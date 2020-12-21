@@ -4,7 +4,7 @@ import { NavLink as Link } from 'react-router-dom';
 
 export const NavTop = styled.div`
     grid-row: 1 / 2;
-    height: 7.5vh;
+    height: 10vh;
     background: var(--black);
     color: var(--white);
 
@@ -46,6 +46,10 @@ export const Dropdown = styled.div`
     background: var(--black);
     width: 200%;
     padding: 0.5rem;
+
+    @media screen and (min-width: 1280px) {
+        width: 100%;
+    }
 `;
 
 export const DropdownOption = styled(Link)`
@@ -56,7 +60,7 @@ export const DropdownOption = styled(Link)`
 
 export const NavAside = styled.div`
     grid-row: 3 / 4;
-    height: 7.5vh;
+    height: 10vh;
     background: var(--primary);
     color: var(--white);
 
@@ -78,7 +82,7 @@ export const NavAside = styled.div`
     }
 
     @media screen and (min-width: 1024px) {
-        width: 7.5vw;
+        width: 8vw;
     }
 
     @media screen and (min-width: 1280px) {
