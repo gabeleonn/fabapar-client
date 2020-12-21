@@ -1,25 +1,27 @@
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+import NavMenu from './Components/NavMenu';
+
 import './App.css';
+import { AppWrapper, ContentWrapper } from './Pages/OtherElements';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <AppWrapper>
+                <NavMenu />
+                <Switch>
+                    <ContentWrapper>
+                        <Route exact path="/" />
+                        <div
+                            className="scroll"
+                            style={{ height: '200vh' }}
+                        ></div>
+                    </ContentWrapper>
+                </Switch>
+            </AppWrapper>
+        </Router>
+    );
 }
 
 export default App;
