@@ -18,6 +18,7 @@ import {
     FaDolly as Loans,
     FaChartLine as Reports,
     FaUserCircle as Profile,
+    FaFileAlt as Tickets,
 } from 'react-icons/fa';
 
 const NavMenu = () => {
@@ -46,6 +47,9 @@ const NavMenu = () => {
             <NavAside>
                 <Icon exact to="/">
                     <Dashboard />
+                </Icon>
+                <Icon exact to="/tickets">
+                    <Tickets />
                 </Icon>
                 <Icon exact to="/usuarios" activeClassName="active">
                     <People />
