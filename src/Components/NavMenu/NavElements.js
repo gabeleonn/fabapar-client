@@ -43,9 +43,10 @@ export const NavTopButton = styled(Link)`
     text-decoration: none;
     width: 100%;
     padding: 0.5rem;
+    transition: all 0.3s ease-in-out;
 
     &:hover {
-        background: var(--primary--light);
+        color: var(--secondary);
     }
 `;
 
