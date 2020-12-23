@@ -12,14 +12,14 @@ export const AppWrapper = styled.div`
         grid-template-rows: 7.5vh 1fr;
     }
 
-    @media screen and (min-width: 1024px) {
+    @media screen and (min-width: 1025px) {
         grid-template-columns: 8vw 1fr;
-        grid-template-rows: 7.5vh 1fr;
+        grid-template-rows: 10vh 1fr;
     }
 
     @media screen and (min-width: 1280px) {
         grid-template-columns: 5vw 1fr;
-        grid-template-rows: 7.5vh 1fr;
+        grid-template-rows: 10vh 1fr;
     }
 `;
 

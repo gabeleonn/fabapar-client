@@ -18,6 +18,12 @@ export const NavTop = styled.div`
         grid-row: 1 / 2;
         height: 7.5vh;
     }
+
+    @media screen and (min-width: 1025px) {
+        grid-column: 1 / 3;
+        grid-row: 1 / 2;
+        height: 10vh;
+    }
 `;
 
 export const NavTopButtons = styled.div`
@@ -43,7 +49,11 @@ export const Dropdown = styled.div`
     position: absolute;
     top: 100%;
     background: var(--black);
-    width: 200%;
+    width: 250%;
+
+    @media screen and (min-width: 768px) {
+        width: 150%;
+    }
 
     @media screen and (min-width: 1280px) {
         width: 100%;

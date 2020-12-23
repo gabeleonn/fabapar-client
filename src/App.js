@@ -13,6 +13,7 @@ import Users from './Pages/Users';
 import Tickets from './Pages/Tickets';
 import Ruined from './Pages/Ruined';
 import Reports from './Pages/Reports';
+import Profile from './Pages/Profile';
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                         <Route exact path="/itens-fixos" component={Fixed} />
                         <Route exact path="/descartados" component={Ruined} />
                         <Route exact path="/relatorios" component={Reports} />
+                        <Route exact path="/me" component={Profile} />
                     </ContentWrapper>
                 </AppWrapper>
             </Switch>
