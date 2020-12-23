@@ -12,7 +12,7 @@ export const AppWrapper = styled.div`
         grid-template-rows: 7.5vh 1fr;
     }
 
-    @media screen and (min-width: 1025px) {
+    @media screen and (min-width: 1024px) {
         grid-template-columns: 8vw 1fr;
         grid-template-rows: 10vh 1fr;
     }

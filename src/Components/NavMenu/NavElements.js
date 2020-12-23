@@ -19,7 +19,7 @@ export const NavTop = styled.div`
         height: 7.5vh;
     }
 
-    @media screen and (min-width: 1025px) {
+    @media screen and (min-width: 1024px) {
         grid-column: 1 / 3;
         grid-row: 1 / 2;
         height: 10vh;
@@ -35,10 +35,17 @@ export const NavTopButtons = styled.div`
     position: relative;
     width: 10vw;
     height: 100%;
+`;
+
+export const NavTopButton = styled(Link)`
+    font-size: 1rem;
+    color: var(--white);
+    text-decoration: none;
+    width: 100%;
+    padding: 0.5rem;
 
     &:hover {
-        color: var(--secondary);
-        cursor: pointer;
+        background: var(--primary--light);
     }
 `;
 

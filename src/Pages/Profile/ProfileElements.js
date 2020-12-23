@@ -18,12 +18,24 @@ export const Form = styled.form`
     flex-direction: column;
     gap: 1rem;
     margin: 0 auto;
+
+    @media screen and (min-width: 768px) {
+        width: 60%;
+    }
+
+    @media screen and (min-width: 1024px) {
+        max-width: 350px;
+    }
 `;
 
 export const Input = styled.input`
     width: 100%;
     height: 6vh;
     padding: 0.5rem;
+
+    @media screen and (min-width: 768px) {
+        height: 4vh;
+    }
 `;
 
 export const InputButton = styled(Input)`

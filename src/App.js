@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+    BrowserRouter as Router,
+    Redirect,
+    Route,
+    Switch,
+} from 'react-router-dom';
 
 import NavMenu from './Components/NavMenu';
 
@@ -31,6 +36,9 @@ function App() {
                         <Route exact path="/descartados" component={Ruined} />
                         <Route exact path="/relatorios" component={Reports} />
                         <Route exact path="/me" component={Profile} />
+                        <Route exact path="/logout">
+                            <Redirect to="/login" />
+                        </Route>
                     </ContentWrapper>
                 </AppWrapper>
             </Switch>

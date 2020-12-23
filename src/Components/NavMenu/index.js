@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 
 import {
     NavAside,
@@ -8,6 +8,7 @@ import {
     Icon,
     Dropdown,
     DropdownOption,
+    NavTopButton,
 } from './NavElements';
 
 import {
@@ -24,20 +25,37 @@ import {
 const NavMenu = () => {
     const [dropdown, setDropdown] = useState(false);
 
+    const [size, setSize] = useState([0, 0]);
+    useLayoutEffect(() => {
+        function updateSize() {
+            setSize([window.innerWidth, window.innerHeight]);
+        }
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
+
     return (
         <>
             <NavTop>
                 <Logo exact to="/">
                     IT MANAGER
                 </Logo>
-                <NavTopButtons onClick={() => setDropdown(!dropdown)}>
-                    <Profile />
-                    {dropdown ? (
+                <NavTopButtons>
+                    {size[0] < 768 ? (
+                        <Profile onClick={() => setDropdown(!dropdown)} />
+                    ) : (
+                        <>
+                            <NavTopButton to="/me">Perfil</NavTopButton>
+                            <NavTopButton to="/logout">Sair</NavTopButton>
+                        </>
+                    )}
+                    {size[0] < 768 && dropdown ? (
                         <Dropdown>
                             <DropdownOption exact to="/me">
                                 Perfil
                             </DropdownOption>
-                            <DropdownOption exact to="/sair">
+                            <DropdownOption exact to="/logout">
                                 Sair
                             </DropdownOption>
                         </Dropdown>
