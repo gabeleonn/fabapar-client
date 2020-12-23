@@ -40,12 +40,10 @@ export const Dropdown = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
     position: absolute;
     top: 100%;
     background: var(--black);
     width: 200%;
-    padding: 0.5rem;
 
     @media screen and (min-width: 1280px) {
         width: 100%;
@@ -56,6 +54,13 @@ export const DropdownOption = styled(Link)`
     font-size: 1rem;
     color: var(--white);
     text-decoration: none;
+    height: 100%;
+    width: 100%;
+    padding: 0.5rem;
+
+    &:hover {
+        background: var(--primary--light);
+    }
 `;
 
 export const NavAside = styled.div`
