@@ -9,7 +9,7 @@ export const TicketStatus = styled.div`
                 return '#E83F5B';
             case 'warning':
                 return '#FD951F';
-            case 'fine':
+            default:
                 return '#04D361';
         }
     }};
