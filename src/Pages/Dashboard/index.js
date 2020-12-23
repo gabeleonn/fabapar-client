@@ -18,7 +18,7 @@ const Dashboard = () => {
                 palette: 'palette2',
                 monochrome: {
                     enabled: true,
-                    color: '#ff6938',
+                    color: '#F79862',
                     shadeTo: 'light',
                     shadeIntensity: 0.65,
                 },
@@ -57,7 +57,7 @@ const Dashboard = () => {
                 palette: 'palette10',
                 monochrome: {
                     enabled: true,
-                    color: '#ff6938',
+                    color: '#F79862',
                     shadeTo: 'light',
                     shadeIntensity: 0.65,
                 },
