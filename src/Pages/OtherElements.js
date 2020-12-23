@@ -122,7 +122,7 @@ export const Element = styled.div`
 `;
 
 export const Row = styled.p`
-    font-size: ${({ primary }) => (primary ? '1.2rem' : '.8rem')};
+    font-size: ${({ primary }) => (primary ? '1.1rem' : '.8rem')};
 `;
 
 export const Label = styled.span``;
