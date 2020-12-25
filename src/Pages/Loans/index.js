@@ -4,14 +4,16 @@ import {
     Wrapper,
     Header,
     Title,
-    Filters,
-    Filter,
+    AddButton,
     ElementList,
     Element,
     Row,
     Label,
     Value,
     Status,
+    Head,
+    SearchBar,
+    SearchInput,
 } from '../OtherElements';
 
 const Loans = () => {
@@ -58,14 +60,13 @@ const Loans = () => {
         <>
             <Wrapper>
                 <Header>
-                    <Title>Empréstimos</Title>
-                    <Filters>
-                        <Filter>Em uso</Filter>
-                        <Filter>Disponível</Filter>
-                        <Filter>Filtro 3</Filter>
-                        <Filter>Filtro 4</Filter>
-                        <Filter>Filtro 5</Filter>
-                    </Filters>
+                    <Head>
+                        <Title>Empréstimos</Title>
+                        <AddButton />
+                    </Head>
+                    <SearchBar>
+                        <SearchInput type="text" placeholder="Pesquisa" />
+                    </SearchBar>
                 </Header>
                 <ElementList>
                     {data.length > 0

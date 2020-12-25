@@ -17,7 +17,7 @@ import {
     FaTachometerAlt as Dashboard,
     FaBoxes as Fixed,
     FaDolly as Loans,
-    FaChartLine as Reports,
+    //FaChartLine as Reports,
     FaUserCircle as Profile,
     FaFileAlt as Tickets,
 } from 'react-icons/fa';
@@ -39,7 +39,7 @@ const NavMenu = () => {
         <>
             <NavTop>
                 <Logo exact to="/">
-                    IT MANAGER
+                    FABAPAR
                 </Logo>
                 <NavTopButtons>
                     {size[0] < 768 ? (
@@ -81,9 +81,9 @@ const NavMenu = () => {
                 <Icon exact to="/descartados" activeClassName="active">
                     <Discard />
                 </Icon>
-                <Icon exact to="/relatorios" activeClassName="active">
+                {/* <Icon exact to="/relatorios" activeClassName="active">
                     <Reports />
-                </Icon>
+                </Icon> */}
             </NavAside>
         </>
     );

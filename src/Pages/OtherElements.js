@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { FaPlus, FaSearch } from 'react-icons/fa';
+
 export const AppWrapper = styled.div`
     display: grid;
     grid-template-columns: 1fr;
@@ -28,6 +30,7 @@ export const ContentWrapper = styled.section`
     height: 80vh;
     grid-row: 2 / 3;
     width: 100%;
+    position: relative;
 
     @media screen and (min-width: 768px) {
         grid-row: 2 / 3;
@@ -57,41 +60,59 @@ export const Header = styled.div`
     color: var(--white);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     width: 100%;
     align-items: center;
+    gap: 0.5rem;
 
     @media screen and (min-width: 768px) {
         flex-direction: row;
+        gap: 1rem;
     }
+`;
+
+export const Head = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 `;
 
 export const Title = styled.h2`
     display: inline-block;
 `;
 
-export const Filters = styled.div`
-    margin-top: 0.5rem;
-
-    @media screen and (min-width: 768px) {
-        margin-top: 0;
-    }
-`;
-
-export const Filter = styled.button`
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 1rem;
-    color: var(--primary--light);
+export const AddButton = styled(FaPlus)`
+    transition: all 0.3s ease-in-out;
 
     &:hover {
         color: var(--secondary);
         cursor: pointer;
     }
+`;
 
-    &:not(:last-child) {
-        margin-right: 1rem;
+export const SearchBar = styled.form`
+    height: 5vh;
+    width: 100%;
+    position: relative;
+
+    @media screen and (min-width: 768px) {
+        width: 50%;
+    }
+`;
+
+export const SearchInput = styled.input`
+    height: 100%;
+    background: var(--black);
+    padding: 0.5rem;
+    width: 100%;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--white);
+
+    &:focus {
+        border-bottom: 2px solid var(--secondary);
     }
 `;
 

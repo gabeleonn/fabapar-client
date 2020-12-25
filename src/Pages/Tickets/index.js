@@ -1,20 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
     Wrapper,
     Header,
     Title,
-    Filters,
-    Filter,
     ElementList,
     Element,
     Row,
     Label,
     Value,
+    AddButton,
+    SearchBar,
+    SearchInput,
+    Head,
 } from '../OtherElements';
+
 import { TicketStatus } from './TicketElements';
 
+import Modal from '../../Components/Modal';
+
 const Loans = () => {
+    const [editMode, setEditMode] = useState(false);
+    const [searchMode, setSearchMode] = useState(false);
+    const [search, setSearch] = useState('');
+
+    useEffect(() => {
+        const handleSearch = () => {
+            if (search === '') {
+                setSearchMode(false);
+            } else {
+                setSearchMode(true);
+            }
+        };
+        handleSearch();
+    }, [search]);
+
+    const handleEditMode = () => {
+        setEditMode(!editMode);
+    };
+
+    const handleSearch = (value) => {
+        setSearch(value);
+    };
+
     const data = [
         {
             id: '5fe3481bcfbb24e5d3c044aa',
@@ -85,17 +113,24 @@ const Loans = () => {
         <>
             <Wrapper>
                 <Header>
-                    <Title>Tickets</Title>
-                    <Filters>
-                        <Filter>Rede</Filter>
-                        <Filter>Hardware</Filter>
-                        <Filter>Software</Filter>
-                        <Filter>Plataforma</Filter>
-                        <Filter>Outros</Filter>
-                    </Filters>
+                    <Head>
+                        <Title>Tickets</Title>
+                        <AddButton onClick={handleEditMode} />
+                    </Head>
+                    <SearchBar>
+                        <SearchInput
+                            type="text"
+                            value={search}
+                            onChange={(e) => handleSearch(e.target.value)}
+                            placeholder="Pesquisa"
+                        />
+                    </SearchBar>
+                    <Modal show={editMode} toggleShow={handleEditMode}>
+                        Aqui vai o formulário de pesquisa
+                    </Modal>
                 </Header>
                 <ElementList>
-                    {data.length > 0
+                    {data.length > 0 && !searchMode
                         ? data.map((element) => (
                               <Element key={element.id}>
                                   <Row primary={true}>
@@ -105,10 +140,46 @@ const Loans = () => {
                                       <Label>Categoria: </Label>
                                       <Value>{element.category}</Value>
                                   </Row>
-                                  <TicketStatus type={element.status} />
+                                  <TicketStatus type={element.status}>
+                                      {element.status === 'danger'
+                                          ? 'Atrasado'
+                                          : null}
+                                      {element.status === 'warning'
+                                          ? 'Parado'
+                                          : null}
+                                      {element.status === 'fine' ? 'OK' : null}
+                                  </TicketStatus>
                               </Element>
                           ))
-                        : null}
+                        : data
+                              .filter(
+                                  (element) =>
+                                      element.category.match(
+                                          new RegExp(search, 'i')
+                                      ) !== null
+                              )
+                              .map((element) => (
+                                  <Element key={element.id}>
+                                      <Row primary={true}>
+                                          <Value>{element.description}</Value>
+                                      </Row>
+                                      <Row>
+                                          <Label>Categoria: </Label>
+                                          <Value>{element.category}</Value>
+                                      </Row>
+                                      <TicketStatus type={element.status}>
+                                          {element.status === 'danger'
+                                              ? 'Atrasado'
+                                              : null}
+                                          {element.status === 'warning'
+                                              ? 'Parado'
+                                              : null}
+                                          {element.status === 'fine'
+                                              ? 'OK'
+                                              : null}
+                                      </TicketStatus>
+                                  </Element>
+                              ))}
                 </ElementList>
             </Wrapper>
         </>

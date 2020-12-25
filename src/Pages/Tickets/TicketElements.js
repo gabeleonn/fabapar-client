@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 
 export const TicketStatus = styled.div`
-    height: 10px;
-    width: 10px;
-    background: ${({ type }) => {
+    color: ${({ type }) => {
         switch (type) {
             case 'danger':
                 return '#E83F5B';
@@ -16,5 +14,5 @@ export const TicketStatus = styled.div`
     position: absolute;
     bottom: 5px;
     right: 5px;
-    clip-path: circle();
+    font-size: 0.8rem;
 `;
