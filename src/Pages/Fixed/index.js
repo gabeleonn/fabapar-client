@@ -111,14 +111,15 @@ const Loans = () => {
                               </Element>
                           ))
                         : data
-                              .filter((element) => {
-                                  let c = new RegExp(search, 'i');
-                                  if (element.person.match(c) !== null) {
-                                      return element;
-                                  } else if (element.item.match(c) !== null) {
-                                      return element;
-                                  }
-                              })
+                              .filter(
+                                  (element) =>
+                                      element.person.match(
+                                          new RegExp(search, 'i')
+                                      ) !== null ||
+                                      element.item.match(
+                                          new RegExp(search, 'i')
+                                      ) !== null
+                              )
                               .map((element) => (
                                   <Element key={element.id}>
                                       <Row primary={true}>

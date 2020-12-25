@@ -38,11 +38,11 @@ export const ContentWrapper = styled.section`
         height: 92.5vh;
     }
 
-    @media screen and (min-width: 1024px) {
+    /* @media screen and (min-width: 1024px) {
         display: flex;
         align-items: center;
         justify-content: center;
-    }
+    } */
 `;
 
 // For all Pages
