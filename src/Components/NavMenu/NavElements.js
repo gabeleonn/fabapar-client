@@ -56,8 +56,11 @@ export const Dropdown = styled.div`
     align-items: center;
     position: absolute;
     top: 100%;
+    right: -30%;
     background: var(--black);
-    width: 250%;
+    width: 300%;
+    z-index: 11;
+    text-align: center;
 
     @media screen and (min-width: 768px) {
         width: 150%;

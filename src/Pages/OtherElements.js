@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { FaPlus, FaSearch } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 
 export const AppWrapper = styled.div`
     display: grid;
@@ -49,7 +49,7 @@ export const ContentWrapper = styled.section`
 
 export const Wrapper = styled.div`
     width: 100%;
-    height: 100%;
+    height: max-content;
     padding: 0.5rem;
 `;
 

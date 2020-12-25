@@ -51,7 +51,7 @@ const NavMenu = () => {
                         </>
                     )}
                     {size[0] < 768 && dropdown ? (
-                        <Dropdown>
+                        <Dropdown onClick={() => setDropdown(!dropdown)}>
                             <DropdownOption exact to="/me">
                                 Perfil
                             </DropdownOption>
