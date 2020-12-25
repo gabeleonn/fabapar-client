@@ -13,6 +13,7 @@ import {
     Status,
     SearchBar,
     SearchInput,
+    Head,
 } from '../OtherElements';
 
 const Loans = () => {
