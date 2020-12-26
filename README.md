@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+# Sistema de Gerênciamento do Setor de TI da FABAPAR
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Front-end simples e moderno com ReactJS & Redux.
 
-## Available Scripts
+License [MIT]
 
-In the project directory, you can run:
+Este site é bem simples, usa ReactJS para composição da página, styled-components, react-icons, redux, entre outros.(_Em caso de dúvidas entrar em [contato][contato]._)
 
-### `yarn start`
+![](dashboard.png)
+![](tickets.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Necessário para instalação
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+OS X & Linux & Windows:
 
-### `yarn test`
+-   Yarn/NPM
+-   Node.js ^v12.18.2
+-   > Comando para instalar os pacotes com Yarn
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```sh
+    yarn
+```
 
-### `yarn build`
+> Comando para instalar os pacotes com NPM
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```sh
+    npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Exemplo de uso
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Roda o servidor para desenvolvimento
 
-### `yarn eject`
+```sh
+    yarn start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Cria os arquivos para produção
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```sh
+    yarn build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+_Para mais informações acesse [Create-React-App][react-app]._
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Histórico de lançamentos
 
-## Learn More
+-   1.0.0
+    -   Versão simples, com SASS.
+    -   Font Awesome.
+    -   Sem Redux ainda.
+-   2.0.0
+    -   Versão com Styled Components.
+    -   React Icons.
+    -   Não responsivo.
+    -   Sem Redux.
+-   3.0.0 (MVP)
+    -   Versão com Styled Components e React Icons.
+    -   Responsivo.
+    -   Ainda sem Redux.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Meta
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Gabriel Leon – [@gabeleonn](https://linkedin.com/in/gabeleonn) – _[gableonn@gmail.com][contato]._
 
-### Code Splitting
+[https://github.com/gabeleonn/](https://github.com/gabeleonn/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Distribuído sob a licença MIT. Entre em [contato][contato] para mais informações.
 
-### Analyzing the Bundle Size
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. Faça o _fork_ do projeto (<https://github.com/gabeleonn/fabapar-client/fork>)
+2. Crie uma _branch_ para sua modificação (`git checkout -b feature/fooBar`)
+3. Faça o _commit_ (`git commit -m 'Type: Add some fooBar'`)
+4. _Push_ (`git push origin feature/fooBar`)
+5. Crie um novo _Pull Request_
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[contato]: mailto:gableonn@gmail.com
+[react-app]: https://create-react-app.dev/docs/getting-started/
