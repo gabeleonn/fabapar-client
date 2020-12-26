@@ -48,7 +48,11 @@ export const ModalBoxClose = styled(FaTimes)`
     }
 `;
 
-export const ModalBoxContent = styled.div`
+export const ModalBoxContent = styled.form`
     color: var(--white);
     padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    text-align: center;
 `;

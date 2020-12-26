@@ -125,7 +125,7 @@ export const ElementList = styled.div`
     padding: 0 1rem;
 
     @media screen and (min-width: 768px) {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     }
 `;
 
@@ -155,4 +155,77 @@ export const Status = styled.span`
     bottom: 5px;
     right: 5px;
     font-size: 0.8rem;
+`;
+
+//FORMS
+
+export const Input = styled.input`
+    height: 5vh;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding-left: 0.5rem;
+    background: var(--primary--dark);
+    color: var(--white);
+    border-radius: 3px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease-in-out;
+
+    &:focus {
+        border-bottom: 3px solid var(--secondary);
+    }
+`;
+
+export const Select = styled.select`
+    height: 5vh;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding-left: 0.5rem;
+    background: var(--primary--dark);
+    color: var(--white);
+    border-radius: 3px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease-in-out;
+
+    &:focus {
+        border-bottom: 3px solid var(--secondary);
+    }
+`;
+
+export const Option = styled.option``;
+
+export const TextArea = styled.textarea`
+    height: 10vh;
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease-in-out;
+    background: var(--primary--dark);
+    padding: 0.5rem;
+    color: var(--white);
+    font-family: inherit;
+
+    &:focus {
+        border-bottom: 3px solid var(--secondary);
+    }
+`;
+
+export const Button = styled.button`
+    height: 5vh;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: var(--black);
+    color: var(--white);
+    border-radius: 3px;
+    margin-top: 0.5rem;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background: var(--primary--dark);
+        cursor: pointer;
+    }
 `;

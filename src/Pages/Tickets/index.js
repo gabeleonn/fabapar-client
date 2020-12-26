@@ -13,6 +13,11 @@ import {
     SearchBar,
     SearchInput,
     Head,
+    Input,
+    Select,
+    Button,
+    Option,
+    TextArea,
 } from '../OtherElements';
 
 import { TicketStatus } from './TicketElements';
@@ -20,7 +25,7 @@ import { TicketStatus } from './TicketElements';
 import Modal from '../../Components/Modal';
 
 const Loans = () => {
-    const [editMode, setEditMode] = useState(false);
+    const [addNew, setAddNew] = useState(false);
     const [searchMode, setSearchMode] = useState(false);
     const [search, setSearch] = useState('');
 
@@ -35,8 +40,8 @@ const Loans = () => {
         handleSearch();
     }, [search]);
 
-    const handleEditMode = () => {
-        setEditMode(!editMode);
+    const handleAddNew = () => {
+        setAddNew(!addNew);
     };
 
     const handleSearch = (value) => {
@@ -109,13 +114,17 @@ const Loans = () => {
         },
     ];
 
+    const handleNewTicket = (e) => {
+        console.log(e);
+    };
+
     return (
         <>
             <Wrapper>
                 <Header>
                     <Head>
                         <Title>Tickets</Title>
-                        <AddButton onClick={handleEditMode} />
+                        <AddButton onClick={handleAddNew} />
                     </Head>
                     <SearchBar>
                         <SearchInput
@@ -125,8 +134,20 @@ const Loans = () => {
                             placeholder="Pesquisa"
                         />
                     </SearchBar>
-                    <Modal show={editMode} toggleShow={handleEditMode}>
-                        Aqui vai o formulário de pesquisa
+                    <Modal show={addNew} toggleShow={handleAddNew}>
+                        <Title>Adicionar Ticket</Title>
+                        <Input type="text" placeholder="Descrição curta" />
+                        <TextArea placeholder="Descrição detalhada" />
+                        <Select>
+                            <Option value="rede">Rede</Option>
+                            <Option value="Hardware">Hardware</Option>
+                        </Select>
+                        <Button
+                            type="button"
+                            onClick={(e) => handleNewTicket(e)}
+                        >
+                            Adicionar
+                        </Button>
                     </Modal>
                 </Header>
                 <ElementList>
