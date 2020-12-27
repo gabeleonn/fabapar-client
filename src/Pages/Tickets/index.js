@@ -18,6 +18,7 @@ import {
     Button,
     Option,
     TextArea,
+    FormRow,
 } from '../OtherElements';
 
 import { TicketStatus } from './TicketElements';
@@ -26,8 +27,12 @@ import Modal from '../../Components/Modal';
 
 const Loans = () => {
     const [addNew, setAddNew] = useState(false);
+
     const [searchMode, setSearchMode] = useState(false);
     const [search, setSearch] = useState('');
+
+    const [editMode, setEditMode] = useState(false);
+    const [editForm, setEditForm] = useState({});
 
     useEffect(() => {
         const handleSearch = () => {
@@ -118,6 +123,20 @@ const Loans = () => {
         console.log(e);
     };
 
+    const handleEditMode = (item) => {
+        setEditForm({ ...item });
+        setEditMode(!editMode);
+    };
+
+    const handleEditTicket = (item) => {
+        // It will be in the editForm
+        console.log(item);
+    };
+
+    const handleDeleteTicket = (id) => {
+        //id will come
+    };
+
     return (
         <>
             <Wrapper>
@@ -150,10 +169,36 @@ const Loans = () => {
                         </Button>
                     </Modal>
                 </Header>
+                <Modal show={editMode} toggleShow={handleEditMode}>
+                    <Title>Editar Ticket</Title>
+                    <Input type="text" placeholder="Descrição curta" />
+                    <TextArea placeholder="Descrição detalhada" />
+                    <Select>
+                        <Option value="rede">Rede</Option>
+                        <Option value="Hardware">Hardware</Option>
+                    </Select>
+                    <FormRow>
+                        <Button
+                            type="button"
+                            onClick={() => handleEditTicket(editForm)}
+                        >
+                            Editar
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={() => handleDeleteTicket(editForm.id)}
+                        >
+                            Excluir
+                        </Button>
+                    </FormRow>
+                </Modal>
                 <ElementList>
                     {data.length > 0 && !searchMode
                         ? data.map((element) => (
-                              <Element key={element.id}>
+                              <Element
+                                  key={element.id}
+                                  onClick={() => handleEditMode(element)}
+                              >
                                   <Row primary={true}>
                                       <Value>{element.description}</Value>
                                   </Row>

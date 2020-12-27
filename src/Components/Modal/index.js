@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import {
     ModalBox,
@@ -8,9 +8,21 @@ import {
 } from './ModalElements';
 
 const Modal = ({ children, show, toggleShow }) => {
+    const outter = useRef();
+
+    const handleOutter = (e) => {
+        if (outter.current === e.target) {
+            toggleShow(!show);
+        }
+    };
+
     return (
         <>
-            <ModalWrapper show={show}>
+            <ModalWrapper
+                ref={outter}
+                onClick={(e) => handleOutter(e)}
+                show={show}
+            >
                 <ModalBox>
                     <ModalBoxClose onClick={toggleShow} />
                     <ModalBoxContent>{children}</ModalBoxContent>
