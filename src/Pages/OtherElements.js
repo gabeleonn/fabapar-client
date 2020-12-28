@@ -140,6 +140,14 @@ export const Element = styled.div`
     flex-direction: column;
     justify-content: center;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+    transform: scale(1);
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        transform: scale(1.01);
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
 `;
 
 export const Row = styled.p`
@@ -158,6 +166,15 @@ export const Status = styled.span`
 `;
 
 //FORMS
+
+export const FormRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 5vh;
+    gap: 1rem;
+`;
 
 export const Input = styled.input`
     height: 5vh;
@@ -221,7 +238,6 @@ export const Button = styled.button`
     background: var(--black);
     color: var(--white);
     border-radius: 3px;
-    margin-top: 0.5rem;
     transition: all 0.3s ease-in-out;
 
     &:hover {

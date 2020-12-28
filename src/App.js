@@ -29,7 +29,7 @@ function App() {
                     <NavMenu />
                     <ContentWrapper>
                         <Route exact path="/" component={Dashboard} />
-                        <Route exact path="/tickets" component={Tickets} />
+                        <Route exact path="/chamados" component={Tickets} />
                         <Route exact path="/usuarios" component={Users} />
                         <Route exact path="/emprestimos" component={Loans} />
                         <Route exact path="/itens-fixos" component={Fixed} />
