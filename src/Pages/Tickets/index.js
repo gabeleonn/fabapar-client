@@ -142,7 +142,7 @@ const Loans = () => {
             <Wrapper>
                 <Header>
                     <Head>
-                        <Title>Tickets</Title>
+                        <Title>Chamados</Title>
                         <AddButton onClick={handleAddNew} />
                     </Head>
                     <SearchBar>

@@ -118,15 +118,39 @@ export const NavAside = styled.div`
 
 export const Icon = styled(Link)`
     font-size: 1.3rem;
-    transition: all 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
     color: var(--white);
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 
     &:hover {
         color: var(--secondary);
         cursor: pointer;
+
+        &::after {
+            display: block;
+            color: var(--black);
+            font-size: 1rem;
+            width: max-content;
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.6));
+            left: 150%;
+            opacity: 1;
+        }
+    }
+
+    &::after {
+        content: ${({ name }) => `'${name}'`};
+        position: absolute;
+        left: 130%;
+        display: none;
+        z-index: 20;
+        clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 10% 100%, 0% 50%);
+        background: var(--auxiliar);
+        padding: 0.1rem 0.5rem 0.1rem 0.9rem;
+        border-radius: 3px;
+        opacity: 0;
     }
 
     &.active {
