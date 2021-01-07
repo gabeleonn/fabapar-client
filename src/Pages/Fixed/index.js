@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
     Wrapper,
@@ -14,14 +14,52 @@ import {
     Head,
     SearchBar,
     SearchInput,
+    Button,
+    FormRow,
+    Select,
+    Input,
+    Option,
+    TextArea,
+    SubTitle,
 } from '../OtherElements';
 
-const Loans = () => {
+import { api, enums } from '../../services';
+import useForm from '../../hooks/useForm';
+import Modal from '../../Components/Modal';
+
+const FixedItems = () => {
+    const addNewFocus = useRef();
+    const editFocus = useRef();
+
     const [addNew, setAddNew] = useState(false);
+    const [data, setData] = useState([]);
+
     const [searchMode, setSearchMode] = useState(false);
     const [search, setSearch] = useState('');
 
+    const [modalEdit, setModalEdit] = useState(false);
+    const [editForm, handleChangeEditForm] = useForm({
+        code: '',
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: '',
+        department: enums.department.default,
+        branch: '',
+    });
+
+    const [addForm, handleChangeAddForm] = useForm({
+        brand: '',
+        type: '',
+        category: enums.categories.default,
+        status: enums.status.default,
+        warranty: '',
+        details: '',
+        maintainer: '',
+    });
+
     useEffect(() => {
+        refreshData();
         const handleSearch = () => {
             if (search === '') {
                 setSearchMode(false);
@@ -32,52 +70,76 @@ const Loans = () => {
         handleSearch();
     }, [search]);
 
-    const handleAddNew = () => {
+    const refreshData = () => {
+        api.get('equipments/fixo').then((response) => {
+            setData(response.data);
+        });
+    };
+
+    const modalAddNew = () => {
         setAddNew(!addNew);
+        addNewFocus.current.focus();
     };
 
     const handleSearch = (value) => {
         setSearch(value);
     };
 
-    const data = [
-        {
-            id: '0001',
-            item: 'Nome do item',
-            person: 'John Doe',
-            department: 'Marketing',
-        },
-        {
-            id: '0002',
-            item: 'Nome do item',
-            person: 'Jane Smith',
-            department: 'RH',
-        },
-        {
-            id: '0003',
-            item: 'Nome do item',
-            person: 'Mark Williams',
-            department: 'Financeiro',
-        },
-        {
-            id: '0004',
-            item: 'Nome do item',
-            person: 'Gabriel Leon',
-            department: 'Financeiro',
-        },
-        {
-            id: '0005',
-            item: 'Nome do item',
-            person: 'Juan Carlos',
-            department: 'RH',
-        },
-        {
-            id: '0006',
-            item: 'Nome do item',
-            person: 'John Doe',
-            department: 'Marketing',
-        },
-    ];
+    const handleNew = async (e) => {
+        modalAddNew(!addNew);
+        let form = { ...addForm };
+        if (form.warranty !== '') {
+            form = {
+                ...form,
+                maintenance: {
+                    warranty: form.warranty,
+                    maintainer: form.maintainer,
+                    details: form.details,
+                },
+            };
+        }
+        delete form.warranty;
+        delete form.maintainer;
+        delete form.details;
+        await api.post('equipments', form);
+        refreshData();
+        handleChangeAddForm({
+            brand: '',
+            type: '',
+            category: enums.categories.default,
+            status: enums.status.default,
+            warranty: '',
+            details: '',
+            maintainer: '',
+        });
+    };
+
+    const handlemodalEdit = (item) => {
+        const { code, email, branch, department, firstname, lastname } = item;
+        handleChangeEditForm({
+            code,
+            password: '',
+            email,
+            branch,
+            department,
+            firstname,
+            lastname,
+        });
+        setModalEdit(!modalEdit);
+        editFocus.current.focus();
+    };
+
+    const handleEdit = async (code) => {
+        setModalEdit(!modalEdit);
+        await api.patch(`users/${code}`, editForm);
+        refreshData();
+    };
+
+    const handleDelete = async (code) => {
+        setModalEdit(!modalEdit);
+        await api.delete(`users/${code}`);
+        refreshData();
+    };
 
     return (
         <>
@@ -85,7 +147,7 @@ const Loans = () => {
                 <Header>
                     <Head>
                         <Title>Itens Fixos</Title>
-                        <AddButton onClick={handleAddNew} />
+                        <AddButton onClick={modalAddNew} />
                     </Head>
                     <SearchBar>
                         <SearchInput
@@ -95,13 +157,152 @@ const Loans = () => {
                             placeholder="Pesquisa"
                         />
                     </SearchBar>
+                    <Modal show={addNew} toggleShow={modalAddNew}>
+                        <Title>Adicionar Item</Title>
+                        <Input
+                            type="text"
+                            placeholder="Marca"
+                            name="brand"
+                            ref={addNewFocus}
+                            value={addForm.brand}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Input
+                            type="text"
+                            placeholder="Tipo (ex: teclado, mouse...)"
+                            name="type"
+                            value={addForm.type}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Select
+                            name="status"
+                            value={addForm.status}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        >
+                            {enums.status.enum.map((element) => (
+                                <Option key={element} value={element}>
+                                    {element.toLowerCase()}
+                                </Option>
+                            ))}
+                        </Select>
+                        <Select
+                            name="category"
+                            value={addForm.category}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        >
+                            {enums.categories.enum.map((element) => (
+                                <Option key={element} value={element}>
+                                    {element.toLowerCase()}
+                                </Option>
+                            ))}
+                        </Select>
+                        <SubTitle>Última Manutenção</SubTitle>
+                        <TextArea
+                            placeholder="Observações"
+                            name="details"
+                            value={addForm.details}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Input
+                            type="date"
+                            placeholder="Data de garantia"
+                            name="warranty"
+                            value={addForm.warranty}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Input
+                            type="text"
+                            placeholder="Quem fez a manutenção?"
+                            name="maintainer"
+                            value={addForm.maintainer}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Button type="button" onClick={handleNew}>
+                            Adicionar
+                        </Button>
+                    </Modal>
                 </Header>
+                <Modal show={modalEdit} toggleShow={setModalEdit}>
+                    <Title>Editar Item</Title>
+                    <Input
+                        type="text"
+                        placeholder="Marca"
+                        name="brand"
+                        ref={editFocus}
+                        value={editForm.brand}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    />
+                    <Input
+                        type="text"
+                        placeholder="Tipo (ex: teclado, mouse...)"
+                        name="type"
+                        value={editForm.type}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    />
+                    <Select
+                        name="status"
+                        value={editForm.status}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    >
+                        {enums.status.enum.map((element) => (
+                            <Option key={element} value={element}>
+                                {element.toLowerCase()}
+                            </Option>
+                        ))}
+                    </Select>
+                    <Select
+                        name="category"
+                        value={editForm.category}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    >
+                        {enums.categories.enum.map((element) => (
+                            <Option key={element} value={element}>
+                                {element.toLowerCase()}
+                            </Option>
+                        ))}
+                    </Select>
+                    <SubTitle>Última Manutenção</SubTitle>
+                    <TextArea
+                        placeholder="Observações"
+                        name="details"
+                        value={editForm.details}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    />
+                    <Input
+                        type="date"
+                        placeholder="Data de garantia"
+                        name="warranty"
+                        value={editForm.warranty}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    />
+                    <Input
+                        type="text"
+                        placeholder="Quem fez a manutenção?"
+                        name="maintainer"
+                        value={editForm.maintainer}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    />
+                    <FormRow>
+                        <Button
+                            type="button"
+                            onClick={() => handleEdit(editForm.code)}
+                        >
+                            Salvar
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={() => handleDelete(editForm.code)}
+                        >
+                            Excluir
+                        </Button>
+                    </FormRow>
+                </Modal>
                 <ElementList>
                     {data.length > 0 && !searchMode
                         ? data.map((element) => (
                               <Element key={element.id}>
                                   <Row primary={true}>
-                                      <Value>{element.item}</Value>
+                                      <Value>{element.description}</Value>
                                   </Row>
                                   <Row>
                                       <Label>Pessoa: </Label>
@@ -113,17 +314,18 @@ const Loans = () => {
                         : data
                               .filter(
                                   (element) =>
-                                      element.person.match(
-                                          new RegExp(search, 'i')
-                                      ) !== null ||
-                                      element.item.match(
+                                      element.id
+                                          .toString()
+                                          .match(new RegExp(search, 'i')) !==
+                                          null ||
+                                      element.description.match(
                                           new RegExp(search, 'i')
                                       ) !== null
                               )
                               .map((element) => (
                                   <Element key={element.id}>
                                       <Row primary={true}>
-                                          <Value>{element.item}</Value>
+                                          <Value>{element.description}</Value>
                                       </Row>
                                       <Row>
                                           <Label>Pessoa: </Label>
@@ -138,4 +340,4 @@ const Loans = () => {
     );
 };
 
-export default Loans;
+export default FixedItems;

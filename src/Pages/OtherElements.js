@@ -82,6 +82,10 @@ export const Title = styled.h2`
     display: inline-block;
 `;
 
+export const SubTitle = styled.h4`
+    display: inline-block;
+`;
+
 export const AddButton = styled(FaPlus)`
     transition: all 0.3s ease-in-out;
 
@@ -205,6 +209,10 @@ export const Select = styled.select`
     border-bottom: 3px solid transparent;
     transition: all 0.3s ease-in-out;
     text-transform: capitalize;
+
+    & option {
+        text-transform: capitalize;
+    }
 
     &:focus {
         border-bottom: 3px solid var(--secondary);

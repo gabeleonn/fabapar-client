@@ -6,7 +6,7 @@ const useForm = (initialValues) => {
     return [
         state,
         (e) => {
-            if (typeof e.code === 'undefined') {
+            if (typeof e.target !== 'undefined') {
                 console.log('here');
                 setState({
                     ...state,
