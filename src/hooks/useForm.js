@@ -7,7 +7,6 @@ const useForm = (initialValues) => {
         state,
         (e) => {
             if (typeof e.target !== 'undefined') {
-                console.log('here');
                 setState({
                     ...state,
                     [e.target.name]: e.target.value,

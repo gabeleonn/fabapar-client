@@ -114,16 +114,32 @@ const FixedItems = () => {
         });
     };
 
+    function FormataStringData(data) {
+        let date = new Date(data);
+        var dia = date.getDate();
+        var mes = date.getMonth();
+        var ano = date.getFullYear();
+        let str =
+            ano +
+            '-' +
+            ('0' + (mes + 1)).slice(-2) +
+            '-' +
+            ('0' + (dia + 1)).slice(-2);
+        return str;
+    }
+
     const handlemodalEdit = (item) => {
-        const { code, email, branch, department, firstname, lastname } = item;
+        const { brand, type, category, status, maintenances } = item;
         handleChangeEditForm({
-            code,
-            password: '',
-            email,
-            branch,
-            department,
-            firstname,
-            lastname,
+            brand,
+            type,
+            category,
+            status,
+            details: maintenances[maintenances.length - 1].details,
+            maintainer: maintenances[maintenances.length - 1].maintainer,
+            warranty: FormataStringData(
+                maintenances[maintenances.length - 1].warranty
+            ),
         });
         setModalEdit(!modalEdit);
         editFocus.current.focus();
@@ -131,13 +147,13 @@ const FixedItems = () => {
 
     const handleEdit = async (code) => {
         setModalEdit(!modalEdit);
-        await api.patch(`users/${code}`, editForm);
+        await api.patch(`equipments/${code}`, editForm);
         refreshData();
     };
 
-    const handleDelete = async (code) => {
+    const handleDelete = async (id) => {
         setModalEdit(!modalEdit);
-        await api.delete(`users/${code}`);
+        await api.delete(`equipments/${id}`);
         refreshData();
     };
 
@@ -285,13 +301,13 @@ const FixedItems = () => {
                     <FormRow>
                         <Button
                             type="button"
-                            onClick={() => handleEdit(editForm.code)}
+                            onClick={() => handleEdit(editForm.id)}
                         >
                             Salvar
                         </Button>
                         <Button
                             type="button"
-                            onClick={() => handleDelete(editForm.code)}
+                            onClick={() => handleDelete(editForm.id)}
                         >
                             Excluir
                         </Button>
@@ -300,7 +316,10 @@ const FixedItems = () => {
                 <ElementList>
                     {data.length > 0 && !searchMode
                         ? data.map((element) => (
-                              <Element key={element.id}>
+                              <Element
+                                  key={element.id}
+                                  onClick={() => handlemodalEdit(element)}
+                              >
                                   <Row primary={true}>
                                       <Value>{element.description}</Value>
                                   </Row>
@@ -323,7 +342,10 @@ const FixedItems = () => {
                                       ) !== null
                               )
                               .map((element) => (
-                                  <Element key={element.id}>
+                                  <Element
+                                      key={element.id}
+                                      onClick={() => handlemodalEdit(element)}
+                                  >
                                       <Row primary={true}>
                                           <Value>{element.description}</Value>
                                       </Row>
