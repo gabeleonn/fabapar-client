@@ -204,13 +204,16 @@ export const Select = styled.select`
     border-radius: 3px;
     border-bottom: 3px solid transparent;
     transition: all 0.3s ease-in-out;
+    text-transform: capitalize;
 
     &:focus {
         border-bottom: 3px solid var(--secondary);
     }
 `;
 
-export const Option = styled.option``;
+export const Option = styled.option`
+    text-transform: capitalize;
+`;
 
 export const TextArea = styled.textarea`
     height: 10vh;
@@ -243,5 +246,9 @@ export const Button = styled.button`
     &:hover {
         background: var(--primary--dark);
         cursor: pointer;
+    }
+
+    &:focus {
+        outline: 1px solid var(--secondary);
     }
 `;

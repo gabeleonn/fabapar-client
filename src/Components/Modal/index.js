@@ -24,7 +24,7 @@ const Modal = ({ children, show, toggleShow }) => {
                 show={show}
             >
                 <ModalBox>
-                    <ModalBoxClose onClick={toggleShow} />
+                    <ModalBoxClose onClick={() => toggleShow(!show)} />
                     <ModalBoxContent>{children}</ModalBoxContent>
                 </ModalBox>
             </ModalWrapper>
