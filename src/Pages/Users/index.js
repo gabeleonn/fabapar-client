@@ -23,6 +23,7 @@ import {
 } from '../OtherElements';
 
 import api from '../../services';
+import useForm from '../../hooks/useForm';
 
 const Users = () => {
     const [addNew, setAddNew] = useState(false);
@@ -31,13 +32,30 @@ const Users = () => {
     const [searchMode, setSearchMode] = useState(false);
     const [search, setSearch] = useState('');
 
-    const [editMode, setEditMode] = useState(false);
-    const [editForm, setEditForm] = useState({});
+    const [modalEdit, setModalEdit] = useState(false);
+    const [editForm, handleChangeEditForm] = useState({
+        code: '',
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: '',
+        department_id: '1',
+        branch: '',
+    });
+
+    const [addForm, handleChangeAddForm] = useForm({
+        code: '',
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: '',
+        role: 'NORMAL',
+        department_id: '1',
+        branch: '',
+    });
 
     useEffect(() => {
-        api.get('users').then((response) => {
-            setData(response.data);
-        });
+        refreshData();
         const handleSearch = () => {
             if (search === '') {
                 setSearchMode(false);
@@ -48,9 +66,10 @@ const Users = () => {
         handleSearch();
     }, [search]);
 
-    const handleData = async () => {
-        let users = await api.get('users');
-        setData(users);
+    const refreshData = () => {
+        api.get('users').then((response) => {
+            setData(response.data);
+        });
     };
 
     const modalAddNew = () => {
@@ -61,23 +80,45 @@ const Users = () => {
         setSearch(value);
     };
 
-    const handleNew = (e) => {
+    const handleNew = async (e) => {
         modalAddNew(!addNew);
-        console.log(e);
+        await api.post('users', addForm);
+        refreshData();
+        handleChangeAddForm();
     };
 
-    const handleEditMode = (item) => {
-        setEditForm({ ...item });
-        setEditMode(!editMode);
+    const handlemodalEdit = (item) => {
+        const {
+            code,
+            email,
+            branch,
+            department_id,
+            firstname,
+            lastname,
+        } = item;
+        handleChangeEditForm({
+            code,
+            password: '',
+            email,
+            branch,
+            department_id,
+            firstname,
+            lastname,
+        });
+        console.log(editForm);
+        setModalEdit(!modalEdit);
     };
 
-    const handleEdit = (item) => {
-        // It will be in the editForm
-        console.log(item);
+    const handleEdit = async (code) => {
+        setModalEdit(!modalEdit);
+        await api.patch(`users/${code}`, editForm);
+        refreshData();
     };
 
-    const handleDelete = (id) => {
-        //id will come
+    const handleDelete = async (code) => {
+        setModalEdit(!modalEdit);
+        await api.delete(`users/${code}`);
+        refreshData();
     };
 
     return (
@@ -98,47 +139,126 @@ const Users = () => {
                     </SearchBar>
                     <Modal show={addNew} toggleShow={modalAddNew}>
                         <Title>Adicionar Usuário</Title>
-                        <Input type="text" placeholder="Nome" />
-                        <Input type="text" placeholder="Sobrenome" />
-                        <Input type="text" placeholder="Ramal" />
-                        <Input type="text" placeholder="E-mail" />
-                        <Select>
+                        <Input
+                            type="text"
+                            placeholder="Matrícula"
+                            name="code"
+                            value={addForm.code}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Input
+                            type="text"
+                            placeholder="Nome"
+                            name="firstname"
+                            value={addForm.firstname}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Input
+                            type="text"
+                            placeholder="Sobrenome"
+                            name="lastname"
+                            value={addForm.lastname}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Input
+                            type="text"
+                            placeholder="Ramal"
+                            maxLength={4}
+                            name="branch"
+                            value={addForm.branch}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Input
+                            type="email"
+                            placeholder="E-mail"
+                            name="email"
+                            value={addForm.email}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Input
+                            type="password"
+                            placeholder="Senha"
+                            name="password"
+                            value={addForm.password}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
+                        <Select
+                            name="role"
+                            value={addForm.role}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        >
                             <Option value="SUPER">Administrador</Option>
                             <Option value="ADMIN">Liderança</Option>
                             <Option value="NORMAL">Funcionário</Option>
                         </Select>
-                        <Select>
+                        <Select
+                            name="department_id"
+                            value={addForm.department_id}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        >
                             <Option value="1">NTI</Option>
+                            <Option value="2">RH</Option>
                         </Select>
-                        <Button type="button" onClick={(e) => handleNew(e)}>
+                        <Button type="button" onClick={handleNew}>
                             Adicionar
                         </Button>
                     </Modal>
                 </Header>
-                <Modal show={editMode} toggleShow={handleEditMode}>
+                <Modal show={modalEdit} toggleShow={handlemodalEdit}>
                     <Title>Editar Usuário</Title>
-                    <Input type="text" placeholder="Nome" />
-                    <Input type="text" placeholder="Sobrenome" />
-                    <Input type="text" placeholder="Ramal" />
-                    <Input type="text" placeholder="E-mail" />
-                    <Select>
-                        <Option value="SUPER">Administrador</Option>
-                        <Option value="ADMIN">Liderança</Option>
-                        <Option value="NORMAL">Funcionário</Option>
-                    </Select>
-                    <Select>
+                    {editForm.firstname}
+                    <Input
+                        type="text"
+                        placeholder="Nome"
+                        name="firstname"
+                        value={editForm.firstname}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    />
+                    <Input
+                        type="text"
+                        placeholder="Sobrenome"
+                        name="lastname"
+                        value={editForm.lastname}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    />
+                    <Input
+                        type="text"
+                        placeholder="Ramal"
+                        name="branch"
+                        value={editForm.branch}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    />
+                    <Input
+                        type="email"
+                        placeholder="E-mail"
+                        name="email"
+                        value={editForm.email}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    />
+                    <Input
+                        type="password"
+                        placeholder="Nova senha"
+                        name="password"
+                        value={editForm.password}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    />
+                    <Select
+                        name="department_id"
+                        value={editForm.department_id}
+                        onChange={(e) => handleChangeEditForm(e)}
+                    >
                         <Option value="1">NTI</Option>
                     </Select>
                     <FormRow>
                         <Button
                             type="button"
-                            onClick={() => handleEdit(editForm)}
+                            onClick={() => handleEdit(editForm.code)}
                         >
-                            Editar
+                            Salvar
                         </Button>
                         <Button
                             type="button"
-                            onClick={() => handleDelete(editForm.id)}
+                            onClick={() => handleDelete(editForm.code)}
                         >
                             Excluir
                         </Button>
@@ -146,11 +266,42 @@ const Users = () => {
                 </Modal>
                 <ElementList>
                     {data.length > 0 && !searchMode
-                        ? data.map((element) => {
-                              return (
+                        ? data.map((element) => (
+                              <Element
+                                  key={element.code}
+                                  onClick={() => handlemodalEdit(element)}
+                              >
+                                  <Row primary={true}>
+                                      <Value>{`${element.firstname} ${element.lastname}`}</Value>
+                                  </Row>
+                                  <Row>
+                                      <Label>Ramal: </Label>
+                                      <Value>{element.branch}</Value>
+                                  </Row>
+                                  <Status>{element.department.name}</Status>
+                              </Element>
+                          ))
+                        : data
+                              .filter(
+                                  (element) =>
+                                      element.firstname.match(
+                                          new RegExp(search, 'i')
+                                      ) !== null ||
+                                      element.lastname.match(
+                                          new RegExp(search, 'i')
+                                      ) !== null ||
+                                      element.email.match(
+                                          new RegExp(search, 'i')
+                                      ) !== null ||
+                                      element.code
+                                          .toString()
+                                          .match(new RegExp(search, 'i')) !==
+                                          null
+                              )
+                              .map((element) => (
                                   <Element
                                       key={element.code}
-                                      onClick={() => handleEditMode(element)}
+                                      onClick={() => handlemodalEdit(element)}
                                   >
                                       <Row primary={true}>
                                           <Value>{`${element.firstname} ${element.lastname}`}</Value>
@@ -160,32 +311,6 @@ const Users = () => {
                                           <Value>{element.branch}</Value>
                                       </Row>
                                       <Status>{element.department.name}</Status>
-                                  </Element>
-                              );
-                          })
-                        : data
-                              .filter(
-                                  (element) =>
-                                      element.id.match(
-                                          new RegExp(search, 'i')
-                                      ) !== null ||
-                                      element.name.match(
-                                          new RegExp(search, 'i')
-                                      ) !== null
-                              )
-                              .map((element) => (
-                                  <Element
-                                      key={element.id}
-                                      onClick={() => handleEditMode(element)}
-                                  >
-                                      <Row primary={true}>
-                                          <Value>{element.name}</Value>
-                                      </Row>
-                                      <Row>
-                                          <Label>Ramal: </Label>
-                                          <Value>{element.branch}</Value>
-                                      </Row>
-                                      <Status>{element.department}</Status>
                                   </Element>
                               ))}
                 </ElementList>
