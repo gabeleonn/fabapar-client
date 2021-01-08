@@ -84,6 +84,11 @@ export const Title = styled.h2`
 
 export const SubTitle = styled.h4`
     display: inline-block;
+    margin-bottom: -1rem;
+`;
+
+export const Description = styled.span`
+    color: var(--auxiliar);
 `;
 
 export const AddButton = styled(FaPlus)`

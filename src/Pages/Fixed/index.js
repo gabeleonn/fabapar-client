@@ -21,6 +21,7 @@ import {
     Option,
     TextArea,
     SubTitle,
+    Description,
 } from '../OtherElements';
 
 import { api, enums } from '../../services';
@@ -45,12 +46,9 @@ const FixedItems = () => {
     const [modalEdit, setModalEdit] = useState(false);
     const [editForm, handleChangeEditForm] = useForm({
         id: '',
-        brand: '',
         user_id: '2041',
-        department: enums.department.default,
-        type: '',
-        specs: '',
-        category: enums.categories.default,
+        description: '',
+        department: 'NTI',
         status: 'FIXO',
         warranty: '',
         details: '',
@@ -59,7 +57,6 @@ const FixedItems = () => {
 
     const [addForm, handleChangeAddForm] = useForm({
         brand: '',
-        department: enums.department.default,
         user_id: '2041',
         type: '',
         specs: '',
@@ -128,7 +125,6 @@ const FixedItems = () => {
         handleChangeAddForm({
             id: '',
             brand: '',
-            department: enums.department.default,
             type: '',
             specs: '',
             user_id: '2041',
@@ -142,42 +138,39 @@ const FixedItems = () => {
 
     const handlemodalEdit = async (item) => {
         await refreshEnums();
-        const {
-            brand,
-            type,
-            category,
-            status,
-            maintenances,
-            specs,
-            department,
-            user_id,
-            id,
-        } = item;
+        const { status, specs, user_id, id, description, user } = item;
         handleChangeEditForm({
+            ...editForm,
             id,
-            brand,
-            type,
-            category,
+            description,
+            department: user.department,
             user_id,
             status,
             specs,
-            department,
-            details: maintenances[maintenances.length - 1].details,
-            maintainer: maintenances[maintenances.length - 1].maintainer,
-            warranty: moment(
-                new Date(maintenances[maintenances.length - 1].warranty)
-            ).format('YYYY-MM-DD'),
         });
         setModalEdit(!modalEdit);
         editFocus.current.focus();
     };
 
-    const handleEdit = async (code) => {
+    const handleEdit = async (id) => {
         setModalEdit(!modalEdit);
         let form = { ...editForm };
         delete form.id;
-        await api.patch(`equipments/${code}`, form);
+        delete form.department;
+        delete form.description;
+        delete form.specs;
+        await api.patch(`equipments/${id}`, form);
         refreshData();
+        handleChangeEditForm({
+            id: '',
+            user_id: '2041',
+            description: '',
+            department: 'NTI',
+            status: 'FIXO',
+            warranty: '',
+            details: '',
+            maintainer: '',
+        });
     };
 
     const handleDelete = async (id) => {
@@ -248,20 +241,8 @@ const FixedItems = () => {
                                 </Option>
                             ))}
                         </Select>
-                        {addForm.status === 'FIXO' ? (
-                            <Select
-                                name="department"
-                                value={addForm.department}
-                                onChange={(e) => handleChangeAddForm(e)}
-                            >
-                                {enums.department.enum.map((element) => (
-                                    <Option key={element} value={element}>
-                                        {element}
-                                    </Option>
-                                ))}
-                            </Select>
-                        ) : null}
-                        {addForm.status === 'EMPRESTADO' ? (
+                        {addForm.status === 'EMPRESTADO' ||
+                        addForm.status === 'FIXO' ? (
                             <Select
                                 name="user_id"
                                 value={addForm.user_id}
@@ -304,23 +285,10 @@ const FixedItems = () => {
                     </Modal>
                 </Header>
                 <Modal show={modalEdit} toggleShow={setModalEdit}>
-                    <Title>Editar Item</Title>
-                    <Input
-                        type="text"
-                        placeholder="Marca"
-                        name="brand"
-                        ref={editFocus}
-                        value={editForm.brand}
-                        onChange={(e) => handleChangeEditForm(e)}
-                    />
-                    <Input
-                        type="text"
-                        placeholder="Tipo (ex: teclado, mouse...)"
-                        name="type"
-                        value={editForm.type}
-                        onChange={(e) => handleChangeEditForm(e)}
-                    />
+                    <SubTitle>{editForm.description}</SubTitle>
+                    <Description>{editForm.department}</Description>
                     <Select
+                        ref={editFocus}
                         name="status"
                         value={editForm.status}
                         onChange={(e) => handleChangeEditForm(e)}
@@ -331,38 +299,45 @@ const FixedItems = () => {
                             </Option>
                         ))}
                     </Select>
-                    <Select
-                        name="category"
-                        value={editForm.category}
-                        onChange={(e) => handleChangeEditForm(e)}
-                    >
-                        {enums.categories.enum.map((element) => (
-                            <Option key={element} value={element}>
-                                {element.toLowerCase()}
-                            </Option>
-                        ))}
-                    </Select>
-                    <SubTitle>Última Manutenção</SubTitle>
-                    <TextArea
-                        placeholder="Observações"
-                        name="details"
-                        value={editForm.details}
-                        onChange={(e) => handleChangeEditForm(e)}
-                    />
-                    <Input
-                        type="date"
-                        placeholder="Data de garantia"
-                        name="warranty"
-                        value={editForm.warranty}
-                        onChange={(e) => handleChangeEditForm(e)}
-                    />
-                    <Input
-                        type="text"
-                        placeholder="Quem fez a manutenção?"
-                        name="maintainer"
-                        value={editForm.maintainer}
-                        onChange={(e) => handleChangeEditForm(e)}
-                    />
+                    {editForm.status === 'EMPRESTADO' ||
+                    editForm.status === 'FIXO' ? (
+                        <Select
+                            name="user_id"
+                            value={editForm.user_id}
+                            onChange={(e) => handleChangeEditForm(e)}
+                        >
+                            {usersEnum.map((element) => (
+                                <Option key={element.code} value={element.code}>
+                                    {`${element.firstname} ${element.lastname}`}
+                                </Option>
+                            ))}
+                        </Select>
+                    ) : null}
+                    {editForm.status === 'MANUTENÇÃO' ? (
+                        <>
+                            <SubTitle>Adicionar Manutenção</SubTitle>
+                            <TextArea
+                                placeholder="Observações"
+                                name="details"
+                                value={editForm.details}
+                                onChange={(e) => handleChangeEditForm(e)}
+                            />
+                            <Input
+                                type="date"
+                                placeholder="Data de garantia"
+                                name="warranty"
+                                value={editForm.warranty}
+                                onChange={(e) => handleChangeEditForm(e)}
+                            />
+                            <Input
+                                type="text"
+                                placeholder="Quem fez a manutenção?"
+                                name="maintainer"
+                                value={editForm.maintainer}
+                                onChange={(e) => handleChangeEditForm(e)}
+                            />
+                        </>
+                    ) : null}
                     <FormRow>
                         <Button
                             type="button"
@@ -407,7 +382,7 @@ const FixedItems = () => {
                                       </Label>
                                       <Value>{element.person}</Value>
                                   </Row>
-                                  <Status>{element.department}</Status>
+                                  <Status>{`${element.user.department} | ${element.user.firstname} ${element.user.lastname}`}</Status>
                               </Element>
                           ))
                         : data
