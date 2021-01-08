@@ -84,11 +84,15 @@ export const Title = styled.h2`
 
 export const SubTitle = styled.h4`
     display: inline-block;
-    margin-bottom: -1rem;
+`;
+
+export const Hr = styled.hr`
+    margin-bottom: 1rem;
 `;
 
 export const Description = styled.span`
     color: var(--auxiliar);
+    margin-top: -0.5rem;
 `;
 
 export const AddButton = styled(FaPlus)`
@@ -151,6 +155,7 @@ export const Element = styled.div`
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     transform: scale(1);
     transition: all 0.3s ease-in-out;
+    padding-bottom: 2.5rem;
 
     &:hover {
         transform: scale(1.01);
@@ -198,9 +203,15 @@ export const Input = styled.input`
     border-radius: 3px;
     border-bottom: 3px solid transparent;
     transition: all 0.3s ease-in-out;
+    padding-right: 0.3rem;
 
     &:focus {
         border-bottom: 3px solid var(--secondary);
+    }
+
+    &::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
     }
 `;
 

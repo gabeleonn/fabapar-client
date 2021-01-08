@@ -22,6 +22,7 @@ import {
     TextArea,
     SubTitle,
     Description,
+    Hr,
 } from '../OtherElements';
 
 import { api, enums } from '../../services';
@@ -68,7 +69,10 @@ const FixedItems = () => {
     });
 
     useEffect(() => {
-        refreshData();
+        let getData = async () => {
+            refreshData();
+        };
+        getData();
         const handleSearch = () => {
             if (search === '') {
                 setSearchMode(false);
@@ -83,15 +87,15 @@ const FixedItems = () => {
         api.get('users/enum').then((response) => {
             setUsersEnum(response.data);
         });
+        refreshData();
     };
 
-    const refreshData = () => {
+    const refreshData = async () => {
         api.get('users/enum').then((response) => {
             setUsersEnum(response.data);
         });
-        api.get('equipments/fixo').then((response) => {
-            setData(response.data);
-        });
+        let equipments = await api.get('equipments/fixo');
+        setData(equipments.data);
     };
 
     const modalAddNew = async () => {
@@ -121,7 +125,7 @@ const FixedItems = () => {
         delete form.maintainer;
         delete form.details;
         await api.post('equipments', form);
-        refreshData();
+        await refreshData();
         handleChangeAddForm({
             id: '',
             brand: '',
@@ -160,7 +164,6 @@ const FixedItems = () => {
         delete form.description;
         delete form.specs;
         await api.patch(`equipments/${id}`, form);
-        refreshData();
         handleChangeEditForm({
             id: '',
             user_id: '2041',
@@ -363,9 +366,11 @@ const FixedItems = () => {
                                   <Row primary={true}>
                                       <Value>{element.description}</Value>
                                   </Row>
+                                  <Hr />
                                   <Row>
                                       <Label>
-                                          Última Manutenção:
+                                          <strong>Última Manutenção:</strong>
+                                          <br />
                                           {` ${moment(
                                               element.maintenances[
                                                   element.maintenances.length -
