@@ -158,7 +158,9 @@ export const Row = styled.p`
     font-size: ${({ primary }) => (primary ? '1.1rem' : '.8rem')};
 `;
 
-export const Label = styled.span``;
+export const Label = styled.span`
+    text-transform: capitalize;
+`;
 
 export const Value = styled.span``;
 

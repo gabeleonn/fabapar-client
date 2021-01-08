@@ -27,9 +27,14 @@ import { api, enums } from '../../services';
 import useForm from '../../hooks/useForm';
 import Modal from '../../Components/Modal';
 
+import moment from 'moment';
+import 'moment/locale/pt-br';
+
 const FixedItems = () => {
     const addNewFocus = useRef();
     const editFocus = useRef();
+
+    const [usersEnum, setUsersEnum] = useState([]);
 
     const [addNew, setAddNew] = useState(false);
     const [data, setData] = useState([]);
@@ -39,20 +44,27 @@ const FixedItems = () => {
 
     const [modalEdit, setModalEdit] = useState(false);
     const [editForm, handleChangeEditForm] = useForm({
-        code: '',
-        firstname: '',
-        lastname: '',
-        email: '',
-        password: '',
+        id: '',
+        brand: '',
+        user_id: '2041',
         department: enums.department.default,
-        branch: '',
+        type: '',
+        specs: '',
+        category: enums.categories.default,
+        status: 'FIXO',
+        warranty: '',
+        details: '',
+        maintainer: '',
     });
 
     const [addForm, handleChangeAddForm] = useForm({
         brand: '',
+        department: enums.department.default,
+        user_id: '2041',
         type: '',
+        specs: '',
         category: enums.categories.default,
-        status: enums.status.default,
+        status: 'FIXO',
         warranty: '',
         details: '',
         maintainer: '',
@@ -70,13 +82,23 @@ const FixedItems = () => {
         handleSearch();
     }, [search]);
 
+    const refreshEnums = () => {
+        api.get('users/enum').then((response) => {
+            setUsersEnum(response.data);
+        });
+    };
+
     const refreshData = () => {
+        api.get('users/enum').then((response) => {
+            setUsersEnum(response.data);
+        });
         api.get('equipments/fixo').then((response) => {
             setData(response.data);
         });
     };
 
-    const modalAddNew = () => {
+    const modalAddNew = async () => {
+        await refreshEnums();
         setAddNew(!addNew);
         addNewFocus.current.focus();
     };
@@ -104,42 +126,47 @@ const FixedItems = () => {
         await api.post('equipments', form);
         refreshData();
         handleChangeAddForm({
+            id: '',
             brand: '',
+            department: enums.department.default,
             type: '',
+            specs: '',
+            user_id: '2041',
             category: enums.categories.default,
-            status: enums.status.default,
+            status: 'FIXO',
             warranty: '',
             details: '',
             maintainer: '',
         });
     };
 
-    function FormataStringData(data) {
-        let date = new Date(data);
-        var dia = date.getDate();
-        var mes = date.getMonth();
-        var ano = date.getFullYear();
-        let str =
-            ano +
-            '-' +
-            ('0' + (mes + 1)).slice(-2) +
-            '-' +
-            ('0' + (dia + 1)).slice(-2);
-        return str;
-    }
-
-    const handlemodalEdit = (item) => {
-        const { brand, type, category, status, maintenances } = item;
-        handleChangeEditForm({
+    const handlemodalEdit = async (item) => {
+        await refreshEnums();
+        const {
             brand,
             type,
             category,
             status,
+            maintenances,
+            specs,
+            department,
+            user_id,
+            id,
+        } = item;
+        handleChangeEditForm({
+            id,
+            brand,
+            type,
+            category,
+            user_id,
+            status,
+            specs,
+            department,
             details: maintenances[maintenances.length - 1].details,
             maintainer: maintenances[maintenances.length - 1].maintainer,
-            warranty: FormataStringData(
-                maintenances[maintenances.length - 1].warranty
-            ),
+            warranty: moment(
+                new Date(maintenances[maintenances.length - 1].warranty)
+            ).format('YYYY-MM-DD'),
         });
         setModalEdit(!modalEdit);
         editFocus.current.focus();
@@ -147,14 +174,16 @@ const FixedItems = () => {
 
     const handleEdit = async (code) => {
         setModalEdit(!modalEdit);
-        await api.patch(`equipments/${code}`, editForm);
+        let form = { ...editForm };
+        delete form.id;
+        await api.patch(`equipments/${code}`, form);
         refreshData();
     };
 
     const handleDelete = async (id) => {
         setModalEdit(!modalEdit);
         await api.delete(`equipments/${id}`);
-        refreshData();
+        await refreshData();
     };
 
     return (
@@ -190,6 +219,13 @@ const FixedItems = () => {
                             value={addForm.type}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
+                        <Input
+                            type="text"
+                            placeholder="Informações extras. (ex: cor, processador...)"
+                            name="specs"
+                            value={addForm.specs}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
                         <Select
                             name="status"
                             value={addForm.status}
@@ -212,6 +248,35 @@ const FixedItems = () => {
                                 </Option>
                             ))}
                         </Select>
+                        {addForm.status === 'FIXO' ? (
+                            <Select
+                                name="department"
+                                value={addForm.department}
+                                onChange={(e) => handleChangeAddForm(e)}
+                            >
+                                {enums.department.enum.map((element) => (
+                                    <Option key={element} value={element}>
+                                        {element}
+                                    </Option>
+                                ))}
+                            </Select>
+                        ) : null}
+                        {addForm.status === 'EMPRESTADO' ? (
+                            <Select
+                                name="user_id"
+                                value={addForm.user_id}
+                                onChange={(e) => handleChangeAddForm(e)}
+                            >
+                                {usersEnum.map((element) => (
+                                    <Option
+                                        key={element.code}
+                                        value={element.code}
+                                    >
+                                        {`${element.firstname} ${element.lastname}`}
+                                    </Option>
+                                ))}
+                            </Select>
+                        ) : null}
                         <SubTitle>Última Manutenção</SubTitle>
                         <TextArea
                             placeholder="Observações"
@@ -324,7 +389,22 @@ const FixedItems = () => {
                                       <Value>{element.description}</Value>
                                   </Row>
                                   <Row>
-                                      <Label>Pessoa: </Label>
+                                      <Label>
+                                          Última Manutenção:
+                                          {` ${moment(
+                                              element.maintenances[
+                                                  element.maintenances.length -
+                                                      1
+                                              ].updatedAt
+                                          )
+                                              .locale('pt-br')
+                                              .format('LLLL')} | ${
+                                              element.maintenances[
+                                                  element.maintenances.length -
+                                                      1
+                                              ].maintainer
+                                          }`}
+                                      </Label>
                                       <Value>{element.person}</Value>
                                   </Row>
                                   <Status>{element.department}</Status>
@@ -350,7 +430,23 @@ const FixedItems = () => {
                                           <Value>{element.description}</Value>
                                       </Row>
                                       <Row>
-                                          <Label>Pessoa: </Label>
+                                          <Label>
+                                              Última Manutenção:
+                                              {` ${moment(
+                                                  element.maintenances[
+                                                      element.maintenances
+                                                          .length - 1
+                                                  ].updatedAt
+                                              )
+                                                  .locale('pt-br')
+                                                  .format('LLLL')} | ${
+                                                  element.maintenances[
+                                                      element.maintenances
+                                                          .length - 1
+                                                  ].maintainer
+                                              }`}
+                                          </Label>
+                                          <Label></Label>
                                           <Value>{element.person}</Value>
                                       </Row>
                                       <Status>{element.department}</Status>
