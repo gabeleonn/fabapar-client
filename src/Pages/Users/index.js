@@ -74,7 +74,6 @@ const Users = () => {
         api.get('users').then((response) => {
             setData(response.data);
         });
-        console.log('e');
     };
 
     const modalAddNew = () => {

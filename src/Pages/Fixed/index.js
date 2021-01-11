@@ -75,8 +75,15 @@ const FixedItems = () => {
     });
 
     useEffect(() => {
-        refreshData();
-        refreshEnums();
+        api.get('equipments/fixo').then((response) => {
+            setData(response.data);
+        });
+        api.get('users/enum').then((response) => {
+            setUsersEnum(response.data);
+        });
+    }, []);
+
+    useEffect(() => {
         const handleSearch = () => {
             if (search === '') {
                 setSearchMode(false);
@@ -97,6 +104,7 @@ const FixedItems = () => {
         api.get('equipments/fixo').then((response) => {
             setData(response.data);
         });
+        console.log('hello');
     };
 
     const modalAddNew = async () => {
@@ -178,7 +186,9 @@ const FixedItems = () => {
     const handleEdit = async (id) => {
         setModalEdit(!modalEdit);
         await api.patch(`equipments/${id}`, editForm);
-        setSearch('');
+        api.get('equipments/fixo').then((response) => {
+            setData(response.data);
+        });
     };
 
     const handleDelete = async (id) => {
