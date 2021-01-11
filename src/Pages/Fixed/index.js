@@ -23,7 +23,10 @@ import {
     SubTitle,
     Description,
     Hr,
+    Icon,
 } from '../OtherElements';
+
+import { FaPaperclip } from 'react-icons/fa';
 
 import { api, enums } from '../../services';
 import useForm from '../../hooks/useForm';
@@ -37,6 +40,8 @@ const FixedItems = () => {
     const editFocus = useRef();
 
     const [usersEnum, setUsersEnum] = useState([]);
+
+    const [upload, setUpload] = useState({ file: {} });
 
     const [addNew, setAddNew] = useState(false);
     const [data, setData] = useState([]);
@@ -66,13 +71,12 @@ const FixedItems = () => {
         warranty: '',
         details: '',
         maintainer: '',
+        price: '',
     });
 
     useEffect(() => {
-        let getData = async () => {
-            refreshData();
-        };
-        getData();
+        refreshData();
+        refreshEnums();
         const handleSearch = () => {
             if (search === '') {
                 setSearchMode(false);
@@ -87,15 +91,12 @@ const FixedItems = () => {
         api.get('users/enum').then((response) => {
             setUsersEnum(response.data);
         });
-        refreshData();
     };
 
-    const refreshData = async () => {
-        api.get('users/enum').then((response) => {
-            setUsersEnum(response.data);
+    const refreshData = () => {
+        api.get('equipments/fixo').then((response) => {
+            setData(response.data);
         });
-        let equipments = await api.get('equipments/fixo');
-        setData(equipments.data);
     };
 
     const modalAddNew = async () => {
@@ -124,8 +125,25 @@ const FixedItems = () => {
         delete form.warranty;
         delete form.maintainer;
         delete form.details;
-        await api.post('equipments', form);
-        await refreshData();
+        let formData = new FormData();
+
+        formData.append('file', upload.file);
+        formData.append('price', form.price);
+        formData.append('brand', form.brand);
+        formData.append('type', form.type);
+        formData.append('specs', form.specs);
+        formData.append('user_id', form.user_id);
+        formData.append('category', form.category);
+        formData.append('status', form.status);
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+
+        await api.post('equipments', formData, config);
+        refreshData();
         handleChangeAddForm({
             id: '',
             brand: '',
@@ -140,9 +158,9 @@ const FixedItems = () => {
         });
     };
 
-    const handlemodalEdit = async (item) => {
-        await refreshEnums();
-        const { status, specs, user_id, id, description, user } = item;
+    const handlemodalEdit = (item) => {
+        refreshEnums();
+        const { status, specs, user_id, id, description, user, file } = item;
         handleChangeEditForm({
             ...editForm,
             id,
@@ -151,6 +169,7 @@ const FixedItems = () => {
             user_id,
             status,
             specs,
+            file,
         });
         setModalEdit(!modalEdit);
         editFocus.current.focus();
@@ -158,28 +177,14 @@ const FixedItems = () => {
 
     const handleEdit = async (id) => {
         setModalEdit(!modalEdit);
-        let form = { ...editForm };
-        delete form.id;
-        delete form.department;
-        delete form.description;
-        delete form.specs;
-        await api.patch(`equipments/${id}`, form);
-        handleChangeEditForm({
-            id: '',
-            user_id: '2041',
-            description: '',
-            department: 'NTI',
-            status: 'FIXO',
-            warranty: '',
-            details: '',
-            maintainer: '',
-        });
+        await api.patch(`equipments/${id}`, editForm);
+        setSearch('');
     };
 
     const handleDelete = async (id) => {
         setModalEdit(!modalEdit);
         await api.delete(`equipments/${id}`);
-        await refreshData();
+        setSearch('');
     };
 
     return (
@@ -198,7 +203,7 @@ const FixedItems = () => {
                             placeholder="Pesquisa"
                         />
                     </SearchBar>
-                    <Modal show={addNew} toggleShow={modalAddNew}>
+                    <Modal show={addNew} height="90vh" toggleShow={modalAddNew}>
                         <Title>Adicionar Item</Title>
                         <Input
                             type="text"
@@ -261,6 +266,22 @@ const FixedItems = () => {
                                 ))}
                             </Select>
                         ) : null}
+                        <Input
+                            type="file"
+                            placeholder="Nota fiscal"
+                            className="custom-file-input"
+                            name="file"
+                            onChange={(e) =>
+                                setUpload({ file: e.target.files[0] })
+                            }
+                        />
+                        <Input
+                            type="number"
+                            placeholder="Preço pago"
+                            name="price"
+                            value={addForm.price}
+                            onChange={(e) => handleChangeAddForm(e)}
+                        />
                         <SubTitle>Última Manutenção</SubTitle>
                         <TextArea
                             placeholder="Observações"
@@ -287,9 +308,19 @@ const FixedItems = () => {
                         </Button>
                     </Modal>
                 </Header>
-                <Modal show={modalEdit} toggleShow={setModalEdit}>
-                    <SubTitle>{editForm.description}</SubTitle>
+                <Modal show={modalEdit} height="auto" toggleShow={setModalEdit}>
+                    <SubTitle>
+                        <Icon
+                            target="_blank"
+                            rel="noreferrer"
+                            href={`http://localhost:8080/${editForm.file}`}
+                        >
+                            <FaPaperclip />
+                        </Icon>
+                        {editForm.description}
+                    </SubTitle>
                     <Description>{editForm.department}</Description>
+
                     <Select
                         ref={editFocus}
                         name="status"
@@ -362,6 +393,7 @@ const FixedItems = () => {
                               <Element
                                   key={element.id}
                                   onClick={() => handlemodalEdit(element)}
+                                  status={true}
                               >
                                   <Row primary={true}>
                                       <Value>{element.description}</Value>
@@ -369,25 +401,35 @@ const FixedItems = () => {
                                   <Hr />
                                   <Row>
                                       <Label>
-                                          <strong>Última Manutenção:</strong>
+                                          Última Manutenção:
                                           <br />
-                                          {` ${moment(
-                                              element.maintenances[
-                                                  element.maintenances.length -
-                                                      1
-                                              ].updatedAt
-                                          )
-                                              .locale('pt-br')
-                                              .format('LLLL')} | ${
-                                              element.maintenances[
-                                                  element.maintenances.length -
-                                                      1
-                                              ].maintainer
-                                          }`}
                                       </Label>
-                                      <Value>{element.person}</Value>
+                                      <Value>
+                                          {element.maintenances
+                                              ? ` ${
+                                                    element.maintenances &&
+                                                    moment(
+                                                        element.maintenances[
+                                                            element.maintenances
+                                                                .length - 1
+                                                        ].updatedAt
+                                                    )
+                                                        .locale('pt-br')
+                                                        .format('LLLL')
+                                                } | ${
+                                                    element.maintenances[
+                                                        element.maintenances
+                                                            .length - 1
+                                                    ].maintainer
+                                                }`
+                                              : null}
+                                      </Value>
                                   </Row>
-                                  <Status>{`${element.user.department} | ${element.user.firstname} ${element.user.lastname}`}</Status>
+                                  <Status>
+                                      {element.user
+                                          ? `${element.user.department} | ${element.user.firstname} ${element.user.lastname}`
+                                          : null}
+                                  </Status>
                               </Element>
                           ))
                         : data
@@ -405,29 +447,26 @@ const FixedItems = () => {
                                   <Element
                                       key={element.id}
                                       onClick={() => handlemodalEdit(element)}
+                                      status={true}
                                   >
                                       <Row primary={true}>
                                           <Value>{element.description}</Value>
                                       </Row>
                                       <Row>
-                                          <Label>
-                                              Última Manutenção:
-                                              {` ${moment(
-                                                  element.maintenances[
-                                                      element.maintenances
-                                                          .length - 1
-                                                  ].updatedAt
-                                              )
-                                                  .locale('pt-br')
-                                                  .format('LLLL')} | ${
-                                                  element.maintenances[
-                                                      element.maintenances
-                                                          .length - 1
-                                                  ].maintainer
-                                              }`}
-                                          </Label>
-                                          <Label></Label>
-                                          <Value>{element.person}</Value>
+                                          <Label>Última Manutenção:</Label>
+                                          <Value>{` ${moment(
+                                              element.maintenances[
+                                                  element.maintenances.length -
+                                                      1
+                                              ].updatedAt
+                                          )
+                                              .locale('pt-br')
+                                              .format('LLLL')} | ${
+                                              element.maintenances[
+                                                  element.maintenances.length -
+                                                      1
+                                              ].maintainer
+                                          }`}</Value>
                                       </Row>
                                       <Status>{element.department}</Status>
                                   </Element>

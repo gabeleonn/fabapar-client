@@ -7,7 +7,7 @@ import {
     ModalWrapper,
 } from './ModalElements';
 
-const Modal = ({ children, show, toggleShow }) => {
+const Modal = ({ children, show, toggleShow, height }) => {
     const outter = useRef();
 
     const handleOutter = (e) => {
@@ -23,7 +23,7 @@ const Modal = ({ children, show, toggleShow }) => {
                 onClick={(e) => handleOutter(e)}
                 show={show}
             >
-                <ModalBox>
+                <ModalBox height={height}>
                     <ModalBoxClose onClick={() => toggleShow(!show)} />
                     <ModalBoxContent>{children}</ModalBoxContent>
                 </ModalBox>

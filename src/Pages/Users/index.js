@@ -20,6 +20,7 @@ import {
     Option,
     Button,
     FormRow,
+    Hr,
 } from '../OtherElements';
 
 import { api, enums } from '../../services';
@@ -73,6 +74,7 @@ const Users = () => {
         api.get('users').then((response) => {
             setData(response.data);
         });
+        console.log('e');
     };
 
     const modalAddNew = () => {
@@ -288,15 +290,20 @@ const Users = () => {
                               <Element
                                   key={element.code}
                                   onClick={() => handlemodalEdit(element)}
+                                  status={false}
                               >
                                   <Row primary={true}>
-                                      <Value>{`${element.firstname} ${element.lastname}`}</Value>
+                                      <Value>{`${element.firstname} ${element.lastname} | ${element.department}`}</Value>
+                                      <Hr />
                                   </Row>
                                   <Row>
                                       <Label>Ramal: </Label>
                                       <Value>{element.branch}</Value>
                                   </Row>
-                                  <Status>{element.department.name}</Status>
+                                  <Row>
+                                      <Label>email: </Label>
+                                      <Value>{element.email}</Value>
+                                  </Row>
                               </Element>
                           ))
                         : data
@@ -320,6 +327,7 @@ const Users = () => {
                                   <Element
                                       key={element.code}
                                       onClick={() => handlemodalEdit(element)}
+                                      status={false}
                                   >
                                       <Row primary={true}>
                                           <Value>{`${element.firstname} ${element.lastname}`}</Value>

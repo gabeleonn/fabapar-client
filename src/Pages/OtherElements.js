@@ -155,7 +155,7 @@ export const Element = styled.div`
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     transform: scale(1);
     transition: all 0.3s ease-in-out;
-    padding-bottom: 2.5rem;
+    padding-bottom: ${({ status }) => (status ? '2.5rem' : '1rem')};
 
     &:hover {
         transform: scale(1.01);
@@ -170,9 +170,12 @@ export const Row = styled.p`
 
 export const Label = styled.span`
     text-transform: capitalize;
+    font-weight: 800;
 `;
 
-export const Value = styled.span``;
+export const Value = styled.span`
+    text-transform: capitalize;
+`;
 
 export const Status = styled.span`
     position: absolute;
@@ -212,6 +215,35 @@ export const Input = styled.input`
     &::-webkit-calendar-picker-indicator {
         filter: invert(1);
         cursor: pointer;
+    }
+    &.custom-file-input {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        background: none;
+        border: none;
+    }
+
+    &.custom-file-input::-webkit-file-upload-button {
+        visibility: hidden;
+    }
+    &.custom-file-input::before {
+        text-align: center;
+        content: 'Upload da nota fiscal';
+        display: inline-block;
+        background: linear-gradient(top, #f9f9f9, #e3e3e3);
+        border: 1px solid #999;
+        border-radius: 3px;
+        padding: 5px 8px;
+        height: 100%;
+        outline: none;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        cursor: pointer;
+    }
+    &.custom-file-input:hover::before {
+        border-color: var(--secondary);
+        color: var(--secondary);
     }
 `;
 
@@ -276,5 +308,15 @@ export const Button = styled.button`
 
     &:focus {
         outline: 1px solid var(--secondary);
+    }
+`;
+
+export const Icon = styled.a`
+    font-size: 1rem;
+    color: var(--secondary);
+    margin-right: 0.5rem;
+
+    &:hover {
+        color: var(--primary--light);
     }
 `;

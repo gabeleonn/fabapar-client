@@ -6,7 +6,7 @@ export const ModalWrapper = styled.div`
     position: fixed;
     width: 100%;
     min-height: 100%;
-    overflow-y: auto;
+    overflow: hidden;
     background: rgba(0, 0, 0, 0.7);
     top: 0;
     left: 0;
@@ -26,6 +26,8 @@ export const ModalBox = styled.div`
     background: var(--primary);
     position: relative;
     border-radius: 3px;
+    overflow-y: auto;
+    height: ${({ height }) => height};
 
     @media screen and (min-width: 768px) {
         width: 50%;
@@ -55,4 +57,5 @@ export const ModalBoxContent = styled.form`
     gap: 1rem;
     flex-direction: column;
     text-align: center;
+    min-height: 100%;
 `;
