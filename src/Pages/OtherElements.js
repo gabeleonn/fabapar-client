@@ -250,6 +250,7 @@ export const Label = styled.label`
 export const LabelS = styled.span`
     text-transform: capitalize;
     font-weight: 800;
+    color: var(--primary--light);
 `;
 
 export const Value = styled.span``;
@@ -297,6 +298,8 @@ export const Input = styled.input`
         display: flex;
         align-items: center;
         justify-content: space-around;
+        line-height: 25px;
+        height: 40px;
         background: none;
         border: none;
     }

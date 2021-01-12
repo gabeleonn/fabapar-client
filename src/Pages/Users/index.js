@@ -22,6 +22,7 @@ import {
     FormRow,
     Hr,
     ButtonWrapper,
+    LabelS,
 } from '../OtherElements';
 
 import { api, enums } from '../../services';
@@ -145,7 +146,7 @@ const Users = () => {
                             type="text"
                             value={search}
                             onChange={(e) => handleSearch(e.target.value)}
-                            placeholder="Pesquisa"
+                            placeholder="Filter por email, nome ou matrícula"
                         />
                     </SearchBar>
                     <Modal show={addNew} toggleShow={modalAddNew}>
@@ -300,11 +301,11 @@ const Users = () => {
                                   </Row>
                                   <Hr />
                                   <Row>
-                                      <Label>Ramal: </Label>
+                                      <LabelS>Ramal: </LabelS>
                                       <Value>{element.branch}</Value>
                                   </Row>
                                   <Row>
-                                      <Label>email: </Label>
+                                      <LabelS>Email: </LabelS>
                                       <Value>{element.email}</Value>
                                   </Row>
                               </Element>

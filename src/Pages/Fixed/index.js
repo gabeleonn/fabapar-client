@@ -238,7 +238,7 @@ const FixedItems = () => {
                             type="text"
                             value={search}
                             onChange={(e) => handleSearch(e.target.value)}
-                            placeholder="Pesquisa"
+                            placeholder="Filtre por departamento ou por item"
                         />
                     </SearchBar>
                     <Hr light={true} />
@@ -284,7 +284,9 @@ const FixedItems = () => {
                     </AuxiliaryButtons>
                     <Modal show={addNew} height="90vh" toggleShow={modalAddNew}>
                         <Title>Adicionar Item</Title>
+                        <Label for="brand-new">Marca</Label>
                         <Input
+                            id="brand-new"
                             type="text"
                             placeholder="Marca"
                             name="brand"
@@ -292,21 +294,27 @@ const FixedItems = () => {
                             value={addForm.brand}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
+                        <Label for="type-new">Tipo</Label>
                         <Input
+                            id="type-new"
                             type="text"
                             placeholder="Tipo (ex: teclado, mouse...)"
                             name="type"
                             value={addForm.type}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
+                        <Label for="specs-new">Especificações</Label>
                         <Input
+                            id="specs-new"
                             type="text"
                             placeholder="Informações extras. (ex: cor, processador...)"
                             name="specs"
                             value={addForm.specs}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
+                        <Label for="status-new">Status</Label>
                         <Select
+                            id="status-new"
                             name="status"
                             value={addForm.status}
                             onChange={(e) => handleChangeAddForm(e)}
@@ -317,7 +325,9 @@ const FixedItems = () => {
                                 </Option>
                             ))}
                         </Select>
+                        <Label for="category-new">Categoria</Label>
                         <Select
+                            id="category-new"
                             name="category"
                             value={addForm.category}
                             onChange={(e) => handleChangeAddForm(e)}
@@ -330,20 +340,24 @@ const FixedItems = () => {
                         </Select>
                         {addForm.status === 'EMPRESTADO' ||
                         addForm.status === 'FIXO' ? (
-                            <Select
-                                name="user_id"
-                                value={addForm.user_id}
-                                onChange={(e) => handleChangeAddForm(e)}
-                            >
-                                {usersEnum.map((element) => (
-                                    <Option
-                                        key={element.code}
-                                        value={element.code}
-                                    >
-                                        {`${element.firstname} ${element.lastname}`}
-                                    </Option>
-                                ))}
-                            </Select>
+                            <>
+                                <Label for="user-new">Usuário</Label>
+                                <Select
+                                    id="user-new"
+                                    name="user_id"
+                                    value={addForm.user_id}
+                                    onChange={(e) => handleChangeAddForm(e)}
+                                >
+                                    {usersEnum.map((element) => (
+                                        <Option
+                                            key={element.code}
+                                            value={element.code}
+                                        >
+                                            {`${element.firstname} ${element.lastname}`}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </>
                         ) : null}
                         <Input
                             type="file"
@@ -354,7 +368,9 @@ const FixedItems = () => {
                                 setUpload({ file: e.target.files[0] })
                             }
                         />
+                        <Label for="price-new">Preço pago</Label>
                         <Input
+                            id="price-new"
                             type="number"
                             placeholder="Preço pago"
                             name="price"
@@ -362,20 +378,28 @@ const FixedItems = () => {
                             onChange={(e) => handleChangeAddForm(e)}
                         />
                         <SubTitle>Última Manutenção</SubTitle>
+                        <Label for="details-new">Observações</Label>
                         <TextArea
+                            id="details-new"
                             placeholder="Observações"
                             name="details"
                             value={addForm.details}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
+                        <Label for="warranty-new">Data de Garantia</Label>
                         <Input
+                            id="warranty-new"
                             type="date"
                             placeholder="Data de garantia"
                             name="warranty"
                             value={addForm.warranty}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
+                        <Label for="maintainer-new">
+                            Quem fez a manutenção?
+                        </Label>
                         <Input
+                            id="maintainer-new"
                             type="text"
                             placeholder="Quem fez a manutenção?"
                             name="maintainer"
