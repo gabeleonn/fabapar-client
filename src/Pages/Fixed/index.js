@@ -30,6 +30,8 @@ import {
     FilterOption,
 } from '../OtherElements';
 
+import SelectComponent from '../../Components/SearchableSelect';
+
 import { FaPaperclip } from 'react-icons/fa';
 
 import { api, enums } from '../../services';
@@ -222,6 +224,20 @@ const FixedItems = () => {
         setSearch('');
     };
 
+    const handleAddSelect = (code) => {
+        handleChangeAddForm({
+            ...addForm,
+            user_id: code,
+        });
+    };
+
+    const handleEditSelect = (code) => {
+        handleChangeEditForm({
+            ...editForm,
+            user_id: code,
+        });
+    };
+
     return (
         <>
             <Wrapper>
@@ -284,7 +300,7 @@ const FixedItems = () => {
                     </AuxiliaryButtons>
                     <Modal show={addNew} height="90vh" toggleShow={modalAddNew}>
                         <Title>Adicionar Item</Title>
-                        <Label for="brand-new">Marca</Label>
+                        <Label htmlFor="brand-new">Marca</Label>
                         <Input
                             id="brand-new"
                             type="text"
@@ -294,7 +310,7 @@ const FixedItems = () => {
                             value={addForm.brand}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
-                        <Label for="type-new">Tipo</Label>
+                        <Label htmlFor="type-new">Tipo</Label>
                         <Input
                             id="type-new"
                             type="text"
@@ -303,7 +319,7 @@ const FixedItems = () => {
                             value={addForm.type}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
-                        <Label for="specs-new">Especificações</Label>
+                        <Label htmlFor="specs-new">Especificações</Label>
                         <Input
                             id="specs-new"
                             type="text"
@@ -312,7 +328,7 @@ const FixedItems = () => {
                             value={addForm.specs}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
-                        <Label for="status-new">Status</Label>
+                        <Label htmlFor="status-new">Status</Label>
                         <Select
                             id="status-new"
                             name="status"
@@ -325,7 +341,7 @@ const FixedItems = () => {
                                 </Option>
                             ))}
                         </Select>
-                        <Label for="category-new">Categoria</Label>
+                        <Label htmlFor="category-new">Categoria</Label>
                         <Select
                             id="category-new"
                             name="category"
@@ -341,22 +357,11 @@ const FixedItems = () => {
                         {addForm.status === 'EMPRESTADO' ||
                         addForm.status === 'FIXO' ? (
                             <>
-                                <Label for="user-new">Usuário</Label>
-                                <Select
-                                    id="user-new"
-                                    name="user_id"
-                                    value={addForm.user_id}
-                                    onChange={(e) => handleChangeAddForm(e)}
-                                >
-                                    {usersEnum.map((element) => (
-                                        <Option
-                                            key={element.code}
-                                            value={element.code}
-                                        >
-                                            {`${element.firstname} ${element.lastname}`}
-                                        </Option>
-                                    ))}
-                                </Select>
+                                <Label htmlFor="user-new">Usuário</Label>
+                                <SelectComponent
+                                    data={usersEnum}
+                                    handleSelect={handleAddSelect}
+                                />
                             </>
                         ) : null}
                         <Input
@@ -368,7 +373,7 @@ const FixedItems = () => {
                                 setUpload({ file: e.target.files[0] })
                             }
                         />
-                        <Label for="price-new">Preço pago</Label>
+                        <Label htmlFor="price-new">Preço pago</Label>
                         <Input
                             id="price-new"
                             type="number"
@@ -378,7 +383,7 @@ const FixedItems = () => {
                             onChange={(e) => handleChangeAddForm(e)}
                         />
                         <SubTitle>Última Manutenção</SubTitle>
-                        <Label for="details-new">Observações</Label>
+                        <Label htmlFor="details-new">Observações</Label>
                         <TextArea
                             id="details-new"
                             placeholder="Observações"
@@ -386,7 +391,7 @@ const FixedItems = () => {
                             value={addForm.details}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
-                        <Label for="warranty-new">Data de Garantia</Label>
+                        <Label htmlFor="warranty-new">Data de Garantia</Label>
                         <Input
                             id="warranty-new"
                             type="date"
@@ -395,7 +400,7 @@ const FixedItems = () => {
                             value={addForm.warranty}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
-                        <Label for="maintainer-new">
+                        <Label htmlFor="maintainer-new">
                             Quem fez a manutenção?
                         </Label>
                         <Input
@@ -425,7 +430,7 @@ const FixedItems = () => {
                             Nota fiscal
                         </Icon>
                     </Description>
-                    <Label for="status-edit">Status</Label>
+                    <Label htmlFor="status-edit">Status</Label>
                     <Select
                         id="status-edit"
                         ref={editFocus}
@@ -442,28 +447,18 @@ const FixedItems = () => {
                     {editForm.status === 'EMPRESTADO' ||
                     editForm.status === 'FIXO' ? (
                         <>
-                            <Label for="user-edit">Status</Label>
-                            <Select
-                                id="user-edit"
-                                name="user_id"
-                                value={editForm.user_id}
-                                onChange={(e) => handleChangeEditForm(e)}
-                            >
-                                {usersEnum.map((element) => (
-                                    <Option
-                                        key={element.code}
-                                        value={element.code}
-                                    >
-                                        {`${element.firstname} ${element.lastname}`}
-                                    </Option>
-                                ))}
-                            </Select>
+                            <Label htmlFor="user-edit">Status</Label>
+                            <SelectComponent
+                                data={usersEnum}
+                                handleSelect={handleEditSelect}
+                                defaultValue={editForm.user_id}
+                            />
                         </>
                     ) : null}
                     {editForm.status === 'MANUTENÇÃO' ? (
                         <>
                             <SubTitle>Adicionar Manutenção</SubTitle>
-                            <Label for="details-edit">Detalhes</Label>
+                            <Label htmlFor="details-edit">Detalhes</Label>
                             <TextArea
                                 id="details-edit"
                                 placeholder="Observações"
@@ -471,7 +466,9 @@ const FixedItems = () => {
                                 value={editForm.details}
                                 onChange={(e) => handleChangeEditForm(e)}
                             />
-                            <Label for="warranty-edit">Data da Garantia</Label>
+                            <Label htmlFor="warranty-edit">
+                                Data da Garantia
+                            </Label>
                             <Input
                                 id="warranty-edit"
                                 type="date"
@@ -480,7 +477,7 @@ const FixedItems = () => {
                                 value={editForm.warranty}
                                 onChange={(e) => handleChangeEditForm(e)}
                             />
-                            <Label for="maintainer-edit">
+                            <Label htmlFor="maintainer-edit">
                                 Quem fez a manutenção
                             </Label>
                             <Input
