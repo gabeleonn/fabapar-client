@@ -14,22 +14,25 @@ const Select = ({ data, handleSelect, defaultValue }) => {
 
     useEffect(() => {
         setOptions(data);
-    }, [data]);
+        if (typeof defaultValue !== 'undefined' && data.length > 0) {
+            let user = data.filter((e) => e.code === defaultValue)[0];
+            let value = `${user.firstname} ${user.lastname}`;
+            updateValue(value);
+        }
+    }, [data, defaultValue]);
 
     const [show, setShow] = useState(false);
     const [options, setOptions] = useState(data);
 
+    const [value, updateValue] = useState('');
+
     const handleOptions = async (value) => {
+        updateValue(value);
         setOptions(
             data.filter(
                 (element) => element.code.match(new RegExp(value, 'i')) !== null
             )
         );
-    };
-
-    const handleDefaultValue = () => {
-        let user = data.filter((e) => e.code === defaultValue)[0];
-        return `${user.firstname} ${user.lastname}`;
     };
 
     return (
@@ -40,7 +43,7 @@ const Select = ({ data, handleSelect, defaultValue }) => {
                     type="text"
                     onChange={(e) => handleOptions(e.target.value)}
                     onClick={() => setShow(!show)}
-                    value={defaultValue ? handleDefaultValue() : ''}
+                    value={value}
                 />
                 <Icon />
             </Search>
@@ -53,7 +56,9 @@ const Select = ({ data, handleSelect, defaultValue }) => {
                                 onClick={() => {
                                     handleSelect(element.code);
                                     setShow(false);
-                                    searchField.current.value = `${element.firstname} ${element.lastname}`;
+                                    updateValue(
+                                        `${element.firstname} ${element.lastname}`
+                                    );
                                 }}
                             >
                                 {`${element.firstname} ${element.lastname}`}
