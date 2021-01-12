@@ -24,6 +24,9 @@ import {
     Description,
     Hr,
     Icon,
+    ButtonWrapper,
+    AuxiliaryButtons,
+    FilterOption,
 } from '../OtherElements';
 
 import { FaPaperclip } from 'react-icons/fa';
@@ -38,6 +41,8 @@ import 'moment/locale/pt-br';
 const FixedItems = () => {
     const addNewFocus = useRef();
     const editFocus = useRef();
+
+    const [status, updateStatus] = useState(enums.status.default);
 
     const [usersEnum, setUsersEnum] = useState([]);
 
@@ -67,7 +72,7 @@ const FixedItems = () => {
         type: '',
         specs: '',
         category: enums.categories.default,
-        status: 'FIXO',
+        status,
         warranty: '',
         details: '',
         maintainer: '',
@@ -75,8 +80,24 @@ const FixedItems = () => {
     });
 
     useEffect(() => {
-        refreshData();
-        refreshEnums();
+        api.get('equipments/').then((response) => {
+            setData(response.data);
+        });
+        api.get('users/enum').then((response) => {
+            setUsersEnum(response.data);
+        });
+    }, []);
+
+    useEffect(() => {
+        api.get('equipments/').then((response) => {
+            setData(response.data);
+        });
+        api.get('users/enum').then((response) => {
+            setUsersEnum(response.data);
+        });
+    }, [status]);
+
+    useEffect(() => {
         const handleSearch = () => {
             if (search === '') {
                 setSearchMode(false);
@@ -94,7 +115,7 @@ const FixedItems = () => {
     };
 
     const refreshData = () => {
-        api.get('equipments/fixo').then((response) => {
+        api.get('equipments/').then((response) => {
             setData(response.data);
         });
     };
@@ -102,6 +123,18 @@ const FixedItems = () => {
     const modalAddNew = async () => {
         await refreshEnums();
         setAddNew(!addNew);
+        handleChangeAddForm({
+            brand: '',
+            user_id: '2041',
+            type: '',
+            specs: '',
+            category: enums.categories.default,
+            status,
+            warranty: '',
+            details: '',
+            maintainer: '',
+            price: '',
+        });
         addNewFocus.current.focus();
     };
 
@@ -145,16 +178,16 @@ const FixedItems = () => {
         await api.post('equipments', formData, config);
         refreshData();
         handleChangeAddForm({
-            id: '',
             brand: '',
+            user_id: '2041',
             type: '',
             specs: '',
-            user_id: '2041',
             category: enums.categories.default,
-            status: 'FIXO',
+            status,
             warranty: '',
             details: '',
             maintainer: '',
+            price: '',
         });
     };
 
@@ -171,6 +204,7 @@ const FixedItems = () => {
             specs,
             file,
         });
+        updateStatus(status);
         setModalEdit(!modalEdit);
         editFocus.current.focus();
     };
@@ -178,7 +212,7 @@ const FixedItems = () => {
     const handleEdit = async (id) => {
         setModalEdit(!modalEdit);
         await api.patch(`equipments/${id}`, editForm);
-        setSearch('');
+        refreshData();
     };
 
     const handleDelete = async (id) => {
@@ -192,8 +226,11 @@ const FixedItems = () => {
             <Wrapper>
                 <Header>
                     <Head>
-                        <Title>Itens Fixos</Title>
-                        <AddButton onClick={modalAddNew} />
+                        <Title>Equipamentos</Title>
+                        <ButtonWrapper onClick={modalAddNew}>
+                            <AddButton />
+                            <span>Adicionar item</span>
+                        </ButtonWrapper>
                     </Head>
                     <SearchBar>
                         <SearchInput
@@ -203,6 +240,47 @@ const FixedItems = () => {
                             placeholder="Pesquisa"
                         />
                     </SearchBar>
+                    <Hr light={true} />
+                    <AuxiliaryButtons>
+                        <FilterOption
+                            className={status === 'FIXO' ? 'active' : null}
+                            onClick={() => updateStatus('FIXO')}
+                        >
+                            Fixo
+                        </FilterOption>
+                        <FilterOption
+                            className={
+                                status === 'EMPRESTADO' ? 'active' : null
+                            }
+                            onClick={() => updateStatus('EMPRESTADO')}
+                        >
+                            Emprestado
+                        </FilterOption>
+                        <FilterOption
+                            className={
+                                status === 'DISPONÍVEL' ? 'active' : null
+                            }
+                            onClick={() => updateStatus('DISPONÍVEL')}
+                        >
+                            Disponível
+                        </FilterOption>
+                        <FilterOption
+                            className={
+                                status === 'MANUTENÇÃO' ? 'active' : null
+                            }
+                            onClick={() => updateStatus('MANUTENÇÃO')}
+                        >
+                            Manutenção
+                        </FilterOption>
+                        <FilterOption
+                            className={
+                                status === 'DESCARTADO' ? 'active' : null
+                            }
+                            onClick={() => updateStatus('DESCARTADO')}
+                        >
+                            Descartado
+                        </FilterOption>
+                    </AuxiliaryButtons>
                     <Modal show={addNew} height="90vh" toggleShow={modalAddNew}>
                         <Title>Adicionar Item</Title>
                         <Input
@@ -309,17 +387,19 @@ const FixedItems = () => {
                     </Modal>
                 </Header>
                 <Modal show={modalEdit} height="auto" toggleShow={setModalEdit}>
-                    <SubTitle>
+                    <SubTitle>{editForm.description}</SubTitle>
+
+                    <Description>
+                        {editForm.department} &nbsp;&nbsp;|
                         <Icon
                             target="_blank"
                             rel="noreferrer"
-                            href={`http://localhost:8080/${editForm.file}`}
+                            href={`http://192.168.15.135:8080/${editForm.file}`}
                         >
                             <FaPaperclip />
+                            Nota fiscal
                         </Icon>
-                        {editForm.description}
-                    </SubTitle>
-                    <Description>{editForm.department}</Description>
+                    </Description>
 
                     <Select
                         ref={editFocus}
@@ -389,58 +469,11 @@ const FixedItems = () => {
                 </Modal>
                 <ElementList>
                     {data.length > 0 && !searchMode
-                        ? data.map((element) => (
-                              <Element
-                                  key={element.id}
-                                  onClick={() => handlemodalEdit(element)}
-                                  status={true}
-                              >
-                                  <Row primary={true}>
-                                      <Value>{element.description}</Value>
-                                  </Row>
-                                  <Hr />
-                                  <Row>
-                                      <Label>
-                                          Última Manutenção:
-                                          <br />
-                                      </Label>
-                                      <Value>
-                                          {element.maintenances
-                                              ? ` ${
-                                                    element.maintenances &&
-                                                    moment(
-                                                        element.maintenances[
-                                                            element.maintenances
-                                                                .length - 1
-                                                        ].updatedAt
-                                                    )
-                                                        .locale('pt-br')
-                                                        .format('LLLL')
-                                                } | ${
-                                                    element.maintenances[
-                                                        element.maintenances
-                                                            .length - 1
-                                                    ].maintainer
-                                                }`
-                                              : null}
-                                      </Value>
-                                  </Row>
-                                  <Status>
-                                      {element.user
-                                          ? `${element.user.department} | ${element.user.firstname} ${element.user.lastname}`
-                                          : null}
-                                  </Status>
-                              </Element>
-                          ))
-                        : data
+                        ? data
                               .filter(
                                   (element) =>
-                                      element.id
-                                          .toString()
-                                          .match(new RegExp(search, 'i')) !==
-                                          null ||
-                                      element.description.match(
-                                          new RegExp(search, 'i')
+                                      element.status.match(
+                                          new RegExp(status, 'i')
                                       ) !== null
                               )
                               .map((element) => (
@@ -452,23 +485,100 @@ const FixedItems = () => {
                                       <Row primary={true}>
                                           <Value>{element.description}</Value>
                                       </Row>
+                                      <Hr />
                                       <Row>
-                                          <Label>Última Manutenção:</Label>
-                                          <Value>{` ${moment(
-                                              element.maintenances[
-                                                  element.maintenances.length -
-                                                      1
-                                              ].updatedAt
-                                          )
-                                              .locale('pt-br')
-                                              .format('LLLL')} | ${
-                                              element.maintenances[
-                                                  element.maintenances.length -
-                                                      1
-                                              ].maintainer
-                                          }`}</Value>
+                                          <Label>
+                                              Última Manutenção:
+                                              <br />
+                                          </Label>
+                                          <Value>
+                                              {element.maintenances
+                                                  ? ` ${
+                                                        element.maintenances &&
+                                                        moment(
+                                                            element
+                                                                .maintenances[
+                                                                element
+                                                                    .maintenances
+                                                                    .length - 1
+                                                            ].updatedAt
+                                                        )
+                                                            .locale('pt-br')
+                                                            .format('LLLL')
+                                                    } | ${
+                                                        element.maintenances[
+                                                            element.maintenances
+                                                                .length - 1
+                                                        ].maintainer
+                                                    }`
+                                                  : null}
+                                          </Value>
                                       </Row>
-                                      <Status>{element.department}</Status>
+                                      <Status>
+                                          {element.user
+                                              ? `${element.user.department} | ${element.user.firstname} ${element.user.lastname}`
+                                              : null}
+                                      </Status>
+                                  </Element>
+                              ))
+                        : data
+                              .filter(
+                                  (element) =>
+                                      element.id
+                                          .toString()
+                                          .match(new RegExp(search, 'i')) !==
+                                          null ||
+                                      element.description.match(
+                                          new RegExp(search, 'i')
+                                      ) !== null ||
+                                      (element.user.department.match(
+                                          new RegExp(search, 'i')
+                                      ) !== null &&
+                                          element.status === status)
+                              )
+                              .map((element) => (
+                                  <Element
+                                      key={element.id}
+                                      onClick={() => handlemodalEdit(element)}
+                                      status={true}
+                                  >
+                                      <Row primary={true}>
+                                          <Value>{element.description}</Value>
+                                      </Row>
+                                      <Hr />
+                                      <Row>
+                                          <Label>
+                                              Última Manutenção:
+                                              <br />
+                                          </Label>
+                                          <Value>
+                                              {element.maintenances
+                                                  ? ` ${
+                                                        element.maintenances &&
+                                                        moment(
+                                                            element
+                                                                .maintenances[
+                                                                element
+                                                                    .maintenances
+                                                                    .length - 1
+                                                            ].updatedAt
+                                                        )
+                                                            .locale('pt-br')
+                                                            .format('LLLL')
+                                                    } | ${
+                                                        element.maintenances[
+                                                            element.maintenances
+                                                                .length - 1
+                                                        ].maintainer
+                                                    }`
+                                                  : null}
+                                          </Value>
+                                      </Row>
+                                      <Status>
+                                          {element.user
+                                              ? `${element.user.department} | ${element.user.firstname} ${element.user.lastname}`
+                                              : null}
+                                      </Status>
                                   </Element>
                               ))}
                 </ElementList>

@@ -21,6 +21,7 @@ import {
     Button,
     FormRow,
     Hr,
+    ButtonWrapper,
 } from '../OtherElements';
 
 import { api, enums } from '../../services';
@@ -74,7 +75,6 @@ const Users = () => {
         api.get('users').then((response) => {
             setData(response.data);
         });
-        console.log('e');
     };
 
     const modalAddNew = () => {
@@ -135,7 +135,10 @@ const Users = () => {
                 <Header>
                     <Head>
                         <Title>Usuários</Title>
-                        <AddButton onClick={modalAddNew} />
+                        <ButtonWrapper onClick={modalAddNew}>
+                            <AddButton />
+                            <span>Adicionar usuário</span>
+                        </ButtonWrapper>
                     </Head>
                     <SearchBar>
                         <SearchInput
@@ -294,8 +297,8 @@ const Users = () => {
                               >
                                   <Row primary={true}>
                                       <Value>{`${element.firstname} ${element.lastname} | ${element.department}`}</Value>
-                                      <Hr />
                                   </Row>
+                                  <Hr />
                                   <Row>
                                       <Label>Ramal: </Label>
                                       <Value>{element.branch}</Value>

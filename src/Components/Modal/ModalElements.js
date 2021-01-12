@@ -41,8 +41,9 @@ export const ModalBox = styled.div`
 export const ModalBoxClose = styled(FaTimes)`
     transition: all 0.3s ease-in-out;
     position: absolute;
-    right: 5px;
-    top: 5px;
+    right: 10px;
+    top: 10px;
+    color: var(--primary--light);
 
     &:hover {
         color: var(--secondary);

@@ -12,12 +12,10 @@ import {
 } from './NavElements';
 
 import {
-    FaRecycle as Discard,
     FaUsers as People,
     FaTachometerAlt as Dashboard,
     FaBoxes as Fixed,
-    FaDolly as Loans,
-    //FaChartLine as Reports,
+    FaChartLine as Reports,
     FaUserCircle as Profile,
     FaFileAlt as Tickets,
 } from 'react-icons/fa';
@@ -78,32 +76,21 @@ const NavMenu = () => {
                     <People />
                 </Icon>
                 <Icon
-                    name="Itens Fixos"
+                    name="Equipamentos"
                     exact
-                    to="/itens-fixos"
+                    to="/equipamentos"
                     activeClassName="active"
                 >
                     <Fixed />
                 </Icon>
                 <Icon
-                    name="Empréstimos"
+                    name="Relatórios"
                     exact
-                    to="/emprestimos"
+                    to="/relatorios"
                     activeClassName="active"
                 >
-                    <Loans />
-                </Icon>
-                <Icon
-                    name="Descartados"
-                    exact
-                    to="/descartados"
-                    activeClassName="active"
-                >
-                    <Discard />
-                </Icon>
-                {/* <Icon name="Relatórios" exact to="/relatorios" activeClassName="active">
                     <Reports />
-                </Icon> */}
+                </Icon>
             </NavAside>
         </>
     );

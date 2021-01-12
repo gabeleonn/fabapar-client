@@ -62,7 +62,10 @@ export const Header = styled.div`
     flex-direction: column;
     width: 100%;
     align-items: center;
+    justify-content: space-between;
     gap: 0.5rem;
+    flex-wrap: wrap;
+    position: relative;
 
     @media screen and (min-width: 768px) {
         flex-direction: row;
@@ -76,6 +79,38 @@ export const Head = styled.div`
     display: flex;
     gap: 1rem;
     align-items: center;
+    flex: 1;
+`;
+
+export const AuxiliaryButtons = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 30px;
+    width: 100%;
+    justify-content: center;
+`;
+
+export const FilterOption = styled.button`
+    border: none;
+    outline: none;
+    color: var(--auxiliar);
+    background: none;
+    transition: all 0.3s ease-in-out;
+    padding: 0.5rem 1rem;
+
+    &:hover {
+        cursor: pointer;
+        color: var(--secondary);
+    }
+
+    &:focus {
+        outline: 1px solid var(--secondary);
+    }
+
+    &.active {
+        color: var(--secondary);
+    }
 `;
 
 export const Title = styled.h2`
@@ -87,21 +122,54 @@ export const SubTitle = styled.h4`
 `;
 
 export const Hr = styled.hr`
-    margin-bottom: 1rem;
+    margin-bottom: ${({ light }) => (light ? '0' : '1rem')};
+    border: none;
+    background: none;
+    width: 100%;
+    border-bottom: ${({ light }) => (light ? '2px' : '1px')} solid
+        var(${({ light }) => (light ? '--primary--light' : '--primary')});
 `;
 
 export const Description = styled.span`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--auxiliar);
     margin-top: -0.5rem;
+    gap: 0.5rem;
+`;
+
+export const ButtonWrapper = styled.div`
+    display: flex;
+    align-items: center;
+
+    & > span {
+        visibility: hidden;
+        opacity: 0;
+        transform: translateX(-15%);
+        transition: all 0.3s ease-in-out;
+        color: var(--auxiliar);
+    }
+
+    &:hover {
+        cursor: pointer;
+
+        & > svg {
+            color: var(--secondary);
+        }
+
+        & > span {
+            visibility: visible;
+            transform: translateX(5%);
+            opacity: 1;
+            transition: all 0.3s ease-in-out;
+        }
+    }
 `;
 
 export const AddButton = styled(FaPlus)`
     transition: all 0.3s ease-in-out;
-
-    &:hover {
-        color: var(--secondary);
-        cursor: pointer;
-    }
+    position: relative;
 `;
 
 export const SearchBar = styled.form`
@@ -137,8 +205,12 @@ export const ElementList = styled.div`
     grid-gap: 0.5rem;
     padding: 0 1rem;
 
-    @media screen and (min-width: 768px) {
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    @media screen and (min-width: 1024px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (min-width: 1440px) {
+        grid-template-columns: 1fr 1fr 1fr;
     }
 `;
 
@@ -149,6 +221,7 @@ export const Element = styled.div`
     color: var(--black);
     position: relative;
     min-height: 80px;
+    min-width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -173,9 +246,7 @@ export const Label = styled.span`
     font-weight: 800;
 `;
 
-export const Value = styled.span`
-    text-transform: capitalize;
-`;
+export const Value = styled.span``;
 
 export const Status = styled.span`
     position: absolute;
@@ -313,10 +384,15 @@ export const Button = styled.button`
 
 export const Icon = styled.a`
     font-size: 1rem;
-    color: var(--secondary);
+    color: var(--primary--light);
     margin-right: 0.5rem;
-
-    &:hover {
-        color: var(--primary--light);
+    display: flex;
+    align-items: center;
+    align-content: center;
+    height: 20px;
+    gap: 0.5rem;
+    text-decoration: none;
+    &:hover > svg {
+        color: var(--secondary);
     }
 `;
