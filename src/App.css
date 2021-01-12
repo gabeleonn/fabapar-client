@@ -49,3 +49,18 @@ body {
 *::-webkit-scrollbar-thumb:hover {
     background: var(--secondary--light);
 }
+
+@keyframes focus {
+    0% {
+        outline: 0px solid transparent;
+    }
+    3% {
+        outline: 0px solid var(--secondary);
+    }
+    90% {
+        outline: 1px solid var(--secondary);
+    }
+    100% {
+        outline: 0px solid transparent;
+    }
+}

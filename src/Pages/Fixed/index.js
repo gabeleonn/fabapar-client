@@ -8,6 +8,7 @@ import {
     Element,
     Row,
     Label,
+    LabelS,
     Value,
     Status,
     AddButton,
@@ -400,8 +401,9 @@ const FixedItems = () => {
                             Nota fiscal
                         </Icon>
                     </Description>
-
+                    <Label for="status-edit">Status</Label>
                     <Select
+                        id="status-edit"
                         ref={editFocus}
                         name="status"
                         value={editForm.status}
@@ -415,35 +417,50 @@ const FixedItems = () => {
                     </Select>
                     {editForm.status === 'EMPRESTADO' ||
                     editForm.status === 'FIXO' ? (
-                        <Select
-                            name="user_id"
-                            value={editForm.user_id}
-                            onChange={(e) => handleChangeEditForm(e)}
-                        >
-                            {usersEnum.map((element) => (
-                                <Option key={element.code} value={element.code}>
-                                    {`${element.firstname} ${element.lastname}`}
-                                </Option>
-                            ))}
-                        </Select>
+                        <>
+                            <Label for="user-edit">Status</Label>
+                            <Select
+                                id="user-edit"
+                                name="user_id"
+                                value={editForm.user_id}
+                                onChange={(e) => handleChangeEditForm(e)}
+                            >
+                                {usersEnum.map((element) => (
+                                    <Option
+                                        key={element.code}
+                                        value={element.code}
+                                    >
+                                        {`${element.firstname} ${element.lastname}`}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </>
                     ) : null}
                     {editForm.status === 'MANUTENÇÃO' ? (
                         <>
                             <SubTitle>Adicionar Manutenção</SubTitle>
+                            <Label for="details-edit">Detalhes</Label>
                             <TextArea
+                                id="details-edit"
                                 placeholder="Observações"
                                 name="details"
                                 value={editForm.details}
                                 onChange={(e) => handleChangeEditForm(e)}
                             />
+                            <Label for="warranty-edit">Data da Garantia</Label>
                             <Input
+                                id="warranty-edit"
                                 type="date"
                                 placeholder="Data de garantia"
                                 name="warranty"
                                 value={editForm.warranty}
                                 onChange={(e) => handleChangeEditForm(e)}
                             />
+                            <Label for="maintainer-edit">
+                                Quem fez a manutenção
+                            </Label>
                             <Input
+                                id="maintainer-edit"
                                 type="text"
                                 placeholder="Quem fez a manutenção?"
                                 name="maintainer"
@@ -487,10 +504,10 @@ const FixedItems = () => {
                                       </Row>
                                       <Hr />
                                       <Row>
-                                          <Label>
+                                          <LabelS>
                                               Última Manutenção:
                                               <br />
-                                          </Label>
+                                          </LabelS>
                                           <Value>
                                               {element.maintenances
                                                   ? ` ${
@@ -547,10 +564,10 @@ const FixedItems = () => {
                                       </Row>
                                       <Hr />
                                       <Row>
-                                          <Label>
+                                          <LabelS>
                                               Última Manutenção:
                                               <br />
-                                          </Label>
+                                          </LabelS>
                                           <Value>
                                               {element.maintenances
                                                   ? ` ${

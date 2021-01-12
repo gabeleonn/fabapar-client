@@ -14,7 +14,7 @@ const enums = {
         enum: ['PERIFÉRICOS', 'DESKTOPS', 'NOTEBOOKS', 'RAMAIS'],
     },
     status: {
-        default: 'DISPONÍVEL',
+        default: 'FIXO',
         enum: ['DISPONÍVEL', 'MANUTENÇÃO', 'EMPRESTADO', 'FIXO', 'DESCARTADO'],
     },
     roles: { default: 'NORMAL', enum: ['SUPER', 'ADMIN', 'NORMAL'] },

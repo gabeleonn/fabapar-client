@@ -27,14 +27,15 @@ export const ModalBox = styled.div`
     position: relative;
     border-radius: 3px;
     overflow-y: auto;
+    padding: 1rem 2rem;
     height: ${({ height }) => height};
 
     @media screen and (min-width: 768px) {
-        width: 50%;
+        width: 55%;
     }
 
     @media screen and (min-width: 1024px) {
-        width: 30%;
+        width: 35%;
     }
 `;
 

@@ -105,7 +105,7 @@ export const FilterOption = styled.button`
     }
 
     &:focus {
-        outline: 1px solid var(--secondary);
+        animation: focus 3s 1;
     }
 
     &.active {
@@ -241,7 +241,13 @@ export const Row = styled.p`
     font-size: ${({ primary }) => (primary ? '1.1rem' : '.8rem')};
 `;
 
-export const Label = styled.span`
+export const Label = styled.label`
+    color: var(--primary--light);
+    text-align: start;
+    margin-bottom: -1rem;
+`;
+
+export const LabelS = styled.span`
     text-transform: capitalize;
     font-weight: 800;
 `;
