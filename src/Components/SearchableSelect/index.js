@@ -16,7 +16,12 @@ const Select = ({ data, handleSelect, defaultValue }) => {
         setOptions(data);
         if (typeof defaultValue !== 'undefined' && data.length > 0) {
             let user = data.filter((e) => e.code === defaultValue)[0];
-            let value = `${user.firstname} ${user.lastname}`;
+            let value = '';
+            if (user !== undefined) {
+                value = `${user.firstname} ${user.lastname}`;
+            } else {
+                value = '';
+            }
             updateValue(value);
         }
     }, [data, defaultValue]);

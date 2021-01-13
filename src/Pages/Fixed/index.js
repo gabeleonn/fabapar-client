@@ -201,7 +201,7 @@ const FixedItems = () => {
             ...editForm,
             id,
             description,
-            department: user.department,
+            department: user !== null ? user.department : 'Disponível',
             user_id,
             status,
             specs,
@@ -447,8 +447,9 @@ const FixedItems = () => {
                     {editForm.status === 'EMPRESTADO' ||
                     editForm.status === 'FIXO' ? (
                         <>
-                            <Label htmlFor="user-edit">Status</Label>
+                            <Label htmlFor="user-edit">Usuário</Label>
                             <SelectComponent
+                                id="user-edit"
                                 data={usersEnum}
                                 handleSelect={handleEditSelect}
                                 defaultValue={editForm.user_id}
@@ -514,51 +515,59 @@ const FixedItems = () => {
                                           new RegExp(status, 'i')
                                       ) !== null
                               )
-                              .map((element) => (
-                                  <Element
-                                      key={element.id}
-                                      onClick={() => handlemodalEdit(element)}
-                                      status={true}
-                                  >
-                                      <Row primary={true}>
-                                          <Value>{element.description}</Value>
-                                      </Row>
-                                      <Hr />
-                                      <Row>
-                                          <LabelS>
-                                              Última Manutenção:
-                                              <br />
-                                          </LabelS>
-                                          <Value>
-                                              {element.maintenances
-                                                  ? ` ${
-                                                        element.maintenances &&
-                                                        moment(
-                                                            element
-                                                                .maintenances[
-                                                                element
-                                                                    .maintenances
-                                                                    .length - 1
-                                                            ].updatedAt
-                                                        )
-                                                            .locale('pt-br')
-                                                            .format('LLLL')
-                                                    } | ${
-                                                        element.maintenances[
-                                                            element.maintenances
-                                                                .length - 1
-                                                        ].maintainer
-                                                    }`
+                              .map((element) => {
+                                  let {
+                                      id,
+                                      description,
+                                      maintenances,
+                                      user,
+                                  } = element;
+                                  return (
+                                      <Element
+                                          key={id}
+                                          onClick={() =>
+                                              handlemodalEdit(element)
+                                          }
+                                          status={true}
+                                      >
+                                          <Row primary={true}>
+                                              <Value>{description}</Value>
+                                          </Row>
+                                          <Hr />
+                                          <Row>
+                                              <LabelS>
+                                                  Última Manutenção:
+                                                  <br />
+                                              </LabelS>
+                                              <Value>
+                                                  {maintenances
+                                                      ? ` ${
+                                                            maintenances &&
+                                                            moment(
+                                                                maintenances[
+                                                                    maintenances.length -
+                                                                        1
+                                                                ].updatedAt
+                                                            )
+                                                                .locale('pt-br')
+                                                                .format('LLLL')
+                                                        } | ${
+                                                            maintenances[
+                                                                maintenances.length -
+                                                                    1
+                                                            ].maintainer
+                                                        }`
+                                                      : null}
+                                              </Value>
+                                          </Row>
+                                          <Status>
+                                              {user !== null
+                                                  ? `${user.department} | ${user.firstname} ${user.lastname}`
                                                   : null}
-                                          </Value>
-                                      </Row>
-                                      <Status>
-                                          {element.user
-                                              ? `${element.user.department} | ${element.user.firstname} ${element.user.lastname}`
-                                              : null}
-                                      </Status>
-                                  </Element>
-                              ))
+                                          </Status>
+                                      </Element>
+                                  );
+                              })
                         : data
                               .filter(
                                   (element) =>
