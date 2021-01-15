@@ -221,7 +221,7 @@ const FixedItems = () => {
     const handleDelete = async (id) => {
         setModalEdit(!modalEdit);
         await api.delete(`equipments/${id}`);
-        setSearch('');
+        refreshData();
     };
 
     const handleAddSelect = (code) => {
@@ -568,7 +568,8 @@ const FixedItems = () => {
                                       </Element>
                                   );
                               })
-                        : data
+                        : data.length > 0
+                        ? data
                               .filter(
                                   (element) =>
                                       element.id
@@ -627,7 +628,8 @@ const FixedItems = () => {
                                               : null}
                                       </Status>
                                   </Element>
-                              ))}
+                              ))
+                        : null}
                 </ElementList>
             </Wrapper>
         </>
