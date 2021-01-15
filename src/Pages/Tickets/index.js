@@ -19,6 +19,7 @@ import {
     Option,
     TextArea,
     FormRow,
+    ButtonWrapper,
 } from '../OtherElements';
 
 import { TicketStatus } from './TicketElements';
@@ -45,7 +46,7 @@ const Loans = () => {
         handleSearch();
     }, [search]);
 
-    const handleAddNew = () => {
+    const modalAddNew = () => {
         setAddNew(!addNew);
     };
 
@@ -143,7 +144,10 @@ const Loans = () => {
                 <Header>
                     <Head>
                         <Title>Chamados</Title>
-                        <AddButton onClick={handleAddNew} />
+                        <ButtonWrapper onClick={modalAddNew}>
+                            <AddButton />
+                            <span>Adicionar ticket</span>
+                        </ButtonWrapper>
                     </Head>
                     <SearchBar>
                         <SearchInput
@@ -153,7 +157,7 @@ const Loans = () => {
                             placeholder="Pesquisa"
                         />
                     </SearchBar>
-                    <Modal show={addNew} toggleShow={handleAddNew}>
+                    <Modal show={addNew} toggleShow={modalAddNew}>
                         <Title>Adicionar Ticket</Title>
                         <Input type="text" placeholder="Descrição curta" />
                         <TextArea placeholder="Descrição detalhada" />
