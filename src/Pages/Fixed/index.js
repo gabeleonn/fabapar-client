@@ -221,6 +221,7 @@ const FixedItems = () => {
     const handleDelete = async (id) => {
         setModalEdit(!modalEdit);
         await api.delete(`equipments/${id}`);
+        updateStatus(status);
         setSearch('');
     };
 
@@ -236,6 +237,33 @@ const FixedItems = () => {
             ...editForm,
             user_id: code,
         });
+    };
+
+    const handleFilter = (element) => {
+        if (element.id === null) {
+            return false;
+        } else {
+            if (element.user !== null) {
+                return (
+                    (element.id.toString().match(new RegExp(search, 'i')) !==
+                        null ||
+                        element.description.match(new RegExp(search, 'i')) !==
+                            null ||
+                        element.user.department.match(
+                            new RegExp(search, 'i')
+                        ) !== null) &&
+                    element.status === status
+                );
+            } else {
+                return (
+                    (element.id.toString().match(new RegExp(search, 'i')) !==
+                        null ||
+                        element.description.match(new RegExp(search, 'i')) !==
+                            null) &&
+                    element.status === status
+                );
+            }
+        }
     };
 
     return (
@@ -522,6 +550,7 @@ const FixedItems = () => {
                                       maintenances,
                                       user,
                                   } = element;
+
                                   return (
                                       <Element
                                           key={id}
@@ -568,66 +597,63 @@ const FixedItems = () => {
                                       </Element>
                                   );
                               })
-                        : data
-                              .filter(
-                                  (element) =>
-                                      element.id
-                                          .toString()
-                                          .match(new RegExp(search, 'i')) !==
-                                          null ||
-                                      element.description.match(
-                                          new RegExp(search, 'i')
-                                      ) !== null ||
-                                      (element.user.department.match(
-                                          new RegExp(search, 'i')
-                                      ) !== null &&
-                                          element.status === status)
-                              )
-                              .map((element) => (
-                                  <Element
-                                      key={element.id}
-                                      onClick={() => handlemodalEdit(element)}
-                                      status={true}
-                                  >
-                                      <Row primary={true}>
-                                          <Value>{element.description}</Value>
-                                      </Row>
-                                      <Hr />
-                                      <Row>
-                                          <LabelS>
-                                              Última Manutenção:
-                                              <br />
-                                          </LabelS>
-                                          <Value>
-                                              {element.maintenances
-                                                  ? ` ${
-                                                        element.maintenances &&
-                                                        moment(
-                                                            element
-                                                                .maintenances[
-                                                                element
-                                                                    .maintenances
-                                                                    .length - 1
-                                                            ].updatedAt
-                                                        )
-                                                            .locale('pt-br')
-                                                            .format('LLLL')
-                                                    } | ${
-                                                        element.maintenances[
-                                                            element.maintenances
-                                                                .length - 1
-                                                        ].maintainer
-                                                    }`
+                        : data.length > 0
+                        ? data
+                              .filter((element) => handleFilter(element))
+                              .map((element) => {
+                                  let {
+                                      id,
+                                      description,
+                                      maintenances,
+                                      user,
+                                  } = element;
+                                  return (
+                                      <Element
+                                          key={id}
+                                          onClick={() =>
+                                              handlemodalEdit(element)
+                                          }
+                                          status={true}
+                                      >
+                                          <Row primary={true}>
+                                              <Value>{description}</Value>
+                                          </Row>
+                                          <Hr />
+                                          <Row>
+                                              <LabelS>
+                                                  Última Manutenção:
+                                                  <br />
+                                              </LabelS>
+                                              <Value>
+                                                  {maintenances
+                                                      ? ` ${
+                                                            maintenances &&
+                                                            moment(
+                                                                maintenances[
+                                                                    maintenances.length -
+                                                                        1
+                                                                ].updatedAt
+                                                            )
+                                                                .locale('pt-br')
+                                                                .format('LLLL')
+                                                        } | ${
+                                                            maintenances[
+                                                                maintenances.length -
+                                                                    1
+                                                            ].maintainer
+                                                        }`
+                                                      : null}
+                                              </Value>
+                                          </Row>
+                                          <Status>
+                                              {user !== null
+                                                  ? `${user.department} | ${user.firstname} ${user.lastname}`
                                                   : null}
-                                          </Value>
-                                      </Row>
-                                      <Status>
-                                          {element.user
-                                              ? `${element.user.department} | ${element.user.firstname} ${element.user.lastname}`
-                                              : null}
-                                      </Status>
-                                  </Element>
-                              ))}
+                                          </Status>
+                                      </Element>
+                                  );
+                              })
+                        : null}
                 </ElementList>
             </Wrapper>
         </>
