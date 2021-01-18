@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 
-import { Container, Item, List, ListItems } from './TicketElements';
+import {
+    Category,
+    Container,
+    Item,
+    List,
+    ListItems,
+    Status,
+    User,
+} from './TicketElements';
 
 import { FaPlus } from 'react-icons/fa';
 
@@ -11,16 +19,18 @@ const KanbanBoard = () => {
         {
             id: '1',
             description: 'Item 1',
-            category: 'rede',
+            category: 'hardware',
             priority: 'low',
             status: 'entrada',
+            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
         },
         {
             id: '2',
             description: 'Item 2',
-            category: 'rede',
+            category: 'software',
             priority: 'high',
             status: 'entrada',
+            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
         },
         {
             id: '3',
@@ -28,13 +38,15 @@ const KanbanBoard = () => {
             category: 'rede',
             priority: 'low',
             status: 'entrada',
+            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
         },
         {
             id: '4',
             description: 'Item 4',
-            category: 'rede',
+            category: 'hardware',
             priority: 'medium',
             status: 'em andamento',
+            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
         },
         {
             id: '5',
@@ -42,13 +54,31 @@ const KanbanBoard = () => {
             category: 'rede',
             priority: 'medium',
             status: 'em andamento',
+            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
         },
         {
             id: '6',
             description: 'Item 6',
-            category: 'rede',
+            category: 'plataforma',
             priority: 'high',
             status: 'concluido',
+            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
+        },
+        {
+            id: '7',
+            description: 'Item 7',
+            category: 'plataforma',
+            priority: 'high',
+            status: 'aguardando terceiros',
+            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
+        },
+        {
+            id: '8',
+            description: 'Item 8',
+            category: 'plataforma',
+            priority: 'high',
+            status: 'aguardando terceiros',
+            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
         },
     ];
 
@@ -122,7 +152,17 @@ const KanbanBoard = () => {
                                                     {...provided.dragHandleProps}
                                                     ref={provided.innerRef}
                                                 >
-                                                    {item.description}
+                                                    <p>{item.description}</p>
+                                                    <Status>
+                                                        <Category
+                                                            className={
+                                                                item.priority
+                                                            }
+                                                        >
+                                                            {item.category}
+                                                        </Category>
+                                                        <User>{`${item.user.firstname} ${item.user.lastname} | ${item.user.department}`}</User>
+                                                    </Status>
                                                 </Item>
                                             )}
                                         </Draggable>

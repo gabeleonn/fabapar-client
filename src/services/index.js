@@ -1,8 +1,50 @@
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
 
 const api = axios.create({
     baseURL: 'http://localhost:8080/v1/',
 });
+
+class Auth {
+    token = '';
+
+    constructor() {
+        this.token = localStorage.getItem('token');
+    }
+
+    async login(form) {
+        let response = await api.post('login', form);
+        if (response.data.token !== null) {
+            localStorage.setItem('token', response.data.token);
+            return response.data.token;
+        }
+        return null;
+    }
+
+    logout() {
+        localStorage.removeItem('token');
+    }
+
+    isLogged() {
+        if (localStorage.getItem('token') === null) {
+            this.token = null;
+            return false;
+        }
+        this.token = localStorage.getItem('token');
+        try {
+            jwt.verify(this.token, 'secret');
+            return true;
+        } catch (e) {
+            console.log(e);
+            localStorage.removeItem('token');
+            return false;
+        }
+    }
+
+    getToken() {
+        return localStorage.getItem('token');
+    }
+}
 
 const enums = {
     department: {
@@ -20,4 +62,4 @@ const enums = {
     roles: { default: 'NORMAL', enum: ['SUPER', 'ADMIN', 'NORMAL'] },
 };
 
-module.exports = { api, enums };
+module.exports = { api, enums, auth: new Auth() };

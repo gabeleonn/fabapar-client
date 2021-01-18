@@ -4,7 +4,6 @@ import {
     Wrapper,
     Header,
     Title,
-    AddButton,
     Head,
     Input,
     Select,
@@ -12,7 +11,6 @@ import {
     Option,
     TextArea,
     FormRow,
-    ButtonWrapper,
 } from '../OtherElements';
 
 import Modal from '../../Components/Modal';
@@ -52,10 +50,6 @@ const Loans = () => {
                 <Header>
                     <Head>
                         <Title>Chamados</Title>
-                        <ButtonWrapper onClick={modalAddNew}>
-                            <AddButton />
-                            <span>Adicionar Chamado</span>
-                        </ButtonWrapper>
                     </Head>
                     <Modal show={addNew} toggleShow={modalAddNew}>
                         <Title>Adicionar Chamado</Title>

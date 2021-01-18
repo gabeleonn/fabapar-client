@@ -20,6 +20,8 @@ import {
     FaFileAlt as Tickets,
 } from 'react-icons/fa';
 
+import { auth } from '../../services';
+
 const NavMenu = () => {
     const [dropdown, setDropdown] = useState(false);
 
@@ -45,7 +47,9 @@ const NavMenu = () => {
                     ) : (
                         <>
                             <NavTopButton to="/me">Perfil</NavTopButton>
-                            <NavTopButton to="/logout">Sair</NavTopButton>
+                            <NavTopButton to="/login" onClick={auth.logout}>
+                                Sair
+                            </NavTopButton>
                         </>
                     )}
                     {size[0] < 768 && dropdown ? (

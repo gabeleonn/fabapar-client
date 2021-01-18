@@ -34,7 +34,7 @@ import SelectComponent from '../../Components/SearchableSelect';
 
 import { FaPaperclip } from 'react-icons/fa';
 
-import { api, enums } from '../../services';
+import { api, auth, enums } from '../../services';
 import useForm from '../../hooks/useForm';
 import Modal from '../../Components/Modal';
 
@@ -83,19 +83,21 @@ const FixedItems = () => {
     });
 
     useEffect(() => {
-        api.get('equipments/').then((response) => {
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        api.get('equipments/', { headers }).then((response) => {
             setData(response.data);
         });
-        api.get('users/enum').then((response) => {
+        api.get('users/enum', { headers }).then((response) => {
             setUsersEnum(response.data);
         });
     }, []);
 
     useEffect(() => {
-        api.get('equipments/').then((response) => {
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        api.get('equipments/', { headers }).then((response) => {
             setData(response.data);
         });
-        api.get('users/enum').then((response) => {
+        api.get('users/enum', { headers }).then((response) => {
             setUsersEnum(response.data);
         });
     }, [status]);
@@ -112,13 +114,15 @@ const FixedItems = () => {
     }, [search]);
 
     const refreshEnums = () => {
-        api.get('users/enum').then((response) => {
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        api.get('users/enum', { headers }).then((response) => {
             setUsersEnum(response.data);
         });
     };
 
     const refreshData = () => {
-        api.get('equipments/').then((response) => {
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        api.get('equipments/', { headers }).then((response) => {
             setData(response.data);
         });
     };
@@ -175,6 +179,7 @@ const FixedItems = () => {
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
+                authorization: `Bearer ${auth.getToken()}`,
             },
         };
 
@@ -214,13 +219,15 @@ const FixedItems = () => {
 
     const handleEdit = async (id) => {
         setModalEdit(!modalEdit);
-        await api.patch(`equipments/${id}`, editForm);
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        await api.patch(`equipments/${id}`, editForm, { headers });
         refreshData();
     };
 
     const handleDelete = async (id) => {
         setModalEdit(!modalEdit);
-        await api.delete(`equipments/${id}`);
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        await api.delete(`equipments/${id}`, { headers });
         updateStatus(status);
         setSearch('');
     };
