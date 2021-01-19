@@ -120,9 +120,9 @@ const FixedItems = () => {
         });
     };
 
-    const refreshData = () => {
+    const getNewData = () => {
         let headers = { authorization: `Bearer ${auth.getToken()}` };
-        api.get('equipments/', { headers }).then((response) => {
+        api.get('equipments', { headers }).then((response) => {
             setData(response.data);
         });
     };
@@ -184,7 +184,7 @@ const FixedItems = () => {
         };
 
         await api.post('equipments', formData, config);
-        refreshData();
+        getNewData();
         handleChangeAddForm({
             brand: '',
             user_id: '2041',
@@ -212,7 +212,6 @@ const FixedItems = () => {
             specs,
             file,
         });
-        updateStatus(status);
         setModalEdit(!modalEdit);
         editFocus.current.focus();
     };
@@ -221,7 +220,7 @@ const FixedItems = () => {
         setModalEdit(!modalEdit);
         let headers = { authorization: `Bearer ${auth.getToken()}` };
         await api.patch(`equipments/${id}`, editForm, { headers });
-        refreshData();
+        getNewData();
     };
 
     const handleDelete = async (id) => {
@@ -229,7 +228,7 @@ const FixedItems = () => {
         let headers = { authorization: `Bearer ${auth.getToken()}` };
         await api.delete(`equipments/${id}`, { headers });
         updateStatus(status);
-        setSearch('');
+        getNewData();
     };
 
     const handleAddSelect = (code) => {
