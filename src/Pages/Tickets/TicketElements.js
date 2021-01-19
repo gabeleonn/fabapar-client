@@ -63,16 +63,19 @@ export const Item = styled.div`
     height: fit-content;
     width: 90%;
     background: var(--auxiliar--light);
-    border-radius: 5px;
-    box-shadow: 0 5px 7px 3px rgba(16, 16, 16, 0.15);
-    transform: translateY(0);
-    padding: 0.5rem;
+    border-bottom: 3px solid transparent;
+    border-left: 3px solid transparent;
     transition: all 0.3s ease-in-out;
+    transform: translate(0, 0);
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
 
     &:hover {
-        box-shadow: 0 7px 8px 2px rgba(16, 16, 16, 0.2);
-        transform: translateY(-2%);
         cursor: pointer;
+        border-bottom: 3px solid var(--auxiliar);
+        border-left: 3px solid var(--auxiliar);
+        transform: translate(0.8px, -0.8px);
+        transition: all 0.3s ease-in-out;
     }
 
     p {
@@ -112,4 +115,24 @@ export const Category = styled.span`
 export const User = styled.span`
     font-size: 0.8rem;
     color: var(--primary--light);
+    text-transform: capitalize;
+`;
+
+export const Ticket = styled.div`
+    background: var(--auxiliar--light);
+    color: var(--black);
+    border-bottom: 3px solid transparent;
+    border-left: 3px solid transparent;
+    transform: translate(0, 0);
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        cursor: pointer;
+        border-bottom: 3px solid var(--auxiliar);
+        border-left: 3px solid var(--auxiliar);
+        transform: translate(0.8px, -0.8px);
+        transition: all 0.3s ease-in-out;
+    }
 `;

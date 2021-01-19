@@ -5,16 +5,26 @@ import { auth } from '../../services';
 
 console.log(auth.isLogged());
 
-const ProtectedRoute = ({ component: Component, ...rest }) => (
+const ProtectedRoute = ({ admin, component: Component, ...rest }) => (
     <Route
         {...rest}
-        render={(props) =>
-            auth.isLogged() ? (
-                <Component {...props} />
-            ) : (
-                <Redirect to="/login" />
-            )
-        }
+        render={(props) => {
+            let isLogged = auth.isLogged();
+            let isNormal = localStorage.getItem('role') === 'NORMAL';
+            if (admin) {
+                if (isLogged && !isNormal) {
+                    return <Component {...props} />;
+                } else {
+                    return <Redirect to="/login" />;
+                }
+            } else {
+                if (isLogged) {
+                    return <Component {...props} />;
+                } else {
+                    return <Redirect to="/login" />;
+                }
+            }
+        }}
     />
 );
 

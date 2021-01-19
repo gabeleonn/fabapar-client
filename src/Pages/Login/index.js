@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import {
     Form,
     Input,
+    Label,
     LoginCard,
     LoginHeading,
     LoginWrapper,
+    Button,
 } from './LoginElements';
 
 import useForm from '../../hooks/useForm';
@@ -25,6 +27,9 @@ const Login = () => {
     }, [logged]);
 
     if (logged) {
+        if (localStorage.getItem('role') === 'NORMAL') {
+            return <Redirect to="/chamados" />;
+        }
         return <Redirect to="/" />;
     }
 
@@ -43,25 +48,27 @@ const Login = () => {
                 <LoginCard>
                     <LoginHeading>Login</LoginHeading>
                     <Form method="POST">
+                        <Label htmlFor="code">Matrícula</Label>
                         <Input
                             type="text"
                             name="code"
+                            id="code"
                             value={loginForm.code}
                             onChange={handleLoginForm}
                             placeholder="Matrícula"
                         />
+                        <Label htmlFor="password">Senha</Label>
                         <Input
                             type="password"
                             name="password"
+                            id="password"
                             value={loginForm.password}
                             onChange={handleLoginForm}
                             placeholder="Senha"
                         />
-                        <Input
-                            type="submit"
-                            value="Entrar"
-                            onClick={(e) => handleLogin(e)}
-                        />
+                        <Button type="submit" onClick={(e) => handleLogin(e)}>
+                            Entrar
+                        </Button>
                     </Form>
                 </LoginCard>
             </LoginWrapper>

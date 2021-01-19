@@ -42,7 +42,12 @@ function App() {
                 <AppWrapper>
                     <NavMenu />
                     <ContentWrapper>
-                        <ProtectedRoute exact path="/" component={Dashboard} />
+                        <ProtectedRoute
+                            exact
+                            path="/"
+                            component={Dashboard}
+                            admin={true}
+                        />
                         <ProtectedRoute
                             exact
                             path="/chamados"
@@ -52,16 +57,19 @@ function App() {
                             exact
                             path="/usuarios"
                             component={Users}
+                            admin={true}
                         />
                         <ProtectedRoute
                             exact
                             path="/equipamentos"
                             component={Fixed}
+                            admin={true}
                         />
                         <ProtectedRoute
                             exact
                             path="/relatorios"
                             component={Reports}
+                            admin={true}
                         />
                         <ProtectedRoute exact path="/me" component={Profile} />
                     </ContentWrapper>

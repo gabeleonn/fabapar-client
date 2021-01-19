@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
     Wrapper,
@@ -11,16 +11,54 @@ import {
     Option,
     TextArea,
     FormRow,
+    ButtonWrapper,
+    AddButton,
+    ElementList,
 } from '../OtherElements';
 
 import Modal from '../../Components/Modal';
 import KanbanBoard from './KanbanBoard';
+import { api } from '../../services';
+import { Category, Status, Ticket, User } from './TicketElements';
 
 const Loans = () => {
     const [addNew, setAddNew] = useState(false);
 
+    const [role, setRole] = useState('');
+    const [code, setCode] = useState('');
+
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        setRole(localStorage.getItem('role'));
+        setCode(localStorage.getItem('code'));
+        setData([
+            {
+                id: '1',
+                description: 'Item 1',
+                category: 'hardware',
+                priority: 'low',
+                status: 'entrada',
+                user: '2041',
+            },
+            {
+                id: '2',
+                description: 'Item 2',
+                category: 'software',
+                priority: 'high',
+                status: 'entrada',
+                user: '2041',
+            },
+        ]);
+    }, []);
+
     const [editMode, setEditMode] = useState(false);
     const [editForm, setEditForm] = useState({});
+
+    const refreshData = () => {
+        if (role === 'NORMAL') {
+        }
+    };
 
     const modalAddNew = () => {
         setAddNew(!addNew);
@@ -50,6 +88,12 @@ const Loans = () => {
                 <Header>
                     <Head>
                         <Title>Chamados</Title>
+                        {role === 'NORMAL' ? (
+                            <ButtonWrapper onClick={modalAddNew}>
+                                <AddButton />
+                                <span>Abrir Chamado</span>
+                            </ButtonWrapper>
+                        ) : null}
                     </Head>
                     <Modal show={addNew} toggleShow={modalAddNew}>
                         <Title>Adicionar Chamado</Title>
@@ -90,7 +134,23 @@ const Loans = () => {
                         </Button>
                     </FormRow>
                 </Modal>
-                <KanbanBoard />
+                {role !== 'NORMAL' ? (
+                    <KanbanBoard />
+                ) : (
+                    <ElementList>
+                        {data.map((element) => (
+                            <Ticket key={element.id}>
+                                {element.description}
+                                <Status>
+                                    <Category className={element.priority}>
+                                        {element.category}
+                                    </Category>
+                                    <User>Status: {element.status}</User>
+                                </Status>
+                            </Ticket>
+                        ))}
+                    </ElementList>
+                )}
             </Wrapper>
         </>
     );

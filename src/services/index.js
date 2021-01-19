@@ -23,6 +23,7 @@ class Auth {
 
     logout() {
         localStorage.removeItem('token');
+        localStorage.removeItem('role');
     }
 
     isLogged() {
@@ -32,7 +33,9 @@ class Auth {
         }
         this.token = localStorage.getItem('token');
         try {
-            jwt.verify(this.token, 'secret');
+            let decoded = jwt.verify(this.token, 'secret');
+            localStorage.setItem('role', decoded.dbUser.role);
+            localStorage.setItem('code', decoded.dbUser.code);
             return true;
         } catch (e) {
             console.log(e);
