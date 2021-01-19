@@ -63,12 +63,13 @@ export const Item = styled.div`
     height: fit-content;
     width: 90%;
     background: var(--auxiliar--light);
-    border-bottom: 3px solid transparent;
-    border-left: 3px solid transparent;
+    border-bottom: 1px solid var(--auxiliar);
+    border-left: 1px solid var(--auxiliar);
     transition: all 0.3s ease-in-out;
     transform: translate(0, 0);
     border-radius: 5px;
     padding: 0.5rem 1rem;
+    margin-bottom: 2px;
 
     &:hover {
         cursor: pointer;
@@ -76,6 +77,7 @@ export const Item = styled.div`
         border-left: 3px solid var(--auxiliar);
         transform: translate(0.8px, -0.8px);
         transition: all 0.3s ease-in-out;
+        margin-bottom: 0;
     }
 
     p {

@@ -24,6 +24,7 @@ class Auth {
     logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
+        localStorage.removeItem('code');
     }
 
     isLogged() {
@@ -39,7 +40,7 @@ class Auth {
             return true;
         } catch (e) {
             console.log(e);
-            localStorage.removeItem('token');
+            this.logout();
             return false;
         }
     }
@@ -59,10 +60,30 @@ const enums = {
         enum: ['PERIFÉRICOS', 'DESKTOPS', 'NOTEBOOKS', 'RAMAIS'],
     },
     status: {
-        default: 'FIXO',
+        default: 'DISPONÍVEL',
         enum: ['DISPONÍVEL', 'MANUTENÇÃO', 'EMPRESTADO', 'FIXO', 'DESCARTADO'],
     },
     roles: { default: 'NORMAL', enum: ['SUPER', 'ADMIN', 'NORMAL'] },
+    ticket: {
+        categories: {
+            default: 'hardware',
+            enum: ['hardware', 'software', 'rede', 'plataforma'],
+        },
+        priority: {
+            default: 'low',
+            enum: ['low', 'medium', 'high'],
+        },
+        status: {
+            default: 'entrada',
+            enum: [
+                'entrada',
+                'em andamento',
+                'aguardando terceiros',
+                'concluído',
+                'perdido',
+            ],
+        },
+    },
 };
 
 module.exports = { api, enums, auth: new Auth() };

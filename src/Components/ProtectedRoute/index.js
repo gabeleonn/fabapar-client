@@ -3,8 +3,6 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { auth } from '../../services';
 
-console.log(auth.isLogged());
-
 const ProtectedRoute = ({ admin, component: Component, ...rest }) => (
     <Route
         {...rest}

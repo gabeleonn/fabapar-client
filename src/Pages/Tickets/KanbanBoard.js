@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
     Category,
@@ -14,75 +14,8 @@ import { FaPlus } from 'react-icons/fa';
 
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
-const KanbanBoard = () => {
-    const backendData = [
-        {
-            id: '1',
-            description: 'Item 1',
-            category: 'hardware',
-            priority: 'low',
-            status: 'entrada',
-            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
-        },
-        {
-            id: '2',
-            description: 'Item 2',
-            category: 'software',
-            priority: 'high',
-            status: 'entrada',
-            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
-        },
-        {
-            id: '3',
-            description: 'Item 3',
-            category: 'rede',
-            priority: 'low',
-            status: 'entrada',
-            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
-        },
-        {
-            id: '4',
-            description: 'Item 4',
-            category: 'hardware',
-            priority: 'medium',
-            status: 'em andamento',
-            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
-        },
-        {
-            id: '5',
-            description: 'Item 5',
-            category: 'rede',
-            priority: 'medium',
-            status: 'em andamento',
-            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
-        },
-        {
-            id: '6',
-            description: 'Item 6',
-            category: 'plataforma',
-            priority: 'high',
-            status: 'concluido',
-            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
-        },
-        {
-            id: '7',
-            description: 'Item 7',
-            category: 'plataforma',
-            priority: 'high',
-            status: 'aguardando terceiros',
-            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
-        },
-        {
-            id: '8',
-            description: 'Item 8',
-            category: 'plataforma',
-            priority: 'high',
-            status: 'aguardando terceiros',
-            user: { firstname: 'Gabriel', lastname: 'Leon', department: 'NTI' },
-        },
-    ];
-
-    const getData = () => {
+const KanbanBoard = ({ modalEdit, modalAddNew, backendData }) => {
+    const getData = (toChangeData) => {
         let newData = [
             { id: '0', title: 'Entrada', items: [] },
             { id: '1', title: 'Em andamento', items: [] },
@@ -90,29 +23,34 @@ const KanbanBoard = () => {
             { id: '3', title: 'Concluído', items: [] },
         ];
 
-        backendData.map((item) => {
-            switch (item.status) {
-                case 'entrada':
-                    newData[0].items.push(item);
-                    break;
-                case 'em andamento':
-                    newData[1].items.push(item);
-                    break;
-                case 'aguardando terceiros':
-                    newData[2].items.push(item);
-                    break;
-                case 'concluido':
-                    newData[3].items.push(item);
-                    break;
-                default:
-                    console.log('error');
-            }
-            return null;
-        });
+        if (toChangeData.length > 0) {
+            toChangeData.map((item) => {
+                switch (item.status) {
+                    case 'entrada':
+                        newData[0].items.push(item);
+                        break;
+                    case 'em andamento':
+                        newData[1].items.push(item);
+                        break;
+                    case 'aguardando terceiros':
+                        newData[2].items.push(item);
+                        break;
+                    case 'concluido':
+                        newData[3].items.push(item);
+                        break;
+                    default:
+                        console.log('error');
+                }
+                return null;
+            });
+        }
         return newData;
     };
+    const [data, updateData] = useState([]);
 
-    const [data, updateData] = useState(getData());
+    useEffect(() => {
+        updateData(getData(backendData));
+    }, [backendData]);
 
     const handleDragEnd = ({ source, destination }) => {
         const items = Array.from(data);
@@ -142,12 +80,15 @@ const KanbanBoard = () => {
                                 <ListItems>
                                     {element.items.map((item, index) => (
                                         <Draggable
-                                            draggableId={item.id}
+                                            draggableId={`${item.id}`}
                                             index={index}
                                             key={item.id}
                                         >
                                             {(provided) => (
                                                 <Item
+                                                    onClick={() =>
+                                                        modalEdit(item)
+                                                    }
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
                                                     ref={provided.innerRef}
@@ -169,7 +110,7 @@ const KanbanBoard = () => {
                                     ))}
 
                                     {provided.placeholder}
-                                    <button>
+                                    <button onClick={modalAddNew}>
                                         <FaPlus /> Chamado
                                     </button>
                                 </ListItems>
