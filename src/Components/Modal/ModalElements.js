@@ -31,11 +31,11 @@ export const ModalBox = styled.div`
     height: ${({ height }) => height};
 
     @media screen and (min-width: 768px) {
-        width: 55%;
+        width: 60%;
     }
 
     @media screen and (min-width: 1024px) {
-        width: 35%;
+        width: 45%;
     }
 `;
 

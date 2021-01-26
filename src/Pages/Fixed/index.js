@@ -448,7 +448,7 @@ const FixedItems = () => {
                         <Icon
                             target="_blank"
                             rel="noreferrer"
-                            href={`http://192.168.15.135:8080/${editForm.file}`}
+                            href={`http://localhost:8080/${editForm.file}`}
                         >
                             <FaPaperclip />
                             Nota fiscal
