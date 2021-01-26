@@ -3,9 +3,19 @@ import styled from 'styled-components';
 export const Container = styled.div`
     display: flex;
     justify-content: space-between;
-    padding: 1rem 0.5rem;
+    padding: 1rem 0.2rem;
     height: 100%;
     overflow: hidden;
+    width: 100%;
+`;
+
+export const KanbanContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
 `;
 
 export const List = styled.div`
@@ -61,7 +71,7 @@ export const ListItems = styled.div`
 export const Item = styled.div`
     min-height: 80px;
     height: fit-content;
-    width: 90%;
+    width: 97%;
     background: var(--auxiliar--light);
     border-bottom: 1px solid var(--auxiliar);
     border-left: 1px solid var(--auxiliar);
@@ -95,7 +105,7 @@ export const Status = styled.div`
 export const Category = styled.span`
     text-transform: capitalize;
     border-radius: 50px;
-    padding: 0.3rem 1rem;
+    padding: 0.3rem .6rem;
     font-size: 0.8rem;
 
     &.high {

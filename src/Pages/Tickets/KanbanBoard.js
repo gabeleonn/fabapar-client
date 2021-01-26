@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import {
     Category,
-    Container,
     Item,
+    KanbanContainer,
     List,
     ListItems,
     Status,
@@ -157,7 +157,7 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
     };
 
     return (
-        <Container>
+        <KanbanContainer>
             <Modal show={entryModal} height="70vh" toggleShow={setEntryModal}>
                 <Title>Revisar Chamado</Title>
                 <LabelS>Descrição</LabelS>
@@ -269,7 +269,7 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
                     </Droppable>
                 ))}
             </DragDropContext>
-        </Container>
+        </KanbanContainer>
     );
 };
 

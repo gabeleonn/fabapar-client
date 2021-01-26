@@ -72,6 +72,7 @@ function App() {
                             admin={true}
                         />
                         <ProtectedRoute exact path="/me" component={Profile} />
+                        <Redirect from="*" to="/" />
                     </ContentWrapper>
                 </AppWrapper>
             </Switch>
