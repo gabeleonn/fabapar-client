@@ -341,6 +341,7 @@ const Loans = () => {
                         backendData={kanban}
                         modalAddNew={modalAddNew}
                         modalEdit={handleEditMode}
+                        getNewData={getData}
                     />
                 ) : (
                     <ElementList>

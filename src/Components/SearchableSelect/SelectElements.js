@@ -59,6 +59,10 @@ export const SearchItem = styled.div`
     display: flex;
     align-items: center;
 
+    &:last-child {
+        margin-bottom: 2rem;
+    }
+
     &:hover {
         background: var(--primary);
         cursor: pointer;
