@@ -5,6 +5,8 @@ import {
     Switch,
 } from 'react-router-dom';
 
+import ProtectedRoute from './Components/ProtectedRoute';
+
 import NavMenu from './Components/NavMenu';
 
 import './App.css';
@@ -18,7 +20,21 @@ import Tickets from './Pages/Tickets';
 import Reports from './Pages/Reports';
 import Profile from './Pages/Profile';
 
+import { useEffect, useState } from 'react';
+
+import { auth } from './services';
+
 function App() {
+    const [logged, setLogged] = useState(false);
+
+    useEffect(() => {
+        setLogged(auth.isLogged());
+    }, [logged]);
+
+    if (!logged) {
+        <Redirect to="/login" />;
+    }
+
     return (
         <Router>
             <Switch>
@@ -26,15 +42,37 @@ function App() {
                 <AppWrapper>
                     <NavMenu />
                     <ContentWrapper>
-                        <Route exact path="/" component={Dashboard} />
-                        <Route exact path="/chamados" component={Tickets} />
-                        <Route exact path="/usuarios" component={Users} />
-                        <Route exact path="/equipamentos" component={Fixed} />
-                        <Route exact path="/relatorios" component={Reports} />
-                        <Route exact path="/me" component={Profile} />
-                        <Route exact path="/logout">
-                            <Redirect to="/login" />
-                        </Route>
+                        <ProtectedRoute
+                            exact
+                            path="/"
+                            component={Dashboard}
+                            admin={true}
+                        />
+                        <ProtectedRoute
+                            exact
+                            path="/chamados"
+                            component={Tickets}
+                        />
+                        <ProtectedRoute
+                            exact
+                            path="/usuarios"
+                            component={Users}
+                            admin={true}
+                        />
+                        <ProtectedRoute
+                            exact
+                            path="/equipamentos"
+                            component={Fixed}
+                            admin={true}
+                        />
+                        <ProtectedRoute
+                            exact
+                            path="/relatorios"
+                            component={Reports}
+                            admin={true}
+                        />
+                        <ProtectedRoute exact path="/me" component={Profile} />
+                        <Redirect from="*" to="/" />
                     </ContentWrapper>
                 </AppWrapper>
             </Switch>

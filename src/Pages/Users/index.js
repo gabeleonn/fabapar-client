@@ -25,7 +25,7 @@ import {
     LabelS,
 } from '../OtherElements';
 
-import { api, enums } from '../../services';
+import { api, enums, auth } from '../../services';
 import useForm from '../../hooks/useForm';
 
 const Users = () => {
@@ -73,7 +73,8 @@ const Users = () => {
     }, [search]);
 
     const refreshData = () => {
-        api.get('users').then((response) => {
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        api.get('users', { headers }).then((response) => {
             setData(response.data);
         });
     };
@@ -89,7 +90,8 @@ const Users = () => {
 
     const handleNew = async (e) => {
         modalAddNew(!addNew);
-        await api.post('users', addForm);
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        await api.post('users', addForm, { headers });
         refreshData();
         handleChangeAddForm({
             code: '',
@@ -120,13 +122,15 @@ const Users = () => {
 
     const handleEdit = async (code) => {
         setModalEdit(!modalEdit);
-        await api.patch(`users/${code}`, editForm);
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        await api.patch(`users/${code}`, editForm, { headers });
         refreshData();
     };
 
     const handleDelete = async (code) => {
         setModalEdit(!modalEdit);
-        await api.delete(`users/${code}`);
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        await api.delete(`users/${code}`, { headers });
         refreshData();
     };
 

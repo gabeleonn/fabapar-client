@@ -34,7 +34,7 @@ import SelectComponent from '../../Components/SearchableSelect';
 
 import { FaPaperclip } from 'react-icons/fa';
 
-import { api, enums } from '../../services';
+import { api, auth, enums } from '../../services';
 import useForm from '../../hooks/useForm';
 import Modal from '../../Components/Modal';
 
@@ -83,22 +83,14 @@ const FixedItems = () => {
     });
 
     useEffect(() => {
-        api.get('equipments/').then((response) => {
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        api.get('equipments/', { headers }).then((response) => {
             setData(response.data);
         });
-        api.get('users/enum').then((response) => {
+        api.get('users/enum', { headers }).then((response) => {
             setUsersEnum(response.data);
         });
     }, []);
-
-    useEffect(() => {
-        api.get('equipments/').then((response) => {
-            setData(response.data);
-        });
-        api.get('users/enum').then((response) => {
-            setUsersEnum(response.data);
-        });
-    }, [status]);
 
     useEffect(() => {
         const handleSearch = () => {
@@ -112,13 +104,15 @@ const FixedItems = () => {
     }, [search]);
 
     const refreshEnums = () => {
-        api.get('users/enum').then((response) => {
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        api.get('users/enum', { headers }).then((response) => {
             setUsersEnum(response.data);
         });
     };
 
-    const refreshData = () => {
-        api.get('equipments/').then((response) => {
+    const getNewData = () => {
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        api.get('equipments', { headers }).then((response) => {
             setData(response.data);
         });
     };
@@ -175,11 +169,12 @@ const FixedItems = () => {
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
+                authorization: `Bearer ${auth.getToken()}`,
             },
         };
 
         await api.post('equipments', formData, config);
-        refreshData();
+        getNewData();
         handleChangeAddForm({
             brand: '',
             user_id: '2041',
@@ -207,22 +202,23 @@ const FixedItems = () => {
             specs,
             file,
         });
-        updateStatus(status);
         setModalEdit(!modalEdit);
         editFocus.current.focus();
     };
 
     const handleEdit = async (id) => {
         setModalEdit(!modalEdit);
-        await api.patch(`equipments/${id}`, editForm);
-        refreshData();
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        await api.patch(`equipments/${id}`, editForm, { headers });
+        getNewData();
     };
 
     const handleDelete = async (id) => {
         setModalEdit(!modalEdit);
-        await api.delete(`equipments/${id}`);
+        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        await api.delete(`equipments/${id}`, { headers });
         updateStatus(status);
-        setSearch('');
+        getNewData();
     };
 
     const handleAddSelect = (code) => {
@@ -410,7 +406,7 @@ const FixedItems = () => {
                             value={addForm.price}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
-                        <SubTitle>Última Manutenção</SubTitle>
+                        {/* <SubTitle>Última Manutenção</SubTitle>
                         <Label htmlFor="details-new">Observações</Label>
                         <TextArea
                             id="details-new"
@@ -438,7 +434,7 @@ const FixedItems = () => {
                             name="maintainer"
                             value={addForm.maintainer}
                             onChange={(e) => handleChangeAddForm(e)}
-                        />
+                        /> */}
                         <Button type="button" onClick={handleNew}>
                             Adicionar
                         </Button>
@@ -452,7 +448,7 @@ const FixedItems = () => {
                         <Icon
                             target="_blank"
                             rel="noreferrer"
-                            href={`http://192.168.15.135:8080/${editForm.file}`}
+                            href={`http://localhost:8080/${editForm.file}`}
                         >
                             <FaPaperclip />
                             Nota fiscal
@@ -484,7 +480,7 @@ const FixedItems = () => {
                             />
                         </>
                     ) : null}
-                    {editForm.status === 'MANUTENÇÃO' ? (
+                    {status === 'MANUTENÇÃO' ? (
                         <>
                             <SubTitle>Adicionar Manutenção</SubTitle>
                             <Label htmlFor="details-edit">Detalhes</Label>
@@ -563,7 +559,7 @@ const FixedItems = () => {
                                               <Value>{description}</Value>
                                           </Row>
                                           <Hr />
-                                          <Row>
+                                          { !!maintenances.length && <Row>
                                               <LabelS>
                                                   Última Manutenção:
                                                   <br />
@@ -588,7 +584,7 @@ const FixedItems = () => {
                                                         }`
                                                       : null}
                                               </Value>
-                                          </Row>
+                                          </Row> }
                                           <Status>
                                               {user !== null
                                                   ? `${user.department} | ${user.firstname} ${user.lastname}`

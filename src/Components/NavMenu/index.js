@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 import {
     NavAside,
@@ -20,8 +20,16 @@ import {
     FaFileAlt as Tickets,
 } from 'react-icons/fa';
 
+import { auth } from '../../services';
+
 const NavMenu = () => {
     const [dropdown, setDropdown] = useState(false);
+
+    const [role, setRole] = useState('');
+
+    useEffect(() => {
+        setRole(localStorage.getItem('role'));
+    }, []);
 
     const [size, setSize] = useState([0, 0]);
     useLayoutEffect(() => {
@@ -45,7 +53,9 @@ const NavMenu = () => {
                     ) : (
                         <>
                             <NavTopButton to="/me">Perfil</NavTopButton>
-                            <NavTopButton to="/logout">Sair</NavTopButton>
+                            <NavTopButton to="/login" onClick={auth.logout}>
+                                Sair
+                            </NavTopButton>
                         </>
                     )}
                     {size[0] < 768 && dropdown ? (
@@ -61,36 +71,44 @@ const NavMenu = () => {
                 </NavTopButtons>
             </NavTop>
             <NavAside>
-                <Icon name="Dashboard" exact to="/">
-                    <Dashboard />
-                </Icon>
-                <Icon name="Chamados" exact to="/chamados">
-                    <Tickets />
-                </Icon>
-                <Icon
-                    name="Usuários"
-                    exact
-                    to="/usuarios"
-                    activeClassName="active"
-                >
-                    <People />
-                </Icon>
-                <Icon
-                    name="Equipamentos"
-                    exact
-                    to="/equipamentos"
-                    activeClassName="active"
-                >
-                    <Fixed />
-                </Icon>
-                <Icon
-                    name="Relatórios"
-                    exact
-                    to="/relatorios"
-                    activeClassName="active"
-                >
-                    <Reports />
-                </Icon>
+                {role === 'SUPER' || role === 'ADMIN' ? (
+                    <>
+                        <Icon name="Dashboard" exact to="/">
+                            <Dashboard />
+                        </Icon>
+                        <Icon name="Chamados" exact to="/chamados">
+                            <Tickets />
+                        </Icon>
+                        <Icon
+                            name="Usuários"
+                            exact
+                            to="/usuarios"
+                            activeClassName="active"
+                        >
+                            <People />
+                        </Icon>
+                        <Icon
+                            name="Equipamentos"
+                            exact
+                            to="/equipamentos"
+                            activeClassName="active"
+                        >
+                            <Fixed />
+                        </Icon>
+                        <Icon
+                            name="Relatórios"
+                            exact
+                            to="/relatorios"
+                            activeClassName="active"
+                        >
+                            <Reports />
+                        </Icon>
+                    </>
+                ) : (
+                    <Icon name="Chamados" exact to="/chamados">
+                        <Tickets />
+                    </Icon>
+                )}
             </NavAside>
         </>
     );

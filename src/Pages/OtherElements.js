@@ -216,8 +216,6 @@ export const ElementList = styled.div`
 
 export const Element = styled.div`
     background: var(--auxiliar--light);
-    border-radius: 3px;
-    padding: 0.5rem 1rem;
     color: var(--black);
     position: relative;
     min-height: 80px;
@@ -225,15 +223,23 @@ export const Element = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
-    transform: scale(1);
+
+    border-bottom: 1px solid var(--auxiliar);
+    border-left: 1px solid var(--auxiliar);
+    margin-bottom: 2px;
     transition: all 0.3s ease-in-out;
+    transform: translate(0, 0);
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
     padding-bottom: ${({ status }) => (status ? '2.5rem' : '1rem')};
 
     &:hover {
-        transform: scale(1.01);
         cursor: pointer;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        border-bottom: 3px solid var(--auxiliar);
+        border-left: 3px solid var(--auxiliar);
+        transform: translate(0.3px, -1px);
+        transition: all 0.3s ease-in-out;
+        margin-bottom: 0;
     }
 `;
 

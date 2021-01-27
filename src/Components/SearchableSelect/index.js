@@ -55,7 +55,7 @@ const Select = ({ data, handleSelect, defaultValue }) => {
             {show ? (
                 <Selector>
                     {options.length > 0 ? (
-                        options.map((element) => (
+                        options.slice(0, 5).map((element) => (
                             <SearchItem
                                 key={element.code}
                                 onClick={() => {
