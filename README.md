@@ -82,7 +82,7 @@ $ yarn start
 
 ## 📝 Licença
 
-Projeto está sob Linceça MIT - veja a licença em [LICENSE](/LICENSE.md).
+Projeto está sob Linceça MIT - veja a licença em [LICENSE](/LICENSE).
 
 ---
 
