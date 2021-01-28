@@ -198,7 +198,10 @@ const FixedItems = () => {
             description,
             department: user !== null ? user.department : 'Disponível',
             user_id,
-            status,
+            status:
+                status === enums.status.default
+                    ? 'MANUTENÇÃO'
+                    : enums.status.default,
             specs,
             file,
         });
@@ -462,11 +465,13 @@ const FixedItems = () => {
                         value={editForm.status}
                         onChange={(e) => handleChangeEditForm(e)}
                     >
-                        {enums.status.enum.map((element) => (
-                            <Option key={element} value={element}>
-                                {element.toLowerCase()}
-                            </Option>
-                        ))}
+                        {enums.status.enum
+                            .filter((element) => element !== status)
+                            .map((element) => (
+                                <Option key={element} value={element}>
+                                    {element.toLowerCase()}
+                                </Option>
+                            ))}
                     </Select>
                     {editForm.status === 'EMPRESTADO' ||
                     editForm.status === 'FIXO' ? (
@@ -559,32 +564,48 @@ const FixedItems = () => {
                                               <Value>{description}</Value>
                                           </Row>
                                           <Hr />
-                                          { !!maintenances.length && <Row>
-                                              <LabelS>
-                                                  Última Manutenção:
-                                                  <br />
-                                              </LabelS>
-                                              <Value>
-                                                  {maintenances
-                                                      ? ` ${
-                                                            maintenances &&
-                                                            moment(
+                                          {!!maintenances.length ? (
+                                              <Row>
+                                                  <LabelS>
+                                                      Última Manutenção:
+                                                      <br />
+                                                  </LabelS>
+                                                  <Value>
+                                                      {maintenances
+                                                          ? ` ${
+                                                                maintenances &&
+                                                                moment(
+                                                                    maintenances[
+                                                                        maintenances.length -
+                                                                            1
+                                                                    ].updatedAt
+                                                                )
+                                                                    .locale(
+                                                                        'pt-br'
+                                                                    )
+                                                                    .format(
+                                                                        'LLLL'
+                                                                    )
+                                                            } | ${
                                                                 maintenances[
                                                                     maintenances.length -
                                                                         1
-                                                                ].updatedAt
-                                                            )
-                                                                .locale('pt-br')
-                                                                .format('LLLL')
-                                                        } | ${
-                                                            maintenances[
-                                                                maintenances.length -
-                                                                    1
-                                                            ].maintainer
-                                                        }`
-                                                      : null}
-                                              </Value>
-                                          </Row> }
+                                                                ].maintainer
+                                                            }`
+                                                          : null}
+                                                  </Value>
+                                              </Row>
+                                          ) : (
+                                              <Row>
+                                                  <LabelS>
+                                                      Última Manutenção:
+                                                      <br />
+                                                  </LabelS>
+                                                  <Value>
+                                                      Não teve manutenção
+                                                  </Value>
+                                              </Row>
+                                          )}
                                           <Status>
                                               {user !== null
                                                   ? `${user.department} | ${user.firstname} ${user.lastname}`

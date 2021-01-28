@@ -22,6 +22,7 @@ import {
     Label,
     LabelS,
     Option,
+    Row,
     Select,
     Title,
 } from '../OtherElements';
@@ -63,11 +64,14 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
                     case 'aguardando terceiros':
                         newData[2].items.push(item);
                         break;
-                    case 'concluido':
-                        newData[3].items.push(item);
+                    case 'concluído':
+                        if (newData[3].items.length < 3) {
+                            newData[3].items.push(item);
+                            break;
+                        }
                         break;
                     default:
-                        console.log('error');
+                        break;
                 }
                 return null;
             });
@@ -109,7 +113,7 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
                     status = 'concluído';
                     break;
                 default:
-                    console.log('error');
+                    break;
             }
             await api.patch(
                 `tickets/drag/${reorderedItem.id}`,
@@ -158,16 +162,14 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
 
     return (
         <KanbanContainer>
-            <Modal show={entryModal} height="70vh" toggleShow={setEntryModal}>
+            <Modal show={entryModal} toggleShow={setEntryModal}>
                 <Title>Revisar Chamado</Title>
-                <LabelS>Descrição</LabelS>
-                <p>{entryForm.description}</p>
-                <LabelS>Usuário</LabelS>
-                {entryForm.user !== null ? (
-                    <p>{`${entryForm.user.firstname} ${entryForm.user.lastname} | ${entryForm.user.department} `}</p>
-                ) : null}
+                <Row>
+                    <LabelS>Descrição</LabelS>
+                    <p>{entryForm.description}</p>
+                </Row>
 
-                <Label htmlFor="status">Status</Label>
+                {/* <Label htmlFor="status">Status</Label>
                 <Select
                     name="status"
                     id="status"
@@ -179,44 +181,50 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
                             {element}
                         </Option>
                     ))}
-                </Select>
-                <Label htmlFor="priority">Prioridade</Label>
-                <Select
-                    name="priority"
-                    id="priority"
-                    value={entryForm.priority}
-                    onChange={(e) => handleEntryForm(e)}
-                >
-                    {enums.ticket.priority.enum.map((element) => (
-                        <Option key={element} value={element}>
-                            {element === 'low' && 'Baixa'}
-                            {element === 'medium' && 'Média'}
-                            {element === 'high' && 'Alta'}
-                        </Option>
-                    ))}
-                </Select>
-                <Label htmlFor="category">Categoria</Label>
-                <Select
-                    name="category"
-                    id="category"
-                    value={entryForm.category}
-                    onChange={(e) => handleEntryForm(e)}
-                >
-                    {enums.ticket.categories.enum.map((element) => (
-                        <Option key={element} value={element}>
-                            {element}
-                        </Option>
-                    ))}
-                </Select>
+                </Select> */}
+                {entryForm.status !== 'concluído' && (
+                    <>
+                        <Label htmlFor="priority">Prioridade</Label>
+                        <Select
+                            name="priority"
+                            id="priority"
+                            value={entryForm.priority}
+                            onChange={(e) => handleEntryForm(e)}
+                        >
+                            {enums.ticket.priority.enum.map((element) => (
+                                <Option key={element} value={element}>
+                                    {element === 'low' && 'Baixa'}
+                                    {element === 'medium' && 'Média'}
+                                    {element === 'high' && 'Alta'}
+                                </Option>
+                            ))}
+                        </Select>
+                        <Label htmlFor="category">Categoria</Label>
+                        <Select
+                            name="category"
+                            id="category"
+                            value={entryForm.category}
+                            onChange={(e) => handleEntryForm(e)}
+                        >
+                            {enums.ticket.categories.enum.map((element) => (
+                                <Option key={element} value={element}>
+                                    {element}
+                                </Option>
+                            ))}
+                        </Select>
+                    </>
+                )}
 
-                <FormRow>
-                    <Button type="button" onClick={(e) => handleAccept()}>
-                        Aceitar
-                    </Button>
-                    <Button type="button" onClick={() => handleReject()}>
-                        Recusar
-                    </Button>
-                </FormRow>
+                {entryForm.status === 'entrada' && (
+                    <FormRow>
+                        <Button type="button" onClick={(e) => handleAccept()}>
+                            Aceitar
+                        </Button>
+                        <Button type="button" onClick={() => handleReject()}>
+                            Recusar
+                        </Button>
+                    </FormRow>
+                )}
             </Modal>
             <DragDropContext onDragEnd={handleDragEnd}>
                 {data.map((element) => (
@@ -243,7 +251,7 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
                                                     {...provided.dragHandleProps}
                                                     ref={provided.innerRef}
                                                 >
-                                                    <p>{item.description}</p>
+                                                    <p>{item.title}</p>
                                                     <Status>
                                                         <Category
                                                             className={

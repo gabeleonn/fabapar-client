@@ -1,29 +1,51 @@
 import React from 'react';
 
 import { Redirect, Route } from 'react-router-dom';
-import { auth } from '../../services';
 
-const ProtectedRoute = ({ admin, component: Component, ...rest }) => (
-    <Route
-        {...rest}
-        render={(props) => {
-            let isLogged = auth.isLogged();
-            let isNormal = localStorage.getItem('role') === 'NORMAL';
-            if (admin) {
-                if (isLogged && !isNormal) {
-                    return <Component {...props} />;
+import { useAuth } from '../../context/AuthContext';
+
+const ProtectedRoute = ({
+    isAdmin,
+    isPrivate,
+    component: Component,
+    ...rest
+}) => {
+    const { user } = useAuth();
+    console.log(!!user);
+    return (
+        <Route
+            {...rest}
+            render={({ location }) => {
+                if (isPrivate) {
+                    if (!!user) {
+                        return (
+                            <Redirect
+                                to={{
+                                    pathname: '/',
+                                    state: { from: location },
+                                }}
+                            />
+                        );
+                    }
+
+                    if (user.role !== 'NORMAL' && isAdmin) {
+                        return <Component />;
+                    } else {
+                        return (
+                            <Redirect
+                                to={{
+                                    pathname: '/chamados',
+                                    state: { from: location },
+                                }}
+                            />
+                        );
+                    }
                 } else {
-                    return <Redirect to="/login" />;
+                    return <Component />;
                 }
-            } else {
-                if (isLogged) {
-                    return <Component {...props} />;
-                } else {
-                    return <Redirect to="/login" />;
-                }
-            }
-        }}
-    />
-);
+            }}
+        />
+    );
+};
 
 export default ProtectedRoute;

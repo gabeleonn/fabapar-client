@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
     Form,
     Input,
@@ -11,8 +11,7 @@ import {
 
 import useForm from '../../hooks/useForm';
 
-import { auth } from '../../services';
-import { Redirect } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
     const [loginForm, handleLoginForm] = useForm({
@@ -20,26 +19,12 @@ const Login = () => {
         password: '',
     });
 
-    const [logged, setLogged] = useState(false);
-
-    useEffect(() => {
-        setLogged(auth.isLogged());
-    }, [logged]);
-
-    if (logged) {
-        if (localStorage.getItem('role') === 'NORMAL') {
-            return <Redirect to="/chamados" />;
-        }
-        return <Redirect to="/" />;
-    }
+    const { signIn } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        let req = await auth.login(loginForm);
-        if (req !== null) {
-            setLogged(true);
-        }
+        signIn(loginForm);
     };
 
     return (

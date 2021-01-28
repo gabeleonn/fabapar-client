@@ -35,7 +35,10 @@ const Select = ({ data, handleSelect, defaultValue }) => {
         updateValue(value);
         setOptions(
             data.filter(
-                (element) => element.code.match(new RegExp(value, 'i')) !== null
+                (element) =>
+                    element.code.match(new RegExp(value, 'i')) !== null ||
+                    element.firstname.match(new RegExp(value, 'i')) !== null ||
+                    element.lastname.match(new RegExp(value, 'i')) !== null
             )
         );
     };
@@ -49,6 +52,7 @@ const Select = ({ data, handleSelect, defaultValue }) => {
                     onChange={(e) => handleOptions(e.target.value)}
                     onClick={() => setShow(!show)}
                     value={value}
+                    onFocus={() => updateValue('')}
                 />
                 <Icon />
             </Search>

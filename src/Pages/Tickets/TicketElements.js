@@ -80,6 +80,7 @@ export const Item = styled.div`
     border-radius: 5px;
     padding: 0.5rem 1rem;
     margin-bottom: 2px;
+    font-size: 15px;
 
     &:hover {
         cursor: pointer;
@@ -105,8 +106,8 @@ export const Status = styled.div`
 export const Category = styled.span`
     text-transform: capitalize;
     border-radius: 50px;
-    padding: 0.3rem .6rem;
-    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
 
     &.high {
         background: #ffc4c7;

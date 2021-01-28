@@ -14,6 +14,7 @@ import {
     AddButton,
     ElementList,
     Label,
+    Input,
 } from '../OtherElements';
 
 import SelectComponent from '../../Components/SearchableSelect';
@@ -40,6 +41,7 @@ const Loans = () => {
         status: enums.ticket.status.default,
         priority: enums.ticket.priority.default,
         category: enums.ticket.categories.default,
+        title: '',
     });
 
     const [editForm, handleEditForm] = useForm({
@@ -48,6 +50,7 @@ const Loans = () => {
         status: enums.ticket.status.default,
         priority: enums.ticket.priority.default,
         category: enums.ticket.categories.default,
+        title: '',
     });
 
     useEffect(() => {
@@ -119,6 +122,7 @@ const Loans = () => {
         getData();
         handleAddForm({
             user_id: role !== 'SUPER' ? code : '',
+            title: '',
             description: '',
             status: enums.ticket.status.default,
             priority: enums.ticket.priority.default,
@@ -128,7 +132,15 @@ const Loans = () => {
     };
 
     const handleEditMode = (item) => {
-        let { description, status, priority, category, user_id, id } = item;
+        let {
+            description,
+            status,
+            priority,
+            category,
+            user_id,
+            id,
+            title,
+        } = item;
         handleEditForm({
             ...editForm,
             description,
@@ -137,6 +149,7 @@ const Loans = () => {
             category,
             user_id,
             id,
+            title,
         });
         setEditMode(!editMode);
     };
@@ -186,8 +199,17 @@ const Loans = () => {
                             </ButtonWrapper>
                         ) : null}
                     </Head>
-                    <Modal show={addNew} height="70vh" toggleShow={modalAddNew}>
+                    <Modal show={addNew} height="65vh" toggleShow={modalAddNew}>
                         <Title>Adicionar Chamado</Title>
+                        <Label htmlFor="title-addnew">Título</Label>
+                        <Input
+                            id="title-addnew"
+                            name="title"
+                            value={addForm.title}
+                            placeholder="Título do chamado"
+                            maxLength="90"
+                            onChange={(e) => handleAddForm(e)}
+                        />
                         <Label htmlFor="description">Descrição</Label>
                         <TextArea
                             id="description"
@@ -205,19 +227,23 @@ const Loans = () => {
                                 />
                             </>
                         ) : null}
-                        <Label htmlFor="status">Status</Label>
-                        <Select
-                            name="status"
-                            id="status"
-                            value={addForm.status}
-                            onChange={(e) => handleAddForm(e)}
-                        >
-                            {enums.ticket.status.enum.map((element) => (
-                                <Option key={element} value={element}>
-                                    {element}
-                                </Option>
-                            ))}
-                        </Select>
+                        {role !== 'NORMAL' && (
+                            <>
+                                <Label htmlFor="status">Status</Label>
+                                <Select
+                                    name="status"
+                                    id="status"
+                                    value={addForm.status}
+                                    onChange={(e) => handleAddForm(e)}
+                                >
+                                    {enums.ticket.status.enum.map((element) => (
+                                        <Option key={element} value={element}>
+                                            {element}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </>
+                        )}
                         <Label htmlFor="priority">Prioridade</Label>
                         <Select
                             name="priority"
@@ -262,6 +288,15 @@ const Loans = () => {
                     height="70vh"
                 >
                     <Title>Adicionar Chamado</Title>
+                    <Label htmlFor="title-edit">Título</Label>
+                    <Input
+                        id="title-edit"
+                        name="title"
+                        value={editForm.title}
+                        placeholder="Título do chamado"
+                        maxLength="100"
+                        onChange={(e) => handleEditForm(e)}
+                    />
                     <Label htmlFor="description-edit">Descrição</Label>
                     <TextArea
                         id="description-edit"
@@ -280,19 +315,24 @@ const Loans = () => {
                             />
                         </>
                     ) : null}
-                    <Label htmlFor="status-edit">Status</Label>
-                    <Select
-                        name="status"
-                        id="status-edit"
-                        value={editForm.status}
-                        onChange={(e) => handleEditForm(e)}
-                    >
-                        {enums.ticket.status.enum.map((element) => (
-                            <Option key={element} value={element}>
-                                {element}
-                            </Option>
-                        ))}
-                    </Select>
+                    {role !== 'NORMAL' && (
+                        <>
+                            <Label htmlFor="status-edit">Status</Label>
+                            <Select
+                                name="status"
+                                id="status-edit"
+                                value={editForm.status}
+                                onChange={(e) => handleEditForm(e)}
+                            >
+                                {enums.ticket.status.enum.map((element) => (
+                                    <Option key={element} value={element}>
+                                        {element}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </>
+                    )}
+
                     <Label htmlFor="priority-edit">Prioridade</Label>
                     <Select
                         name="priority"
@@ -350,7 +390,7 @@ const Loans = () => {
                                 key={element.id}
                                 onClick={() => handleEditMode(element)}
                             >
-                                {element.description}
+                                {element.title}
                                 <Status>
                                     <Category className={element.priority}>
                                         {element.category}

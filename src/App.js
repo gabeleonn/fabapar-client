@@ -20,61 +20,60 @@ import Tickets from './Pages/Tickets';
 import Reports from './Pages/Reports';
 import Profile from './Pages/Profile';
 
-import { useEffect, useState } from 'react';
-
-import { auth } from './services';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
-    const [logged, setLogged] = useState(false);
-
-    useEffect(() => {
-        setLogged(auth.isLogged());
-    }, [logged]);
-
-    if (!logged) {
-        <Redirect to="/login" />;
-    }
-
     return (
         <Router>
             <Switch>
-                <Route exact path="/login" component={Login} />
-                <AppWrapper>
-                    <NavMenu />
-                    <ContentWrapper>
-                        <ProtectedRoute
-                            exact
-                            path="/"
-                            component={Dashboard}
-                            admin={true}
-                        />
-                        <ProtectedRoute
-                            exact
-                            path="/chamados"
-                            component={Tickets}
-                        />
-                        <ProtectedRoute
-                            exact
-                            path="/usuarios"
-                            component={Users}
-                            admin={true}
-                        />
-                        <ProtectedRoute
-                            exact
-                            path="/equipamentos"
-                            component={Fixed}
-                            admin={true}
-                        />
-                        <ProtectedRoute
-                            exact
-                            path="/relatorios"
-                            component={Reports}
-                            admin={true}
-                        />
-                        <ProtectedRoute exact path="/me" component={Profile} />
-                        <Redirect from="*" to="/" />
-                    </ContentWrapper>
-                </AppWrapper>
+                <AuthProvider>
+                    <ProtectedRoute exact path="/login" component={Login} />
+                    <AppWrapper>
+                        <NavMenu />
+                        <ContentWrapper>
+                            <ProtectedRoute
+                                exact
+                                path="/"
+                                component={Dashboard}
+                                isAdmin
+                                isPrivate
+                            />
+                            <ProtectedRoute
+                                exact
+                                path="/chamados"
+                                component={Tickets}
+                                isPrivate
+                            />
+                            <ProtectedRoute
+                                exact
+                                path="/usuarios"
+                                component={Users}
+                                admin
+                                isPrivate
+                            />
+                            <ProtectedRoute
+                                exact
+                                path="/equipamentos"
+                                component={Fixed}
+                                admin
+                                isPrivate
+                            />
+                            <ProtectedRoute
+                                exact
+                                path="/relatorios"
+                                component={Reports}
+                                admin
+                                isPrivate
+                            />
+                            <ProtectedRoute
+                                exact
+                                path="/me"
+                                component={Profile}
+                                isPrivate
+                            />
+                        </ContentWrapper>
+                    </AppWrapper>
+                </AuthProvider>
             </Switch>
         </Router>
     );
