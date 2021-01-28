@@ -16,33 +16,16 @@ const ProtectedRoute = ({
         <Route
             {...rest}
             render={({ location }) => {
-                if (isPrivate) {
-                    if (!!user) {
-                        return (
-                            <Redirect
-                                to={{
-                                    pathname: '/',
-                                    state: { from: location },
-                                }}
-                            />
-                        );
-                    }
-
-                    if (user.role !== 'NORMAL' && isAdmin) {
-                        return <Component />;
-                    } else {
-                        return (
-                            <Redirect
-                                to={{
-                                    pathname: '/chamados',
-                                    state: { from: location },
-                                }}
-                            />
-                        );
-                    }
-                } else {
-                    return <Component />;
-                }
+                return isPrivate && !!user ? (
+                    <Component />
+                ) : (
+                    <Redirect
+                        to={{
+                            pathname: isPrivate ? '/login' : '/dashboard',
+                            state: { from: location },
+                        }}
+                    />
+                );
             }}
         />
     );

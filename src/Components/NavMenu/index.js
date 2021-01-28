@@ -21,15 +21,18 @@ import {
 } from 'react-icons/fa';
 
 import { auth } from '../../services';
+import { useAuth } from '../../context/AuthContext';
 
 const NavMenu = () => {
     const [dropdown, setDropdown] = useState(false);
 
+    const { user } = useAuth();
+
     const [role, setRole] = useState('');
 
     useEffect(() => {
-        setRole(localStorage.getItem('role'));
-    }, []);
+        setRole(user.role);
+    }, [user.role]);
 
     const [size, setSize] = useState([0, 0]);
     useLayoutEffect(() => {

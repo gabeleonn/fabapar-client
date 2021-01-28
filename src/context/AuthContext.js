@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         let token = localStorage.getItem('@fabapar/token');
         if (!!user && !!token) {
             try {
-                jwt.verify(this.token, 'secret').then();
+                jwt.verify(token, 'secret').then();
                 return { user: JSON.parse(user), token };
             } catch (e) {
                 return {};
@@ -27,29 +27,36 @@ export const AuthProvider = ({ children }) => {
         return {};
     });
 
-    const signIn = useCallback(async ({ code, password }) => {
-        const response = await api.post('/login', { code, password });
-        if (response.data.token) {
-            try {
-                let { dataValues } = jwt.verify(response.data.token, 'secret');
-                let user = {
-                    fullname: `${dataValues.firstname} ${dataValues.lastname}`,
-                    email: dataValues.email,
-                    role: dataValues.role,
-                    code: dataValues.code,
-                };
-                localStorage.setItem('@fabapar/user', JSON.stringify(user));
-                localStorage.setItem('@fabapar/token', response.data.token);
-                setData({
-                    user: response.data.user,
-                    token: response.data.token,
-                });
-            } catch (e) {
-                localStorage.removeItem('@fabapar/user');
-                localStorage.removeItem('@fabapar/token');
+    const signIn = useCallback(
+        async ({ code, password }) => {
+            const response = await api.post('/login', { code, password });
+            if (response.data.token) {
+                try {
+                    let { dataValues } = jwt.verify(
+                        response.data.token,
+                        'secret'
+                    );
+                    let user = {
+                        fullname: `${dataValues.firstname} ${dataValues.lastname}`,
+                        email: dataValues.email,
+                        role: dataValues.role,
+                        code: dataValues.code,
+                    };
+                    localStorage.setItem('@fabapar/user', JSON.stringify(user));
+                    localStorage.setItem('@fabapar/token', response.data.token);
+                    setData({
+                        user: response.data.user,
+                        token: response.data.token,
+                    });
+                    console.log(data);
+                } catch (e) {
+                    localStorage.removeItem('@fabapar/user');
+                    localStorage.removeItem('@fabapar/token');
+                }
             }
-        }
-    }, []);
+        },
+        [data]
+    );
 
     const signOut = useCallback(() => {
         localStorage.removeItem('@fabapar/user');
