@@ -31,8 +31,8 @@ const NavMenu = () => {
     const [role, setRole] = useState('');
 
     useEffect(() => {
-        setRole(user.role);
-    }, [user.role]);
+        setRole('NORMAL');
+    }, []);
 
     const [size, setSize] = useState([0, 0]);
     useLayoutEffect(() => {
