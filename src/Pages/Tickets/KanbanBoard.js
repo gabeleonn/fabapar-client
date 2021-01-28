@@ -28,9 +28,12 @@ import {
 } from '../OtherElements';
 import useForm from '../../hooks/useForm';
 
-import { api, auth, enums } from '../../services';
+import { api, enums } from '../../services';
+import { useAuth } from '../../context/AuthContext';
 
 const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
+    const { user, token } = useAuth();
+
     const [entryModal, setEntryModal] = useState(false);
     const [entryForm, handleEntryForm] = useForm({
         description: '',
@@ -97,7 +100,7 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
             reorderedItem
         );
         if (source.droppableId !== destination.droppableId) {
-            let headers = { authorization: `Bearer ${auth.getToken()}` };
+            let headers = { authorization: `Bearer ${token}` };
             let status = '';
             switch (destination.droppableId) {
                 case '0':
@@ -117,7 +120,7 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
             }
             await api.patch(
                 `tickets/drag/${reorderedItem.id}`,
-                { code: localStorage.getItem('code'), status },
+                { code: user.code, status },
                 { headers }
             );
         }
@@ -131,11 +134,11 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
 
     const handleAccept = async () => {
         const { priority, category } = entryForm;
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        let headers = { authorization: `Bearer ${token}` };
         await api.patch(
             `tickets/drag/${entryForm.id}`,
             {
-                code: localStorage.getItem('code'),
+                code: user.code,
                 status: 'em andamento',
                 priority,
                 category,
@@ -147,11 +150,11 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
     };
 
     const handleReject = async () => {
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        let headers = { authorization: `Bearer ${token}` };
         await api.patch(
             `tickets/drag/${entryForm.id}`,
             {
-                code: localStorage.getItem('code'),
+                code: user.code,
                 status: 'perdido',
             },
             { headers }

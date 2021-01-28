@@ -18,9 +18,11 @@ export const AuthProvider = ({ children }) => {
         let token = localStorage.getItem('@fabapar/token');
         if (!!user && !!token) {
             try {
-                jwt.verify(token, 'secret').then();
+                jwt.verify(token, 'secret');
+                console.log({ user: JSON.parse(user), token })
                 return { user: JSON.parse(user), token };
             } catch (e) {
+                console.log(e)
                 return {};
             }
         }
@@ -45,22 +47,24 @@ export const AuthProvider = ({ children }) => {
                     localStorage.setItem('@fabapar/user', JSON.stringify(user));
                     localStorage.setItem('@fabapar/token', response.data.token);
                     setData({
-                        user: response.data.user,
+                        user,
                         token: response.data.token,
                     });
-                    console.log(data);
+                    
                 } catch (e) {
                     localStorage.removeItem('@fabapar/user');
                     localStorage.removeItem('@fabapar/token');
+                    console.log(e)
                 }
             }
         },
-        [data]
+        []
     );
 
     const signOut = useCallback(() => {
         localStorage.removeItem('@fabapar/user');
         localStorage.removeItem('@fabapar/token');
+        setData({ user: null, token: null });
     }, []);
 
     return (
@@ -68,6 +72,7 @@ export const AuthProvider = ({ children }) => {
             value={{ user: data.user, token: data.token, signIn, signOut }}
         >
             {children}
+            {JSON.stringify(data)}
         </AuthContext.Provider>
     );
 };

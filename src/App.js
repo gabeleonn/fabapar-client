@@ -1,7 +1,5 @@
 import {
     BrowserRouter as Router,
-    Redirect,
-    Route,
     Switch,
 } from 'react-router-dom';
 
@@ -23,6 +21,7 @@ import Profile from './Pages/Profile';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
+
     return (
         <Router>
             <Switch>
@@ -48,21 +47,21 @@ function App() {
                                 exact
                                 path="/usuarios"
                                 component={Users}
-                                admin
+                                isAdmin
                                 isPrivate
                             />
                             <ProtectedRoute
                                 exact
                                 path="/equipamentos"
                                 component={Fixed}
-                                admin
+                                isAdmin
                                 isPrivate
                             />
                             <ProtectedRoute
                                 exact
                                 path="/relatorios"
                                 component={Reports}
-                                admin
+                                isAdmin
                                 isPrivate
                             />
                             <ProtectedRoute
@@ -71,8 +70,10 @@ function App() {
                                 component={Profile}
                                 isPrivate
                             />
+                            
                         </ContentWrapper>
                     </AppWrapper>
+                
                 </AuthProvider>
             </Switch>
         </Router>

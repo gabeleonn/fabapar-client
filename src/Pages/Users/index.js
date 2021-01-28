@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Modal from '../../Components/Modal';
 
 import {
@@ -25,12 +25,15 @@ import {
     LabelS,
 } from '../OtherElements';
 
-import { api, enums, auth } from '../../services';
+import { api, enums } from '../../services';
 import useForm from '../../hooks/useForm';
+import { useAuth } from '../../context/AuthContext';
 
 const Users = () => {
     const addNewFocus = useRef();
     const editFocus = useRef();
+    
+    const { token } = useAuth();
 
     const [addNew, setAddNew] = useState(false);
     const [data, setData] = useState([]);
@@ -60,6 +63,13 @@ const Users = () => {
         branch: '',
     });
 
+    const refreshData = useCallback(() => {
+        let headers = { authorization: `Bearer ${token}` };
+        api.get('users', { headers }).then((response) => {
+            setData(response.data);
+        });
+    }, [token]);
+
     useEffect(() => {
         refreshData();
         const handleSearch = () => {
@@ -70,14 +80,9 @@ const Users = () => {
             }
         };
         handleSearch();
-    }, [search]);
+    }, [search, refreshData]);
 
-    const refreshData = () => {
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
-        api.get('users', { headers }).then((response) => {
-            setData(response.data);
-        });
-    };
+    
 
     const modalAddNew = () => {
         setAddNew(!addNew);
@@ -90,7 +95,7 @@ const Users = () => {
 
     const handleNew = async (e) => {
         modalAddNew(!addNew);
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        let headers = { authorization: `Bearer ${token}` };
         await api.post('users', addForm, { headers });
         refreshData();
         handleChangeAddForm({
@@ -122,14 +127,14 @@ const Users = () => {
 
     const handleEdit = async (code) => {
         setModalEdit(!modalEdit);
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        let headers = { authorization: `Bearer ${token}` };
         await api.patch(`users/${code}`, editForm, { headers });
         refreshData();
     };
 
     const handleDelete = async (code) => {
         setModalEdit(!modalEdit);
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        let headers = { authorization: `Bearer ${token}` };
         await api.delete(`users/${code}`, { headers });
         refreshData();
     };

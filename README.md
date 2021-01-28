@@ -1,79 +1,89 @@
-# Sistema de Gerênciamento do Setor de TI da FABAPAR
+<h1 align="center">
+  Sistema de Gerênciamento do Setor de TI da Fabapar
+</h1>
 
-> Front-end simples e moderno com ReactJS & Redux.
+> For english version [click here](/README_EN.md).
 
-License [MIT]
+<p align="center">
+  Sistema simples e moderno com ReactJS & ContextAPI.
+</p>
 
-Este site é bem simples, usa ReactJS para composição da página, styled-components, react-icons, redux, entre outros.(_Em caso de dúvidas entrar em [contato][contato]._)
+<p align="center">
+  <img alt="GitHub" src="/license.svg">
+</p>
 
-![](dashboard.png)
-![](tickets.png)
+<p align="center">
+  <a href="#-sobre">Sobre o Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-historico-de-lançamento">Histórico de Lançamento</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-licença">Licença</a>
+</p>
 
-## Necessário para instalação
+<p align="center">
+  <img alt="Dashboard" src="/dashboard.png">
+  <img alt="Tickets" src="/tickets.png">
+</p>
 
-OS X & Linux & Windows:
+## 💇🏻‍♂️ Sobre
 
--   Yarn/NPM
--   Node.js ^v12.18.2
--   > Comando para instalar os pacotes com Yarn
+Este projeto está sendo realizado por Gabriel Leon, para as Faculdades Batistas do Paraná. A parte do front-end do projeto vem sendo desenvolvida com ReactJS, ContextAPI, e outras tecnologias que possibilitam tal projeto.
 
-```sh
-    yarn
+> Para saber mais sobre o back-end [clique aqui!](https://github.com/gabeleonn/fabapar-server)
+
+
+## 🚀 Tecnologias
+
+Tecnologias usadas no projeto:
+
+- [ReactJS](https://reactjs.org/)
+- [React Router DOM](https://reacttraining.com/react-router/)
+- [React Icons](https://react-icons.netlify.com/#/)
+- [Styled Components](https://styled-components.com/)
+- [React Beautiful DND](https://yarnpkg.com/package/react-beautiful-dnd)
+- [React Apex Charts](https://apexcharts.com/)
+- [Prettier](https://prettier.io/)
+
+## 💻 Para testar
+
+### Requisitos
+
+> OBS: Instalação do Node.js & servidor [backend](https://github.com/gabeleonn/fabapar-server) são necessárias.
+
+**Clone o projeto e acesse a pasta**
+
+```bash
+$ git clone https://github.com/gabeleonn/fabapar-client.git && cd fabapar-client
 ```
 
-> Comando para instalar os pacotes com NPM
+**Siga os passos abaixo para instalar as dependências com yarn:**
 
-```sh
-    npm install
+```bash
+# Instalar dependências
+$ yarn
+
+# Startar o projeto
+$ yarn start
+
+# Ótimo, agora basta acessar http://localhost:3000/ para usar o projeto.
 ```
 
-## Exemplo de uso
-
-Roda o servidor para desenvolvimento
-
-```sh
-    yarn start
-```
-
-Cria os arquivos para produção
-
-```sh
-    yarn build
-```
-
-_Para mais informações acesse [Create-React-App][react-app]._
-
-## Histórico de lançamentos
+## 🗂️ Histórico de lançamento
 
 -   1.0.0
     -   Versão simples, com SASS.
     -   Font Awesome.
-    -   Sem Redux ainda.
 -   2.0.0
     -   Versão com Styled Components.
     -   React Icons.
-    -   Não responsivo.
-    -   Sem Redux.
--   3.0.0 (MVP)
-    -   Versão com Styled Components e React Icons.
-    -   Responsivo.
-    -   Ainda sem Redux.
+    -   Componentes: Fixed & Users.
+-   3.0.0 (mais recente)
+    -   Componentes: Login, KanbanBoard & ProtectedRoute.
+    -   ContextAPI para cuidar da autenticação. 
 
-## Meta
+## 📝 Licença
 
-Gabriel Leon – [@gabeleonn](https://linkedin.com/in/gabeleonn) – _[gableonn@gmail.com][contato]._
+Projeto está sob Linceça MIT - veja a licença em [LICENSE](/LICENSE.md).
 
-[https://github.com/gabeleonn/](https://github.com/gabeleonn/)
+---
 
-Distribuído sob a licença MIT. Entre em [contato][contato] para mais informações.
-
-## Contributing
-
-1. Faça o _fork_ do projeto (<https://github.com/gabeleonn/fabapar-client/fork>)
-2. Crie uma _branch_ para sua modificação (`git checkout -b feature/fooBar`)
-3. Faça o _commit_ (`git commit -m 'Type: Add some fooBar'`)
-4. _Push_ (`git push origin feature/fooBar`)
-5. Crie um novo _Pull Request_
-
-[contato]: mailto:gableonn@gmail.com
-[react-app]: https://create-react-app.dev/docs/getting-started/
+Feito por Gabriel Leon 👋 [Acesse meu linkedin](https://www.linkedin.com/in/gabeleonn/)

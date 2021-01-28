@@ -11,25 +11,27 @@ const ProtectedRoute = ({
     ...rest
 }) => {
     const { user } = useAuth();
-    console.log(!!user);
     return (
         <Route
             {...rest}
             render={({ location }) => {
                 if (isPrivate) {
                     if (!!user) {
-                        if (isAdmin && user.role !== 'NORMAL') {
-                            <Component />;
-                        } else {
-                            <Redirect
+                        if (isAdmin) {
+                            if(user.role === 'NORMAL') {
+                                return <Redirect
                                 to={{
                                     pathname: '/chamados',
                                     state: { from: location },
                                 }}
                             />;
+                            }
+                            return <Component />;
+                        } else {
+                            return <Component />;
                         }
                     } else {
-                        <Redirect
+                        return <Redirect
                             to={{
                                 pathname: '/login',
                                 state: { from: location },
@@ -37,6 +39,14 @@ const ProtectedRoute = ({
                         />;
                     }
                 } else {
+                    if(!!user) {
+                        return <Redirect
+                                to={{
+                                    pathname: '/',
+                                    state: { from: location },
+                                }}
+                            />;
+                    }
                     return <Component />;
                 }
             }}

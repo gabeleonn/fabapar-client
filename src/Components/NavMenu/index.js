@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 
 import {
     NavAside,
@@ -20,19 +20,12 @@ import {
     FaFileAlt as Tickets,
 } from 'react-icons/fa';
 
-import { auth } from '../../services';
 import { useAuth } from '../../context/AuthContext';
 
 const NavMenu = () => {
     const [dropdown, setDropdown] = useState(false);
 
-    const { user } = useAuth();
-
-    const [role, setRole] = useState('');
-
-    useEffect(() => {
-        setRole('NORMAL');
-    }, []);
+    const { user, signOut } = useAuth();
 
     const [size, setSize] = useState([0, 0]);
     useLayoutEffect(() => {
@@ -56,7 +49,7 @@ const NavMenu = () => {
                     ) : (
                         <>
                             <NavTopButton to="/me">Perfil</NavTopButton>
-                            <NavTopButton to="/login" onClick={auth.logout}>
+                            <NavTopButton to="/login" onClick={signOut}>
                                 Sair
                             </NavTopButton>
                         </>
@@ -74,7 +67,7 @@ const NavMenu = () => {
                 </NavTopButtons>
             </NavTop>
             <NavAside>
-                {role === 'SUPER' || role === 'ADMIN' ? (
+                {user ? user.role === 'SUPER' || user.role === 'ADMIN' ? (
                     <>
                         <Icon name="Dashboard" exact to="/">
                             <Dashboard />
@@ -111,7 +104,7 @@ const NavMenu = () => {
                     <Icon name="Chamados" exact to="/chamados">
                         <Tickets />
                     </Icon>
-                )}
+                ): null}
             </NavAside>
         </>
     );

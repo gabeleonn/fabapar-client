@@ -21,15 +21,15 @@ import SelectComponent from '../../Components/SearchableSelect';
 import Modal from '../../Components/Modal';
 import KanbanBoard from './KanbanBoard';
 
-import { api, auth, enums } from '../../services';
+import { api,  enums } from '../../services';
+import { useAuth } from '../../context/AuthContext'
 import { Category, Status, Ticket, User } from './TicketElements';
 import useForm from '../../hooks/useForm';
 
 const Loans = () => {
-    const [addNew, setAddNew] = useState(false);
+    const { user, token } = useAuth();
 
-    const [role, setRole] = useState('');
-    const [code, setCode] = useState('');
+    const [addNew, setAddNew] = useState(false);
 
     const [data, setData] = useState([]);
     const [kanban, setKanban] = useState([]);
@@ -54,14 +54,9 @@ const Loans = () => {
     });
 
     useEffect(() => {
-        setRole(localStorage.getItem('role'));
-        setCode(localStorage.getItem('code'));
-    }, []);
-
-    useEffect(() => {
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
-        if (localStorage.getItem('role') === 'NORMAL') {
-            api.get(`tickets/${localStorage.getItem('code')}`, {
+        let headers = { authorization: `Bearer ${token}` };
+        if (user.role === 'NORMAL') {
+            api.get(`tickets/${user.role}`, {
                 headers,
             }).then((response) => {
                 if (!response.data.error) {
@@ -82,7 +77,7 @@ const Loans = () => {
                 }
             });
         }
-    }, []);
+    }, [user.role, token]);
 
     const [editMode, setEditMode] = useState(false);
 
@@ -91,9 +86,9 @@ const Loans = () => {
     };
 
     const getData = () => {
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
-        if (localStorage.getItem('role') === 'NORMAL') {
-            api.get(`tickets/${localStorage.getItem('code')}`, {
+        let headers = { authorization: `Bearer ${token}` };
+        if (user.role === 'NORMAL') {
+            api.get(`tickets/${user.code}`, {
                 headers,
             }).then((response) => {
                 if (!response.data.error) {
@@ -117,11 +112,11 @@ const Loans = () => {
     };
 
     const handleNewTicket = async () => {
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
-        await api.post(`tickets`, { user_id: code, ...addForm }, { headers });
+        let headers = { authorization: `Bearer ${token}` };
+        await api.post(`tickets`, { user_id: user.code, ...addForm }, { headers });
         getData();
         handleAddForm({
-            user_id: role !== 'SUPER' ? code : '',
+            user_id: user.role !== 'SUPER' ? user.code : '',
             title: '',
             description: '',
             status: enums.ticket.status.default,
@@ -155,10 +150,10 @@ const Loans = () => {
     };
 
     const handleEditTicket = async () => {
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
+        let headers = { authorization: `Bearer ${token}` };
         await api.patch(
             `tickets/${editForm.id}`,
-            { code: localStorage.getItem('code'), ...editForm },
+            { code: user.code, ...editForm },
             { headers }
         );
         getData();
@@ -166,8 +161,8 @@ const Loans = () => {
     };
 
     const handleDeleteTicket = async (id) => {
-        let headers = { authorization: `Bearer ${auth.getToken()}` };
-        await api.delete(`tickets`, { data: { id, code }, headers });
+        let headers = { authorization: `Bearer ${token}` };
+        await api.delete(`tickets`, { data: { id, code: user.code }, headers });
         getData();
         setEditMode(!editMode);
     };
@@ -192,7 +187,7 @@ const Loans = () => {
                 <Header>
                     <Head>
                         <Title>Chamados</Title>
-                        {role === 'NORMAL' ? (
+                        {user.role === 'NORMAL' ? (
                             <ButtonWrapper onClick={modalAddNew}>
                                 <AddButton />
                                 <span>Abrir Chamado</span>
@@ -218,7 +213,7 @@ const Loans = () => {
                             placeholder="Descrição detalhada"
                             onChange={(e) => handleAddForm(e)}
                         />
-                        {role === 'SUPER' ? (
+                        {user.role === 'SUPER' ? (
                             <>
                                 <Label htmlFor="user-new">Usuário</Label>
                                 <SelectComponent
@@ -227,7 +222,7 @@ const Loans = () => {
                                 />
                             </>
                         ) : null}
-                        {role !== 'NORMAL' && (
+                        {user.role !== 'NORMAL' && (
                             <>
                                 <Label htmlFor="status">Status</Label>
                                 <Select
@@ -305,7 +300,7 @@ const Loans = () => {
                         placeholder="Descrição detalhada"
                         onChange={(e) => handleEditForm(e)}
                     />
-                    {role === 'SUPER' ? (
+                    {user.role === 'SUPER' ? (
                         <>
                             <Label htmlFor="user-edit">Usuário</Label>
                             <SelectComponent
@@ -315,7 +310,7 @@ const Loans = () => {
                             />
                         </>
                     ) : null}
-                    {role !== 'NORMAL' && (
+                    {user.role !== 'NORMAL' && (
                         <>
                             <Label htmlFor="status-edit">Status</Label>
                             <Select
@@ -376,7 +371,7 @@ const Loans = () => {
                         </Button>
                     </FormRow>
                 </Modal>
-                {role !== 'NORMAL' ? (
+                {user.role !== 'NORMAL' ? (
                     <KanbanBoard
                         backendData={kanban}
                         modalAddNew={modalAddNew}
