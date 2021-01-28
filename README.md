@@ -13,9 +13,9 @@
 </p>
 
 <p align="center">
-  <a href="#-sobre">Sobre o Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-sobre-o-projeto">Sobre o Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-historico-de-lançamento">Histórico de Lançamento</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-histórico-de-lançamento">Histórico de Lançamento</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-licença">Licença</a>
 </p>
 
@@ -24,7 +24,7 @@
   <img alt="Tickets" src="/tickets.png">
 </p>
 
-## 💇🏻‍♂️ Sobre
+## 💇🏻‍♂️ Sobre o Projeto
 
 Este projeto está sendo realizado por Gabriel Leon, para as Faculdades Batistas do Paraná. A parte do front-end do projeto vem sendo desenvolvida com ReactJS, ContextAPI, e outras tecnologias que possibilitam tal projeto.
 
