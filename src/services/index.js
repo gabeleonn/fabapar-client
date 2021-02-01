@@ -2,7 +2,7 @@ const axios = require('axios');
 const jwt = require('jsonwebtoken');
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/v1/',
+    baseURL: 'http://192.168.15.135:8080/v1/',
 });
 
 class Auth {

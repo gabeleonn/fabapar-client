@@ -21,8 +21,8 @@ import SelectComponent from '../../Components/SearchableSelect';
 import Modal from '../../Components/Modal';
 import KanbanBoard from './KanbanBoard';
 
-import { api,  enums } from '../../services';
-import { useAuth } from '../../context/AuthContext'
+import { api, enums } from '../../services';
+import { useAuth } from '../../context/AuthContext';
 import { Category, Status, Ticket, User } from './TicketElements';
 import useForm from '../../hooks/useForm';
 
@@ -56,7 +56,7 @@ const Loans = () => {
     useEffect(() => {
         let headers = { authorization: `Bearer ${token}` };
         if (user.role === 'NORMAL') {
-            api.get(`tickets/${user.role}`, {
+            api.get(`tickets/${user.code}`, {
                 headers,
             }).then((response) => {
                 if (!response.data.error) {
@@ -77,7 +77,7 @@ const Loans = () => {
                 }
             });
         }
-    }, [user.role, token]);
+    }, [user.code, user.role, token]);
 
     const [editMode, setEditMode] = useState(false);
 
@@ -113,7 +113,11 @@ const Loans = () => {
 
     const handleNewTicket = async () => {
         let headers = { authorization: `Bearer ${token}` };
-        await api.post(`tickets`, { user_id: user.code, ...addForm }, { headers });
+        await api.post(
+            `tickets`,
+            { user_id: user.code, ...addForm },
+            { headers }
+        );
         getData();
         handleAddForm({
             user_id: user.role !== 'SUPER' ? user.code : '',
