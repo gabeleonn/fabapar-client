@@ -19,6 +19,7 @@ import Modal from '../../Components/Modal';
 import {
     Button,
     FormRow,
+    Hr,
     Label,
     LabelS,
     Option,
@@ -167,25 +168,12 @@ const KanbanBoard = ({ modalAddNew, backendData, getNewData }) => {
         <KanbanContainer>
             <Modal show={entryModal} toggleShow={setEntryModal}>
                 <Title>Revisar Chamado</Title>
-                <Row>
-                    <LabelS>Descrição</LabelS>
-                    <p>{entryForm.description}</p>
-                </Row>
+                <Hr light />
+                <strong>Descrição</strong>
+                <p>{entryForm.description}</p>
+                <div className="user">{`${entryForm.user.firstname} ${entryForm.user.lastname} | ${entryForm.user.department} `}</div>
 
-                {/* <Label htmlFor="status">Status</Label>
-                <Select
-                    name="status"
-                    id="status"
-                    value={entryForm.status}
-                    onChange={(e) => handleEntryForm(e)}
-                >
-                    {enums.ticket.status.enum.map((element) => (
-                        <Option key={element} value={element}>
-                            {element}
-                        </Option>
-                    ))}
-                </Select> */}
-                {entryForm.status !== 'concluído' && (
+                {entryForm.status === 'entrada' && (
                     <>
                         <Label htmlFor="priority">Prioridade</Label>
                         <Select

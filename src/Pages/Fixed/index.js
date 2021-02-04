@@ -412,35 +412,6 @@ const FixedItems = () => {
                             value={addForm.price}
                             onChange={(e) => handleChangeAddForm(e)}
                         />
-                        {/* <SubTitle>Última Manutenção</SubTitle>
-                        <Label htmlFor="details-new">Observações</Label>
-                        <TextArea
-                            id="details-new"
-                            placeholder="Observações"
-                            name="details"
-                            value={addForm.details}
-                            onChange={(e) => handleChangeAddForm(e)}
-                        />
-                        <Label htmlFor="warranty-new">Data de Garantia</Label>
-                        <Input
-                            id="warranty-new"
-                            type="date"
-                            placeholder="Data de garantia"
-                            name="warranty"
-                            value={addForm.warranty}
-                            onChange={(e) => handleChangeAddForm(e)}
-                        />
-                        <Label htmlFor="maintainer-new">
-                            Quem fez a manutenção?
-                        </Label>
-                        <Input
-                            id="maintainer-new"
-                            type="text"
-                            placeholder="Quem fez a manutenção?"
-                            name="maintainer"
-                            value={addForm.maintainer}
-                            onChange={(e) => handleChangeAddForm(e)}
-                        /> */}
                         <Button type="button" onClick={handleNew}>
                             Adicionar
                         </Button>
@@ -468,13 +439,11 @@ const FixedItems = () => {
                         value={editForm.status}
                         onChange={(e) => handleChangeEditForm(e)}
                     >
-                        {enums.status.enum
-                            .filter((element) => element !== status)
-                            .map((element) => (
-                                <Option key={element} value={element}>
-                                    {element.toLowerCase()}
-                                </Option>
-                            ))}
+                        {enums.status.enum.map((element) => (
+                            <Option key={element} value={element}>
+                                {element.toLowerCase()}
+                            </Option>
+                        ))}
                     </Select>
                     {editForm.status === 'EMPRESTADO' ||
                     editForm.status === 'FIXO' ? (

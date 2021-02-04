@@ -16,6 +16,22 @@ export const KanbanContainer = styled.div`
     height: 100%;
     overflow: hidden;
     width: 100%;
+
+    strong {
+        font-size: 0.8rem;
+        color: var(--primary--light);
+        letter-spacing: 1px;
+        margin-bottom: -15px;
+    }
+
+    p {
+        font-size: 0.8rem;
+    }
+
+    & .user {
+        font-size: 0.8rem;
+        color: var(--primary--light);
+    }
 `;
 
 export const List = styled.div`
