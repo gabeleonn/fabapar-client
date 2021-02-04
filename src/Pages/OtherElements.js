@@ -37,12 +37,6 @@ export const ContentWrapper = styled.section`
         grid-column: 2 / 3;
         height: 92.5vh;
     }
-
-    /* @media screen and (min-width: 1024px) {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    } */
 `;
 
 // For all Pages

@@ -31,11 +31,15 @@
 
 body {
     width: 100vw;
-    height: 100vw;
+    height: 100vh;
     color: var(--black);
     background: var(--white);
     font-family: 'Poppins', 'sans-serif';
     overflow: hidden;
+}
+
+#root {
+    height: 100vh;
 }
 
 *::-webkit-scrollbar {
