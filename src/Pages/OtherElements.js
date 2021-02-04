@@ -327,6 +327,7 @@ export const Input = styled.input`
     border-bottom: 3px solid transparent;
     transition: all 0.3s ease-in-out;
     padding-right: 0.3rem;
+    z-index: 100;
 
     &:focus {
         border-bottom: 3px solid var(--secondary);

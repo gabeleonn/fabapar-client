@@ -58,6 +58,7 @@ export const SearchItem = styled.div`
     padding-right: 0.3rem;
     display: flex;
     align-items: center;
+    z-index: 900;
 
     &:last-child {
         margin-bottom: 2rem;

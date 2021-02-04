@@ -35,6 +35,7 @@ const Loans = () => {
     const [kanban, setKanban] = useState([]);
 
     const [usersEnum, setUsersEnum] = useState([]);
+    const [itemsEnum, setItemsEnum] = useState([]);
 
     const [addForm, handleAddForm] = useForm({
         description: '',
@@ -42,6 +43,7 @@ const Loans = () => {
         priority: enums.ticket.priority.default,
         category: enums.ticket.categories.default,
         title: '',
+        user_id: '',
     });
 
     const [editForm, handleEditForm] = useForm({
@@ -78,6 +80,19 @@ const Loans = () => {
             });
         }
     }, [user.code, user.role, token]);
+
+    useEffect(() => {
+        if (addForm.category === 'hardware') {
+            if (kanban.length > 0) {
+                let items = kanban.filter(
+                    (item) => item.user.code === addForm.user_id
+                );
+                if (items.length > 0) {
+                    setItemsEnum([...items[0].user.equipments]);
+                }
+            }
+        }
+    }, [addForm.user_id, addForm.category, kanban]);
 
     const [editMode, setEditMode] = useState(false);
 
@@ -171,17 +186,24 @@ const Loans = () => {
         setEditMode(!editMode);
     };
 
-    const handleAddSelect = (code) => {
+    const handleAddSelect = (user) => {
         handleAddForm({
             ...addForm,
-            user_id: code,
+            user_id: user.code,
         });
     };
 
-    const handleEditSelect = (code) => {
+    const handleAddItemSelect = (item) => {
+        handleAddForm({
+            ...addForm,
+            item_id: item.id,
+        });
+    };
+
+    const handleEditSelect = (user) => {
         handleEditForm({
             ...editForm,
-            user_id: code,
+            user_id: user.code,
         });
     };
 
@@ -221,15 +243,18 @@ const Loans = () => {
                             placeholder="Descrição detalhada"
                             onChange={(e) => handleAddForm(e)}
                         />
-                        {user.role === 'SUPER' ? (
+
+                        {user.role === 'SUPER' && (
                             <>
                                 <Label htmlFor="user-new">Usuário</Label>
                                 <SelectComponent
+                                    type="user"
                                     data={usersEnum}
                                     handleSelect={handleAddSelect}
                                 />
                             </>
-                        ) : null}
+                        )}
+
                         {user.role !== 'NORMAL' && (
                             <>
                                 <Label htmlFor="status">Status</Label>
@@ -276,6 +301,16 @@ const Loans = () => {
                             ))}
                         </Select>
 
+                        {addForm.category === 'hardware' && (
+                            <>
+                                <Label htmlFor="user-item">Equipamento</Label>
+                                <SelectComponent
+                                    type="item"
+                                    data={itemsEnum}
+                                    handleSelect={handleAddItemSelect}
+                                />
+                            </>
+                        )}
                         <Button
                             type="button"
                             onClick={(e) => handleNewTicket(e)}

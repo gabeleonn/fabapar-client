@@ -9,22 +9,34 @@ import {
     Search,
 } from './SelectElements';
 
-const Select = ({ data, handleSelect, defaultValue }) => {
+const Select = ({ data, handleSelect, defaultValue, type }) => {
     const searchField = useRef();
 
     useEffect(() => {
         setOptions(data);
         if (typeof defaultValue !== 'undefined' && data.length > 0) {
-            let user = data.filter((e) => e.code === defaultValue)[0];
+            let element = '';
             let value = '';
-            if (user !== undefined) {
-                value = `${user.firstname} ${user.lastname}`;
-            } else {
-                value = '';
+
+            if (type === 'user') {
+                element = data.filter((e) => e.code === defaultValue)[0];
+                if (element !== undefined) {
+                    value = `${element.firstname} ${element.lastname}`;
+                } else {
+                    value = '';
+                }
+            } else if (type === 'item') {
+                element = data.filter((e) => e.id === defaultValue)[0];
+                if (element !== undefined) {
+                    value = element.description;
+                } else {
+                    value = '';
+                }
             }
+
             updateValue(value);
         }
-    }, [data, defaultValue]);
+    }, [data, defaultValue, type]);
 
     const [show, setShow] = useState(false);
     const [options, setOptions] = useState(data);
@@ -52,7 +64,9 @@ const Select = ({ data, handleSelect, defaultValue }) => {
                     onChange={(e) => handleOptions(e.target.value)}
                     onClick={() => setShow(!show)}
                     value={value}
+                    placeholder="Digite nome ou matrícula do funcionário..."
                     onFocus={() => updateValue('')}
+                    //onBlur={() => setShow(false)}
                 />
                 <Icon />
             </Search>
@@ -61,16 +75,24 @@ const Select = ({ data, handleSelect, defaultValue }) => {
                     {options.length > 0 ? (
                         options.slice(0, 5).map((element) => (
                             <SearchItem
-                                key={element.code}
+                                key={
+                                    type === 'user' ? element.code : element.id
+                                }
                                 onClick={() => {
-                                    handleSelect(element.code);
+                                    handleSelect(element);
                                     setShow(false);
-                                    updateValue(
-                                        `${element.firstname} ${element.lastname}`
-                                    );
+                                    if (type === 'user') {
+                                        updateValue(
+                                            `${element.firstname} ${element.lastname}`
+                                        );
+                                    } else if (type === 'item') {
+                                        updateValue(`${element.description}`);
+                                    }
                                 }}
                             >
-                                {`${element.firstname} ${element.lastname}`}
+                                {type === 'user'
+                                    ? `${element.firstname} ${element.lastname}`
+                                    : element.description}
                             </SearchItem>
                         ))
                     ) : (

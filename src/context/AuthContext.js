@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
         if (!!user && !!token) {
             try {
                 jwt.verify(token, 'secret');
-                console.log({ user: JSON.parse(user), token });
                 return { user: JSON.parse(user), token };
             } catch (e) {
                 console.log(e);

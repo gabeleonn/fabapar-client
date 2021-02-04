@@ -225,17 +225,17 @@ const FixedItems = () => {
         getNewData();
     };
 
-    const handleAddSelect = (code) => {
+    const handleAddSelect = (user) => {
         handleChangeAddForm({
             ...addForm,
-            user_id: code,
+            user_id: user.code,
         });
     };
 
-    const handleEditSelect = (code) => {
+    const handleEditSelect = (user) => {
         handleChangeEditForm({
             ...editForm,
-            user_id: code,
+            user_id: user.code,
         });
     };
 
@@ -387,6 +387,7 @@ const FixedItems = () => {
                             <>
                                 <Label htmlFor="user-new">Usuário</Label>
                                 <SelectComponent
+                                    type="user"
                                     data={usersEnum}
                                     handleSelect={handleAddSelect}
                                 />
@@ -450,6 +451,7 @@ const FixedItems = () => {
                             <SelectComponent
                                 id="user-edit"
                                 data={usersEnum}
+                                type="user"
                                 handleSelect={handleEditSelect}
                                 defaultValue={editForm.user_id}
                             />
