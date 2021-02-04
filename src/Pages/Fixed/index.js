@@ -202,10 +202,7 @@ const FixedItems = () => {
             description,
             department: user !== null ? user.department : 'Disponível',
             user_id,
-            status:
-                status === enums.status.default
-                    ? 'MANUTENÇÃO'
-                    : enums.status.default,
+            status,
             specs,
             file,
         });
