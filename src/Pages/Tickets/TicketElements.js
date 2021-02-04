@@ -74,7 +74,6 @@ export const List = styled.div`
 
 export const ListItems = styled.div`
     width: 100%;
-    height: 75.5vh;
     overflow-y: auto;
     flex: 1;
     display: flex;

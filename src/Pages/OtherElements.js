@@ -241,6 +241,10 @@ export const Element = styled.div`
         transition: all 0.3s ease-in-out;
         margin-bottom: 0;
     }
+
+    & .small {
+        font-size: 0.75rem;
+    }
 `;
 
 export const Row = styled.p`
@@ -279,6 +283,44 @@ export const FormRow = styled.div`
     gap: 1rem;
 `;
 
+export const UploadFile = styled.input`
+    &.custom-file-input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 25px;
+        height: 40px;
+        background: none;
+
+        &:focus::before {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+    }
+
+    &.custom-file-input::-webkit-file-upload-button {
+        visibility: hidden;
+    }
+    &.custom-file-input::before {
+        content: 'Upload da nota fiscal';
+        display: inline-block;
+        border: 1px solid #999;
+        border-radius: 3px;
+        height: 100%;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    &.custom-file-input:hover::before {
+        border-color: var(--secondary);
+        color: var(--secondary);
+    }
+`;
+
 export const Input = styled.input`
     height: 5vh;
     width: 100%;
@@ -299,37 +341,6 @@ export const Input = styled.input`
     &::-webkit-calendar-picker-indicator {
         filter: invert(1);
         cursor: pointer;
-    }
-    &.custom-file-input {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        line-height: 25px;
-        height: 40px;
-        background: none;
-        border: none;
-    }
-
-    &.custom-file-input::-webkit-file-upload-button {
-        visibility: hidden;
-    }
-    &.custom-file-input::before {
-        text-align: center;
-        content: 'Upload da nota fiscal';
-        display: inline-block;
-        background: linear-gradient(top, #f9f9f9, #e3e3e3);
-        border: 1px solid #999;
-        border-radius: 3px;
-        padding: 5px 8px;
-        height: 100%;
-        outline: none;
-        white-space: nowrap;
-        -webkit-user-select: none;
-        cursor: pointer;
-    }
-    &.custom-file-input:hover::before {
-        border-color: var(--secondary);
-        color: var(--secondary);
     }
 `;
 

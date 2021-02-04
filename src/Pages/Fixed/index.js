@@ -28,6 +28,7 @@ import {
     ButtonWrapper,
     AuxiliaryButtons,
     FilterOption,
+    UploadFile,
 } from '../OtherElements';
 
 import SelectComponent from '../../Components/SearchableSelect';
@@ -394,7 +395,7 @@ const FixedItems = () => {
                                 />
                             </>
                         ) : null}
-                        <Input
+                        <UploadFile
                             type="file"
                             placeholder="Nota fiscal"
                             className="custom-file-input"
@@ -537,7 +538,7 @@ const FixedItems = () => {
                                           </Row>
                                           <Hr />
                                           {!!maintenances.length ? (
-                                              <Row>
+                                              <div className="small">
                                                   <LabelS>
                                                       Última Manutenção:
                                                       <br />
@@ -566,9 +567,9 @@ const FixedItems = () => {
                                                             }`
                                                           : null}
                                                   </Value>
-                                              </Row>
+                                              </div>
                                           ) : (
-                                              <Row>
+                                              <div className="small">
                                                   <LabelS>
                                                       Última Manutenção:
                                                       <br />
@@ -576,7 +577,7 @@ const FixedItems = () => {
                                                   <Value>
                                                       Não teve manutenção
                                                   </Value>
-                                              </Row>
+                                              </div>
                                           )}
                                           <Status>
                                               {user !== null

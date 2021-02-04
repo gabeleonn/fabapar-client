@@ -198,7 +198,11 @@ const Loans = () => {
                             </ButtonWrapper>
                         ) : null}
                     </Head>
-                    <Modal show={addNew} height="65vh" toggleShow={modalAddNew}>
+                    <Modal
+                        show={addNew}
+                        height={user.role === 'NORMAL' ? '75vh' : '90vh'}
+                        toggleShow={modalAddNew}
+                    >
                         <Title>Adicionar Chamado</Title>
                         <Label htmlFor="title-addnew">Título</Label>
                         <Input
