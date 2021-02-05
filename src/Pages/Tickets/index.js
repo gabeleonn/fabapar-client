@@ -44,6 +44,7 @@ const Loans = () => {
         category: enums.ticket.categories.default,
         title: '',
         user_id: '',
+        equipment_id: '',
     });
 
     const [editForm, handleEditForm] = useForm({
@@ -83,16 +84,17 @@ const Loans = () => {
 
     useEffect(() => {
         if (addForm.category === 'hardware') {
-            if (kanban.length > 0) {
-                let items = kanban.filter(
-                    (item) => item.user.code === addForm.user_id
+            let data = usersEnum;
+            if (data.length > 0) {
+                let items = data.filter(
+                    (item) => item.code === addForm.user_id
                 );
                 if (items.length > 0) {
-                    setItemsEnum([...items[0].user.equipments]);
+                    setItemsEnum([...items[0].equipments]);
                 }
             }
         }
-    }, [addForm.user_id, addForm.category, kanban]);
+    }, [addForm.user_id, addForm.category, usersEnum]);
 
     const [editMode, setEditMode] = useState(false);
 
@@ -196,7 +198,7 @@ const Loans = () => {
     const handleAddItemSelect = (item) => {
         handleAddForm({
             ...addForm,
-            item_id: item.id,
+            equipment_id: item.id,
         });
     };
 
