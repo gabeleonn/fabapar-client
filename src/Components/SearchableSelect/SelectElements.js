@@ -32,7 +32,7 @@ export const Searchable = styled.input`
     }
 
     &:disabled {
-        color: var(--primary--dark);
+        color: var(--primary--light);
     }
 `;
 

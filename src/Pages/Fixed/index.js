@@ -218,11 +218,13 @@ const FixedItems = () => {
     };
 
     const handleDelete = async (id) => {
-        setModalEdit(!modalEdit);
-        let headers = { authorization: `Bearer ${token}` };
-        await api.delete(`equipments/${id}`, { headers });
-        updateStatus(status);
-        getNewData();
+        if (window.confirm('Tem certeza que deseja excluír o item?')) {
+            setModalEdit(!modalEdit);
+            let headers = { authorization: `Bearer ${token}` };
+            await api.delete(`equipments/${id}`, { headers });
+            updateStatus(status);
+            getNewData();
+        }
     };
 
     const handleAddSelect = (user) => {
