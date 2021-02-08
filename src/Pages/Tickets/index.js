@@ -64,6 +64,7 @@ const Loans = () => {
             }).then((response) => {
                 if (!response.data.error) {
                     setData(response.data);
+                    setItemsEnum(user.equipments);
                 }
             });
         } else {
@@ -80,7 +81,7 @@ const Loans = () => {
                 }
             });
         }
-    }, [user.code, user.role, token]);
+    }, [user.code, user.role, token, user.equipments]);
 
     useEffect(() => {
         if (addForm.category === 'hardware') {
@@ -110,6 +111,7 @@ const Loans = () => {
             }).then((response) => {
                 if (!response.data.error) {
                     setData(response.data);
+                    setItemsEnum(user.equipments);
                 }
             });
         } else {
@@ -132,7 +134,7 @@ const Loans = () => {
         let headers = { authorization: `Bearer ${token}` };
         await api.post(
             `tickets`,
-            { user_id: user.code, ...addForm },
+            { ...addForm, user_id: user.code },
             { headers }
         );
         getData();
@@ -156,6 +158,7 @@ const Loans = () => {
             user_id,
             id,
             title,
+            equipment_id,
         } = item;
         handleEditForm({
             ...editForm,
@@ -166,6 +169,7 @@ const Loans = () => {
             user_id,
             id,
             title,
+            equipment_id,
         });
         setEditMode(!editMode);
     };
@@ -363,6 +367,7 @@ const Loans = () => {
                                 id="status-edit"
                                 value={editForm.status}
                                 onChange={(e) => handleEditForm(e)}
+                                disabled
                             >
                                 {enums.ticket.status.enum.map((element) => (
                                     <Option key={element} value={element}>
@@ -378,6 +383,7 @@ const Loans = () => {
                         name="priority"
                         id="priority-edit"
                         value={editForm.priority}
+                        disabled
                         onChange={(e) => handleEditForm(e)}
                     >
                         {enums.ticket.priority.enum.map((element) => (
@@ -393,6 +399,7 @@ const Loans = () => {
                         name="category"
                         id="category-edit"
                         value={editForm.category}
+                        disabled={user.role === 'NORMAL' ? true : false}
                         onChange={(e) => handleEditForm(e)}
                     >
                         {enums.ticket.categories.enum.map((element) => (
@@ -401,6 +408,18 @@ const Loans = () => {
                             </Option>
                         ))}
                     </Select>
+                    {editForm.category === 'hardware' && (
+                        <>
+                            <Label htmlFor="user-item">Equipamento</Label>
+                            <SelectComponent
+                                type="item"
+                                data={itemsEnum}
+                                handleSelect={handleAddItemSelect}
+                                disabled
+                                defaultValue={editForm.equipment_id}
+                            />
+                        </>
+                    )}
                     <FormRow>
                         <Button
                             type="button"

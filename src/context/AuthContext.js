@@ -8,6 +8,7 @@ const AuthContext = createContext({
         email: '',
         role: '',
         code: '',
+        equipments: [],
     },
     token: '',
 });
@@ -32,13 +33,15 @@ export const AuthProvider = ({ children }) => {
         const response = await api.post('/login', { code, password });
         if (response.data.token) {
             try {
-                let { dataValues } = jwt.verify(response.data.token, 'secret');
+                let dataValues = jwt.verify(response.data.token, 'secret');
                 let user = {
                     fullname: `${dataValues.firstname} ${dataValues.lastname}`,
                     email: dataValues.email,
                     role: dataValues.role,
                     code: dataValues.code,
+                    equipments: dataValues.equipments,
                 };
+
                 localStorage.setItem('@fabapar/user', JSON.stringify(user));
                 localStorage.setItem('@fabapar/token', response.data.token);
                 setData({

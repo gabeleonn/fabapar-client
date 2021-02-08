@@ -189,7 +189,7 @@ const FixedItems = () => {
             warranty: '',
             details: '',
             maintainer: '',
-            price: '',
+            price: 0.0,
         });
     };
 
@@ -424,7 +424,7 @@ const FixedItems = () => {
                         <Icon
                             target="_blank"
                             rel="noreferrer"
-                            href={`http://192.168.15.135:8080/${editForm.file}`}
+                            href={`http://192.168.15.111:8080/${editForm.file}`}
                         >
                             <FaPaperclip />
                             Nota fiscal

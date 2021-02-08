@@ -9,7 +9,7 @@ import {
     Search,
 } from './SelectElements';
 
-const Select = ({ data, handleSelect, defaultValue, type }) => {
+const Select = ({ data, handleSelect, defaultValue, type, disabled }) => {
     const searchField = useRef();
 
     useEffect(() => {
@@ -59,6 +59,7 @@ const Select = ({ data, handleSelect, defaultValue, type }) => {
         <Container>
             <Search>
                 <Searchable
+                    disabled={!!disabled}
                     ref={searchField}
                     type="text"
                     onChange={(e) => handleOptions(e.target.value)}
@@ -66,7 +67,6 @@ const Select = ({ data, handleSelect, defaultValue, type }) => {
                     value={value}
                     placeholder="Digite nome ou matrícula do funcionário..."
                     onFocus={() => updateValue('')}
-                    //onBlur={() => setShow(false)}
                 />
                 <Icon />
             </Search>

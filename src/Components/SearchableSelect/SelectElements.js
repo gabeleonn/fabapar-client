@@ -30,6 +30,10 @@ export const Searchable = styled.input`
     &:focus {
         border-bottom: 3px solid var(--secondary);
     }
+
+    &:disabled {
+        color: var(--primary--dark);
+    }
 `;
 
 export const Selector = styled.div`
