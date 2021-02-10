@@ -192,6 +192,7 @@ const FixedItems = () => {
             maintainer: '',
             price: 0.0,
         });
+        setUpload({ file: {}, term: {} });
     };
 
     const handlemodalEdit = (item) => {
@@ -398,7 +399,7 @@ const FixedItems = () => {
                                     type="file"
                                     description="term"
                                     className="custom-file-input"
-                                    name="file"
+                                    name="term"
                                     onChange={(e) =>
                                         setUpload({
                                             ...upload,
@@ -439,15 +440,16 @@ const FixedItems = () => {
                     <SubTitle>{editForm.description}</SubTitle>
 
                     <Description>
-                        {editForm.department} &nbsp;&nbsp;|
+                        {editForm.department} &nbsp;&nbsp;| {
+                        !!editForm.file &&
                         <Icon
                             target="_blank"
                             rel="noreferrer"
-                            href={`http://192.168.15.111:8080/${editForm.file}`}
+                            href={`http://192.168.0.43:8080/${editForm.file}`}
                         >
                             <FaPaperclip />
                             Nota fiscal
-                        </Icon>
+                        </Icon>}
                     </Description>
                     <Label htmlFor="status-edit">Status</Label>
                     <Select

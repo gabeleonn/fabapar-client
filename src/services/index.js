@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const api = axios.create({
-    baseURL: 'http://192.168.15.114:8080/v1/',
+    baseURL: 'http://192.168.0.43:8080/v1/',
 });
 
 const enums = {
