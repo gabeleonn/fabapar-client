@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { FaPlus } from 'react-icons/fa';
 
@@ -296,7 +296,14 @@ export const UploadFile = styled.input`
         visibility: hidden;
     }
     &.custom-file-input::before {
-        content: 'Upload da nota fiscal';
+        ${({ description }) =>
+            description === 'file'
+                ? css`
+                      content: 'Upload da nota fiscal';
+                  `
+                : css`
+                      content: 'Upload do termo de responsabilidade';
+                  `}
         display: inline-block;
         border: 1px solid #999;
         border-radius: 3px;

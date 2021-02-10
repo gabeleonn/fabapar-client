@@ -53,7 +53,7 @@ const FixedItems = () => {
 
     const [usersEnum, setUsersEnum] = useState([]);
 
-    const [upload, setUpload] = useState({ file: {} });
+    const [upload, setUpload] = useState({ file: {}, term: {} });
 
     const [addNew, setAddNew] = useState(false);
     const [data, setData] = useState([]);
@@ -162,6 +162,7 @@ const FixedItems = () => {
         let formData = new FormData();
 
         formData.append('file', upload.file);
+        formData.append('term', upload.term);
         formData.append('price', form.price);
         formData.append('brand', form.brand);
         formData.append('type', form.type);
@@ -393,17 +394,33 @@ const FixedItems = () => {
                                     data={usersEnum}
                                     handleSelect={handleAddSelect}
                                 />
+                                <UploadFile
+                                    type="file"
+                                    description="term"
+                                    className="custom-file-input"
+                                    name="file"
+                                    onChange={(e) =>
+                                        setUpload({
+                                            ...upload,
+                                            term: e.target.files[0],
+                                        })
+                                    }
+                                />
                             </>
                         ) : null}
                         <UploadFile
                             type="file"
-                            placeholder="Nota fiscal"
+                            description="file"
                             className="custom-file-input"
                             name="file"
                             onChange={(e) =>
-                                setUpload({ file: e.target.files[0] })
+                                setUpload({
+                                    ...upload,
+                                    file: e.target.files[0],
+                                })
                             }
                         />
+
                         <Label htmlFor="price-new">Preço pago</Label>
                         <Input
                             id="price-new"
