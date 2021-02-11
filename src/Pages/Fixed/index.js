@@ -215,7 +215,18 @@ const FixedItems = () => {
     const handleEdit = async (id) => {
         setModalEdit(!modalEdit);
         let headers = { authorization: `Bearer ${token}` };
-        await api.patch(`equipments/${id}`, editForm, { headers });
+        let formData = new FormData();
+        formData.append('file', upload.file);
+        formData.append('term', upload.term);
+        formData.append('status', editForm.status);
+        formData.append('user_id', editForm.user_id);
+        if(editForm.status === 'MANUTENÇÃO') {
+            formData.append('details', editForm.details);
+            formData.append('warranty', editForm.warranty);
+            formData.append('maintainer', editForm.maintainer);
+        }
+
+        await api.patch(`equipments/${id}`, formData, { headers });
         getNewData();
     };
 
@@ -465,6 +476,18 @@ const FixedItems = () => {
                             </Option>
                         ))}
                     </Select>
+                    <UploadFile
+                            type="file"
+                            description="file"
+                            className="custom-file-input"
+                            name="file"
+                            onChange={(e) =>
+                                setUpload({
+                                    ...upload,
+                                    file: e.target.files[0],
+                                })
+                            }
+                        />
                     {editForm.status === 'EMPRESTADO' ||
                     editForm.status === 'FIXO' ? (
                         <>
@@ -476,6 +499,18 @@ const FixedItems = () => {
                                 handleSelect={handleEditSelect}
                                 defaultValue={editForm.user_id}
                             />
+                            <UploadFile
+                                    type="file"
+                                    description="term"
+                                    className="custom-file-input"
+                                    name="term"
+                                    onChange={(e) =>
+                                        setUpload({
+                                            ...upload,
+                                            term: e.target.files[0],
+                                        })
+                                    }
+                                />
                         </>
                     ) : null}
                     {status === 'MANUTENÇÃO' ? (
